@@ -29,6 +29,7 @@ namespace TowerDefense {
 
         public Form1() {
             InitializeComponent();
+            globalTimer.Enabled = true;
         }
         
         private void GameWorldPB_Paint(object sender, PaintEventArgs e) {
@@ -97,6 +98,10 @@ namespace TowerDefense {
             //foreach(BaseTile bt in world.tilesList) {
             //    bt.DrawVertex(g);
             //}
+        }
+
+        private void globalTimer_Tick(object sender, EventArgs e) {
+            Console.WriteLine("Tick!");
         }
     }
 }

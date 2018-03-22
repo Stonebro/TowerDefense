@@ -23,11 +23,13 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.GameWorldPB = new System.Windows.Forms.PictureBox();
             this.Tower1PB = new System.Windows.Forms.PictureBox();
             this.Tower2PB = new System.Windows.Forms.PictureBox();
             this.showVerticesBtn = new System.Windows.Forms.Button();
+            this.globalTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.GameWorldPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower1PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower2PB)).BeginInit();
@@ -79,6 +81,11 @@
             this.showVerticesBtn.UseVisualStyleBackColor = true;
             this.showVerticesBtn.Click += new System.EventHandler(this.showVerticesBtn_Click);
             // 
+            // globalTimer
+            // 
+            this.globalTimer.Interval = 250;
+            this.globalTimer.Tick += new System.EventHandler(this.globalTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -103,6 +110,7 @@
         private System.Windows.Forms.PictureBox Tower1PB;
         private System.Windows.Forms.PictureBox Tower2PB;
         private System.Windows.Forms.Button showVerticesBtn;
+        private System.Windows.Forms.Timer globalTimer;
     }
 }
 
