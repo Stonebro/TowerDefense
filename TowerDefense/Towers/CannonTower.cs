@@ -9,11 +9,12 @@ using TowerDefense.Util;
 
 namespace TowerDefense.Towers {
     class CannonTower : Tower{
+        /// CannonTower constructor.
         public CannonTower() { 
             goldCost = 10;
             attackPower = 10;
-            splash = new Bitmap("D:/Windesheim GP/AAI/TowerDefense/TowerDefense/Resources/CannonTower.png");
-            sprite = new Bitmap("D:/Windesheim GP/AAI/TowerDefense/TowerDefense/Resources/CannonTowerSprite.png");
+            splash = new Bitmap(Resources.Resources.CannonTower);
+            sprite = new Bitmap(Resources.Resources.CannonTowerSprite);
         }
     }
 }

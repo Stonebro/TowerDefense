@@ -18,3 +18,14 @@ C:\BACKUP OPSLAG\Windesheim GP\AAI\TowerDefense\TowerDefense\obj\Debug\TowerDefe
 C:\BACKUP OPSLAG\Windesheim GP\AAI\TowerDefense\TowerDefense\obj\Debug\TowerDefense.csproj.CoreCompileInputs.cache
 C:\BACKUP OPSLAG\Windesheim GP\AAI\TowerDefense\TowerDefense\obj\Debug\TowerDefense.exe
 C:\BACKUP OPSLAG\Windesheim GP\AAI\TowerDefense\TowerDefense\obj\Debug\TowerDefense.pdb
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\bin\Debug\TowerDefense.exe.config
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\bin\Debug\TowerDefense.exe
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\bin\Debug\TowerDefense.pdb
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.csprojResolveAssemblyReference.cache
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.Form1.resources
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.Properties.Resources.resources
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.csproj.GenerateResource.Cache
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.csproj.CoreCompileInputs.cache
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.exe
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.pdb
+C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.Resources.Resources.resources

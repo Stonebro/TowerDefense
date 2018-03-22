@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 
+
 namespace TowerDefense.Towers {
     class ArrowTower : Tower {
+        /// ArrowTower constructor.
         public ArrowTower() { 
             goldCost = 5;
             attackPower = 5;
-            splash = new Bitmap("D:/Windesheim GP/AAI/TowerDefense/TowerDefense/Resources/ArrowTower.png");
-            sprite = new Bitmap("D:/Windesheim GP/AAI/TowerDefense/TowerDefense/Resources/ArrowTowerSprite.png");
+            splash = new Bitmap(Resources.Resources.ArrowTower);
+            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
     }
 }

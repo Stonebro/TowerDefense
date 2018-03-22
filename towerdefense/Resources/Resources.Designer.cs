@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TowerDefense.Properties {
+namespace TowerDefense.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace TowerDefense.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TowerDefense.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TowerDefense.Resources.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,56 @@ namespace TowerDefense.Properties {
         internal static System.Drawing.Bitmap ArrowTower {
             get {
                 object obj = ResourceManager.GetObject("ArrowTower", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ArrowTowerSprite {
+            get {
+                object obj = ResourceManager.GetObject("ArrowTowerSprite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap basic_ground {
+            get {
+                object obj = ResourceManager.GetObject("basic_ground", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap basic_ground1 {
+            get {
+                object obj = ResourceManager.GetObject("basic_ground1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CannonTower {
+            get {
+                object obj = ResourceManager.GetObject("CannonTower", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CannonTowerSprite {
+            get {
+                object obj = ResourceManager.GetObject("CannonTowerSprite", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

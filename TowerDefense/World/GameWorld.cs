@@ -9,9 +9,13 @@ using TowerDefense.Towers;
 using TowerDefense.Util;
 
 namespace TowerDefense.World {
+    /// Represents the GameWorld.
     public class GameWorld {
+        // Singleton instance of GameWorld.
         private static GameWorld _instance;
-        public static GameWorld instance {
+
+        // Getter that initializes Gameworld if it doesn't already exist and returns the GameWorld instance.
+        public static GameWorld Instance {
             get {
                 if (_instance == null) {
                     _instance = new GameWorld();
@@ -19,20 +23,36 @@ namespace TowerDefense.World {
                 return _instance;
             }
         }
-        public int tilesH = 40, tilesV = 40, tiles;
+        // Amount of horizontal Tiles.
+        public int tilesH = 40;
+        // Amount of vertical Tiles
+        public int tilesV = 40; 
+        // Total amount of Tiles.
+        public int tiles;
+        // List containing all Tiles.
         public BaseTile[] tilesList;
+        // List of Towers.
         public List<Tower> towers;
+        // Graph of GameWorld.
         public Graph graph;
+        // StartTile and EndTile.
         public BaseTile startTile, endTile;
 
+        /// GameWorld constructor. 
         public GameWorld() {
+            // Initializes GameWorld.
             _instance = this;
+
+            // Sets total amount of Tiles.
             tiles = tilesH * tilesV;
+            // Creates an array of Tiles with size equal to total amount of tiles.
             tilesList = new BaseTile[tiles];
+            // Initializes list of Towers.
             towers = new List<Tower>();
+            // Creates Graph.
             graph = new Graph();
 
-            // Fill tileList with all grid tiles
+            // Fills TileList with Tiles.
             float curX = 0, curY = 0;
             for(int i = 0; i < tiles; i++) {
                 BaseTile tile = new BaseTile(new Vector2D(curX, curY));
@@ -43,64 +63,89 @@ namespace TowerDefense.World {
                 }
                 this.tilesList[i] = tile;
             }
-            graph.initGraph();
+            // Initializes Graph.
+            graph.InitializeGraph();
+            // Sets startTile to be upper-left tile.
             startTile = tilesList[0];
+            // sets startTile not Buildable.
             startTile.buildable = false;
+            // Sets endTile to be bottom-right tile.
             endTile = tilesList[tiles - 1];
+            // Sets endTile to not Buildable.
             endTile.buildable = false;
 
         }
 
-        // Draw each tile
+        /// Draws each tile
         public void RenderWorld(Graphics g) {
+            // Loops through Tiles.
             for (int i = 0; i < tiles; i++) {
+                // Handles draw of not-buildable Tiles.
                 if (tilesList[i].buildable == false) {
                     g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
-                } else {
+                }  else { // If Tile is buildable.
                     g.DrawRectangle(new Pen(Color.LightGray), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 }
+                // Draws startTile and endTile.
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[0].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[tiles-1].pos, new Vector2D(BaseTile.size, BaseTile.size)));
             }
         }
 
-        // Returns index of clicked tile
+        /// Returns index of clicked Tile.
         public int GetIndexOfTile(Vector2D pos) {
             int index = (int)(pos.y / BaseTile.size) * tilesH;
             index += (int)(pos.x / BaseTile.size);
             return index;
         }
 
-        // Check if any of the 4 spaces have something built on them already
+        /// Checks if any of the Tiles within a 2x2 space (around the mouseclick) has something built on it already.
         public bool isBuildable(List<BaseTile> selectedTiles) {
             if (selectedTiles.All(i => i.buildable)) return true;
-            else return false;
+            return false;
         }
 
+   
+        /// Gets all neighbours of tile where building is allowed.
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
+            // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
+            // Used for determening if a Tile is present above/under/to the left/to the right of the Tile specified.
             bool up=false, down=false, left=false, right=false;
-            if (tile.pos.x >= tilesH) left = true;
-            if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true;
-            if (tile.pos.y >= BaseTile.size) up = true;
-            if (tile.pos.y < (tilesV * BaseTile.size) - BaseTile.size) down = true;
+            if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
+            if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true; // A tile to the right is present.
+            if (tile.pos.y >= BaseTile.size) up = true; // A tile above the specified tile is present.
+            if (tile.pos.y < (tilesV * BaseTile.size) - BaseTile.size) down = true; // A tile under the specified tile is present.
 
+            // If there is a Tile above the specified Tile.
             if (up) {
+                // Gets the Tile upwards of the current tile.
                 BaseTile upTile = tilesList[GetIndexOfTile(tile.pos - new Vector2D(0, BaseTile.size))];
+                // Adds the Tile to List of neighbours if its possible to build on the Tile.
                 if (upTile.buildable) neighbours.Add(upTile);
             }
+            // If there is a Tile under the specified Tile.
             if (down) {
+                // Gets the Tile under the current Tile.
                 BaseTile downTile = tilesList[GetIndexOfTile(tile.pos + new Vector2D(0, BaseTile.size))];
+                // Adds the Tile to List of neighbours if its possible to build on the Tile.
                 if (downTile.buildable) neighbours.Add(downTile);
             }
+            // If there is a Tile to the left of the specified Tile.
             if (left) {
+                // Gets the Tile to the left of the current Tile.
                 BaseTile leftTile = tilesList[GetIndexOfTile(tile.pos - new Vector2D(BaseTile.size, 0))];
+                // Adds the Tile to List of neighbours if its possible to build on the Tile.
                 if (leftTile.buildable) neighbours.Add(leftTile);
             }
+            // If theres a Tile to the right of the specified Tile.
             if (right) {
+                // Gets the Tile to the right of the current Tile.
                 BaseTile rightTile = tilesList[GetIndexOfTile(tile.pos + new Vector2D(BaseTile.size, 0))];
+                // Adds the Tile to List of neighbours if its possible to build on the Tile.
                 if (rightTile.buildable) neighbours.Add(rightTile);
             }
+            // Returns list of neighbours.
             return neighbours;
         }
     }
