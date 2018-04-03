@@ -52,12 +52,17 @@ namespace TowerDefense {
                     bt.DrawVertex(g);
                 }
             }
+            bool drawTowerRange = true;
+            if (drawTowerRange) {
+                foreach (Tower t in world.towers)
+                    t.DrawAttackRange(g);
+                //world.DrawTowerRanges();
+            }
             GameWorldPB.Image = bm;
         }
 
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
             List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
-
             Tower addTower = null; 
             if (world.isBuildable(selectedTiles) && selectedTower != 0) {
                 if (selectedTower == (int)Towers.ArrowTower)
@@ -66,6 +71,7 @@ namespace TowerDefense {
                     addTower = new CannonTower();
                 foreach (BaseTile bt in selectedTiles) {
                     bt.buildable = false;
+                    bt.DestroyVertex();
                     bt.tower = addTower;
                 }
                 addTower.BuildTower(GetTileAtMouse);

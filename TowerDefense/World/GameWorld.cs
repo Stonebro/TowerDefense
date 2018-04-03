@@ -52,7 +52,7 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             endTile.buildable = false;
             Enemy testEnemy = new Imp(tilesList[60].pos, 10, 10, new Vector2D());
-            enemies.Add(testEnemy);
+            instance.enemies.Add(testEnemy);
         }
 
         // Draw each tile

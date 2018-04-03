@@ -12,7 +12,10 @@ namespace TowerDefense.Towers {
     public class Tower {
         public int goldCost;
         public int attackPower;
+        public int attackRange;
+        public float attackInterval;
         public BaseTile pos;
+        public Vector2D position;
         public Bitmap splash;
         public Bitmap sprite;
 
@@ -22,15 +25,20 @@ namespace TowerDefense.Towers {
 
         public virtual void BuildTower(BaseTile pos) {
             this.pos = pos;
+            this.position = pos.pos + new Vector2D(BaseTile.size, BaseTile.size);
+            Console.WriteLine("pos: " + position);
             GameWorld.instance.towers.Add(this);
 
-            //for(int i=0; i<GameWorld.instance.towers.Count; i++) {
-            //    Console.WriteLine(GameWorld.instance.towers[i].pos);
-            //}
+        }
+
+        public void DrawAttackRange(Graphics g) {
+            int range = (attackRange * 2 + 2);
+            //Console.WriteLine(position.x + "  " + position.y + "   " + range);
+            Pen pen = new Pen(Color.Red);
+            g.DrawEllipse(pen, position.x - (range/2)*BaseTile.size, position.y - (range/2) * BaseTile.size, range*BaseTile.size, range*BaseTile.size);
         }
 
         public virtual void Update() {
-
         }
     }
 }
