@@ -28,5 +28,9 @@ namespace TowerDefense.Towers {
             //    Console.WriteLine(GameWorld.instance.towers[i].pos);
             //}
         }
+
+        public virtual void Update() {
+
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefense.Enemies;
 using TowerDefense.Tiles;
 using TowerDefense.Towers;
 using TowerDefense.Util;
@@ -22,6 +23,7 @@ namespace TowerDefense.World {
         public int tilesH = 40, tilesV = 40, tiles;
         public BaseTile[] tilesList;
         public List<Tower> towers;
+        public List<Enemy> enemies;
         public Graph graph;
         public BaseTile startTile, endTile;
 
@@ -30,6 +32,7 @@ namespace TowerDefense.World {
             tiles = tilesH * tilesV;
             tilesList = new BaseTile[tiles];
             towers = new List<Tower>();
+            enemies = new List<Enemy>();
             graph = new Graph();
 
             // Fill tileList with all grid tiles
@@ -48,7 +51,8 @@ namespace TowerDefense.World {
             startTile.buildable = false;
             endTile = tilesList[tiles - 1];
             endTile.buildable = false;
-
+            Enemy testEnemy = new Imp(tilesList[60].pos, 10, 10, new Vector2D());
+            enemies.Add(testEnemy);
         }
 
         // Draw each tile
@@ -62,6 +66,12 @@ namespace TowerDefense.World {
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[0].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[tiles-1].pos, new Vector2D(BaseTile.size, BaseTile.size)));
             }
+            foreach (Enemy e in enemies) e.Render(g);
+        }
+
+        public void Update() {
+            foreach (Tower t in towers) t.Update();
+            foreach (Enemy e in enemies) e.Update();
         }
 
         // Returns index of clicked tile

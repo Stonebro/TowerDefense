@@ -15,6 +15,7 @@ using TowerDefense.World;
 namespace TowerDefense {
     public partial class Form1 : Form {
         private GameWorld world = GameWorld.instance;
+        public static Form1 instance;
         private Vector2D mousePos;
         private int selectedTower;
         enum Towers { ArrowTower=1, CannonTower };
@@ -29,21 +30,29 @@ namespace TowerDefense {
 
         public Form1() {
             InitializeComponent();
+            instance = this;
+            DrawBackground();
             globalTimer.Enabled = true;
         }
         
         private void GameWorldPB_Paint(object sender, PaintEventArgs e) {
             base.OnPaint(e);
-            world.RenderWorld(e.Graphics);
             if (mousePos != null) {
                 SolidBrush brush = new SolidBrush(Color.FromArgb(128, 200, 0, 0));
                 e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size*2, BaseTile.size*2)));
             }
+        }
+
+        public void DrawBackground() {
+            Bitmap bm = new Bitmap(600, 600);
+            Graphics g = Graphics.FromImage(bm);
+            world.RenderWorld(g);
             if (drawVerts) {
                 foreach (BaseTile bt in world.tilesList) {
-                    bt.DrawVertex(e.Graphics);
+                    bt.DrawVertex(g);
                 }
             }
+            GameWorldPB.Image = bm;
         }
 
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
@@ -60,6 +69,7 @@ namespace TowerDefense {
                     bt.tower = addTower;
                 }
                 addTower.BuildTower(GetTileAtMouse);
+                DrawBackground();
             }
         }
 
@@ -98,10 +108,11 @@ namespace TowerDefense {
             //foreach(BaseTile bt in world.tilesList) {
             //    bt.DrawVertex(g);
             //}
+            DrawBackground();
         }
 
         private void globalTimer_Tick(object sender, EventArgs e) {
-            Console.WriteLine("Tick!");
+            world.Update();
         }
     }
 }
