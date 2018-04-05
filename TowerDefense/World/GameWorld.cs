@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefense.Enemies;
 using TowerDefense.Tiles;
 using TowerDefense.Towers;
 using TowerDefense.Util;
@@ -33,7 +34,7 @@ namespace TowerDefense.World {
         public BaseTile[] tilesList;
         // List of Towers.
         public List<Tower> towers;
-        // Graph of GameWorld.
+        public List<Enemy> enemies;
         public Graph graph;
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
@@ -49,6 +50,7 @@ namespace TowerDefense.World {
             tilesList = new BaseTile[tiles];
             // Initializes list of Towers.
             towers = new List<Tower>();
+            enemies = new List<Enemy>();
             // Creates Graph.
             graph = new Graph();
 
@@ -73,7 +75,8 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             // Sets endTile to not Buildable.
             endTile.buildable = false;
-
+            Enemy testEnemy = new Imp(tilesList[60].pos, 10, 10, new Vector2D());
+            Instance.enemies.Add(testEnemy);
         }
 
         /// Draws each tile
@@ -90,6 +93,12 @@ namespace TowerDefense.World {
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[0].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[tiles-1].pos, new Vector2D(BaseTile.size, BaseTile.size)));
             }
+            foreach (Enemy e in enemies) e.Render(g);
+        }
+
+        public void Update() {
+            foreach (Tower t in towers) t.Update();
+            foreach (Enemy e in enemies) e.Update();
         }
 
         /// Returns index of clicked Tile.
@@ -110,7 +119,7 @@ namespace TowerDefense.World {
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
-            // Used for determening if a Tile is present above/under/to the left/to the right of the Tile specified.
+            // Used for determining if a Tile is present above/under/to the left/to the right of the Tile specified.
             bool up=false, down=false, left=false, right=false;
             if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
             if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true; // A tile to the right is present.
