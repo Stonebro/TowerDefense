@@ -12,9 +12,6 @@
 .vs/TowerDefense/v15/Server/sqlite3/*
 .vs/TowerDefense/v15/Server/sqlite3/storage.ide-wal
 
-.vs/TowerDefense/v15/*
-.vs/TowerDefense/v15/Server/sqlite3/*
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -26,9 +23,9 @@
 x64/
 x86/
 bld/
-TowerDefense/[Bb]in/
-TowerDefense/[Oo]bj/
-[Ll]og/
+*/[Bb]in/
+*/[Oo]bj/
+*/[Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
