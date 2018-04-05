@@ -34,6 +34,8 @@ namespace TowerDefense {
 
         public Form1() {
             InitializeComponent();
+            instance = this;
+            DrawBackground();
             globalTimer.Enabled = true;
         }
         
@@ -49,18 +51,29 @@ namespace TowerDefense {
                 e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size*2, BaseTile.size*2)));
             }
             // Draws Graph of GameWorld if user desires to see it.
+
+        public void DrawBackground() {
+            Bitmap bm = new Bitmap(600, 600);
+            Graphics g = Graphics.FromImage(bm);
+            world.RenderWorld(g);
             if (drawVerts) {
                 foreach (BaseTile bt in world.tilesList) {
-                    bt.DrawVertex(e.Graphics);
+                    bt.DrawVertex(g);
                 }
             }
+            bool drawTowerRange = true;
+            if (drawTowerRange) {
+                foreach (Tower t in world.towers)
+                    t.DrawAttackRange(g);
+                //world.DrawTowerRanges();
+            }
+            GameWorldPB.Image = bm;
         }
 
         /// Handles placing a tower on the PictureBox.
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
             // Gets 2x2 square of Tiles according to location of mouse.
             List<BaseTile> selectedTiles = GetSelectedTiles(e.Location); 
-
             // Tower to add.
             Tower addTower = null;
             
@@ -76,11 +89,13 @@ namespace TowerDefense {
                 // Sets all of the selected Tiles to not buildable (you cant build multiple Towers on the same Tiles).
                 foreach (BaseTile bt in selectedTiles) {
                     bt.buildable = false;
+                    bt.DestroyVertex();
                     bt.tower = addTower;
                 }
                 
                 // Adds the Tower to the list of Towers, with the position being the Tile where the mouse was clicked.
                 addTower.BuildTower(GetTileAtMouse);
+                DrawBackground();
             }
         }
 
@@ -128,12 +143,13 @@ namespace TowerDefense {
         private void showVerticesBtn_Click(object sender, EventArgs e) {
             drawVerts = !drawVerts; // Toggles bool.
             GameWorldPB.Invalidate();
+            DrawBackground();
         }
 
         
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
-           // Console.WriteLine("Tick!");
+            world.Update();
         }
     }
 }

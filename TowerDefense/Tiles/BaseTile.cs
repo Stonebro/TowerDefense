@@ -37,7 +37,10 @@ namespace TowerDefense.Tiles {
 
         /// Destroys the Vertex that corresponds to the Tile. 
         public void DestroyVertex() {
-            this.vertex = null;
+            if (vertex != null) {
+                this.vertex.adj = null;
+                this.vertex = null;
+            }
         }
 
         /// Creates a vertex corresponding to this Tile if it doesn't have one yet and the Tile is buildable.
