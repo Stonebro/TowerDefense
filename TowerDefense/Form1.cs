@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TowerDefense.Enemies;
 using TowerDefense.Tiles;
 using TowerDefense.Towers;
 using TowerDefense.Util;
@@ -20,7 +21,9 @@ namespace TowerDefense {
         private Vector2D mousePos;
         // Currently selected Tower.
         private int selectedTower;
-        // enum that contains Availbable Towers.
+
+        private Tower towertower; // UGLY
+        // enum that contains Available Towers.
         private enum Towers { ArrowTower=1, CannonTower=2 };
         // Decides if Graph of GameWorld is drawn or not.
         private bool drawVerts = false;
@@ -34,11 +37,11 @@ namespace TowerDefense {
 
         public Form1() {
             InitializeComponent();
-            //instance = this;
+            playerGoldAmount.Text = world.gold.ToString();
+            playerLivesAmount.Text = world.lives.ToString();
             DrawBackground();
             globalTimer.Enabled = true;
         }
-
 
         /// Paints the GameWorld. 
         private void GameWorldPB_Paint(object sender, PaintEventArgs e) {
@@ -48,8 +51,23 @@ namespace TowerDefense {
             // Previews location of Tower placement if mouse is on the PictureBox.
             if (mousePos != null) {
                 SolidBrush brush = new SolidBrush(Color.FromArgb(128, 200, 0, 0));
-                e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
+                if (selectedTower == 0)
+                    e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                else { 
+                    e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
+                    if(towertower != null) { // UGLY
+                        //towertower.drawTowerRange = true; // UGLY
+                        //towertower.position = GetTileAtMouse.pos + new Vector2D(BaseTile.size, BaseTile.size); // UGLY
+                        //towertower.DrawAttackRange(e.Graphics); // UGLY
+                    }
+                }
             }
+            if (world.tower != null) {
+                SolidBrush blue = new SolidBrush(Color.FromArgb(128, Color.Blue));
+                e.Graphics.FillRectangle(blue, new Rectangle(world.tower.pos[0].pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
+                
+            }
+            DrawBackground();
         }
 
         // Draws Graph of GameWorld if user desires to see it.
@@ -62,19 +80,34 @@ namespace TowerDefense {
                     bt.DrawVertex(g);
                 }
             }
-            bool drawTowerRange = true;
-            if (drawTowerRange) {
-                foreach (Tower t in world.towers)
+
+            foreach (Tower t in world.towers)
+                if (t.drawTowerRange)
                     t.DrawAttackRange(g);
-                //world.DrawTowerRanges();
-            }
+
             GameWorldPB.Image = bm;
         }
 
         /// Handles placing a tower on the PictureBox.
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
+            // No tower to build selected.
+            if(selectedTower == 0 && !GetTileAtMouse.buildable) {
+                for (int i = 0; i < world.towers.Count; i++) {
+                    for(int j = 0; j < world.towers[i].pos.Count; j++) {
+                        if (world.towers[i].pos[j] == GetTileAtMouse) {
+                            Console.WriteLine(i);
+                            if (world.tower != null) world.tower.drawTowerRange = false;
+                            world.tower = world.towers[i];
+                            world.tower.drawTowerRange = true;
+                        }
+                    }
+                }
+            }
+
+
             // Gets 2x2 square of Tiles according to location of mouse.
-            List<BaseTile> selectedTiles = GetSelectedTiles(e.Location); 
+            List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
+            
             // Tower to add.
             Tower addTower = null;
             
@@ -87,21 +120,35 @@ namespace TowerDefense {
                 if (selectedTower == (int)Towers.CannonTower)
                     addTower = new CannonTower();
 
-                // Sets all of the selected Tiles to not buildable (you cant build multiple Towers on the same Tiles).
-                foreach (BaseTile bt in selectedTiles) {
-                    bt.buildable = false;
-                    bt.DestroyVertex();
-                    bt.tower = addTower;
+                if (world.gold + addTower.goldCost >= 0) {
+                    world.AddOrDeductGold(addTower.goldCost);
+                    Console.WriteLine(world.gold + "  " + addTower.goldCost);
+                    // Sets all of the selected Tiles to not buildable (you cant build multiple Towers on the same Tiles).
+                    foreach (BaseTile bt in selectedTiles) {
+                        bt.buildable = false;
+                        bt.DestroyVertex();
+                        bt.tower = addTower;
+                    }
+                    // Adds the Tower to the list of Towers, with the position being the Tile where the mouse was clicked.
+                    addTower.BuildTower(selectedTiles);
+                    //towertower.drawTowerRange = false; // UGLY
+                    //towertower = null; // UGLY
+                    //towertower = addTower; // UGLY
                 }
-                
-                // Adds the Tower to the list of Towers, with the position being the Tile where the mouse was clicked.
-                addTower.BuildTower(GetTileAtMouse);
+
+                playerGoldAmount.Text = world.gold.ToString();
                 DrawBackground();
+            }
+            // Enemy placement testcode
+            if(e.Button == MouseButtons.Right) {
+                Enemy newEnemy = new Imp(e.Location, 5, 10, null);
+                world.enemies.Add(newEnemy);
             }
         }
 
         /// Handles change of mouse location within PictureBox, redraws.
         private void GameWorldPB_MouseMove(object sender, MouseEventArgs e) {
+            //if (selectedTower == 0 && !GetTileAtMouse.buildable) GameWorldPB.Cursor = Cursors.Hand;
             mousePos = e.Location;
             GameWorldPB.Invalidate();
         }
@@ -115,14 +162,27 @@ namespace TowerDefense {
         /// Handles selecting ArrowTower as placement.
         private void Tower1PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = (int)Towers.ArrowTower;
+            //towertower = new ArrowTower(); // UGLY
+            if (world.tower != null) world.tower.drawTowerRange = false;
+            GameWorldPB.Invalidate();
+            world.tower = null;
         }
 
         /// Handles selecting CannonTower as placement.      
         private void Tower2PB_MouseDown(object sender, MouseEventArgs e)
         {
             this.selectedTower = (int)Towers.CannonTower;
+            //towertower = new CannonTower();
+            if (world.tower != null) world.tower.drawTowerRange = false;
+            GameWorldPB.Invalidate();
+            world.tower = null;
         }
-      
+
+        private void handSelectPB_Click(object sender, EventArgs e) {
+            this.selectedTower = 0;
+            GameWorldPB.Invalidate();
+        }
+
         ///  Gets currently selected Tiles (used after clicking the main picturebox).
         private List<BaseTile> GetSelectedTiles(Vector2D pos) {
             List<BaseTile> toReturn = new List<BaseTile>();
@@ -152,5 +212,7 @@ namespace TowerDefense {
         private void globalTimer_Tick(object sender, EventArgs e) {
             world.Update();
         }
+
+
     }
 }

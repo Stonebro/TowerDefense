@@ -11,8 +11,10 @@ namespace TowerDefense.Towers {
     class CannonTower : Tower{
         /// CannonTower constructor.
         public CannonTower() { 
-            goldCost = 10;
+            goldCost = -10;
             attackPower = 10;
+            attackRange = 8;
+            attackInterval = 0.2f;
             splash = new Bitmap(Resources.Resources.CannonTower);
             sprite = new Bitmap(Resources.Resources.CannonTowerSprite);
         }

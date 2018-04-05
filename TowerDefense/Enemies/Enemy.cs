@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
+using TowerDefense.CommandPattern;
 
 namespace TowerDefense.Enemies {
-    public class Enemy {
+    public class Enemy : IReceiver {
         public Vector2D pos;
         public float health;
         public int size;
@@ -21,7 +22,8 @@ namespace TowerDefense.Enemies {
         }
 
         public virtual void Update() {
-
+            //AttackCommand cmd = new AttackCommand(this);
+            //cmd.Execute();
         }
 
         public virtual void Render(Graphics g) { }

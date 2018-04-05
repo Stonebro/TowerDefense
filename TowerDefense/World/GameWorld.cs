@@ -27,7 +27,7 @@ namespace TowerDefense.World {
         // Amount of horizontal Tiles.
         public int tilesH = 40;
         // Amount of vertical Tiles
-        public int tilesV = 40; 
+        public int tilesV = 40;
         // Total amount of Tiles.
         public int tiles;
         // List containing all Tiles.
@@ -39,8 +39,15 @@ namespace TowerDefense.World {
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
 
+        // UI Elements
+        public int gold { get; private set; }
+        public int lives { get; private set; }
+        public Tower tower { get; set; }
+
         /// GameWorld constructor. 
         public GameWorld() {
+            gold = 500;
+            lives = 50;
             // Initializes GameWorld.
             _instance = this;
 
@@ -119,8 +126,12 @@ namespace TowerDefense.World {
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
+            if (tile.buildable == false) {
+                Console.WriteLine(tile.pos);
+                return neighbours;
+            }
             // Used for determining if a Tile is present above/under/to the left/to the right of the Tile specified.
-            bool up=false, down=false, left=false, right=false;
+            bool up =false, down=false, left=false, right=false;
             if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
             if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true; // A tile to the right is present.
             if (tile.pos.y >= BaseTile.size) up = true; // A tile above the specified tile is present.
@@ -152,10 +163,14 @@ namespace TowerDefense.World {
                 // Gets the Tile to the right of the current Tile.
                 BaseTile rightTile = tilesList[GetIndexOfTile(tile.pos + new Vector2D(BaseTile.size, 0))];
                 // Adds the Tile to List of neighbours if its possible to build on the Tile.
-                if (rightTile.buildable) neighbours.Add(rightTile);
+                if (rightTile.buildable && rightTile.vertex != null) neighbours.Add(rightTile);
             }
             // Returns list of neighbours.
             return neighbours;
+        }
+
+        public int AddOrDeductGold(int amount) {
+            return gold += amount;
         }
     }
 }

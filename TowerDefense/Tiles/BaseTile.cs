@@ -37,10 +37,25 @@ namespace TowerDefense.Tiles {
 
         /// Destroys the Vertex that corresponds to the Tile. 
         public void DestroyVertex() {
-            if (vertex != null) {
-                this.vertex.adj = null;
-                this.vertex = null;
-            }
+            //if (vertex != null) {
+            //    foreach (Edge e in vertex.adj) {
+            //        for(int i=0; i < e.dest.adj.Count; i++) {
+            //            if(e.dest.adj[i].dest == vertex) {
+            //                e.dest.adj[i] = null;
+            //            }
+            //        }
+            //    }
+            //    Console.WriteLine("AMOUNT OF EDGES: " + vertex.adj.Count);
+            //}
+
+
+
+            //if(vertex != null) {
+            //    foreach(Edge e in vertex.adj) {
+            //        Console.WriteLine(IsConnected(e.dest.parentTile));
+            //    }
+            //}
+            this.vertex = null;
         }
 
         /// Creates a vertex corresponding to this Tile if it doesn't have one yet and the Tile is buildable.
@@ -71,9 +86,14 @@ namespace TowerDefense.Tiles {
                 PointF a, b;
                 a = new PointF(pos.x + size / 2, pos.y + size / 2);
                 foreach(Edge e in vertex.adj) {
+                    //if (!e.dest.parentTile.buildable) {
+                    //    e.dest.adj.Remove(e);
+                    //}
+                    //else { 
                     Vector2D ePos = e.dest.parentTile.pos;
-                    b = new PointF(ePos.x + size/2, ePos.y + size/2);
+                    b = new PointF(ePos.x + size / 2, ePos.y + size / 2);
                     g.DrawLine(new Pen(Color.DarkTurquoise), a, b);
+                    //}
                 }
             }
 
