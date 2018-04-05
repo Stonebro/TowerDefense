@@ -110,7 +110,7 @@ namespace TowerDefense.World {
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
-            // Used for determening if a Tile is present above/under/to the left/to the right of the Tile specified.
+            // Used for determining if a Tile is present above/under/to the left/to the right of the Tile specified.
             bool up=false, down=false, left=false, right=false;
             if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
             if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true; // A tile to the right is present.
