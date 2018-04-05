@@ -28,7 +28,10 @@ namespace TowerDefense.Tiles {
         }
 
         public void DestroyVertex() {
-            this.vertex = null;
+            if (vertex != null) {
+                this.vertex.adj = null;
+                this.vertex = null;
+            }
         }
 
         public void CreateVertex() {
