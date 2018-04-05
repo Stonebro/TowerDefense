@@ -29,3 +29,4 @@ C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.csp
 C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.exe
 C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.pdb
 C:\Users\gijs4\source\repos\TowerDefense\TowerDefense\obj\Debug\TowerDefense.Resources.Resources.resources
+C:\BACKUP OPSLAG\Windesheim GP\AAI\TowerDefense\TowerDefense\obj\Debug\TowerDefense.Resources.Resources.resources
