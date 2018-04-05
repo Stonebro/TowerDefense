@@ -8,6 +8,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.vs
+.vs/TowerDefense/v15/Server/sqlite3/*
+.vs/TowerDefense/v15/Server/sqlite3/storage.ide-wal
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
