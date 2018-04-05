@@ -76,7 +76,7 @@ namespace TowerDefense.World {
             // Sets endTile to not Buildable.
             endTile.buildable = false;
             Enemy testEnemy = new Imp(tilesList[60].pos, 10, 10, new Vector2D());
-            instance.enemies.Add(testEnemy);
+            Instance.enemies.Add(testEnemy);
         }
 
         /// Draws each tile

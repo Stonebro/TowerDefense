@@ -34,24 +34,25 @@ namespace TowerDefense {
 
         public Form1() {
             InitializeComponent();
-            instance = this;
+            //instance = this;
             DrawBackground();
             globalTimer.Enabled = true;
         }
-        
-     
+
+
         /// Paints the GameWorld. 
         private void GameWorldPB_Paint(object sender, PaintEventArgs e) {
             base.OnPaint(e);
-            world.RenderWorld(e.Graphics); // Renders the world, draws each Tile.
+            //world.RenderWorld(e.Graphics); // Renders the world, draws each Tile.
 
             // Previews location of Tower placement if mouse is on the PictureBox.
             if (mousePos != null) {
                 SolidBrush brush = new SolidBrush(Color.FromArgb(128, 200, 0, 0));
-                e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size*2, BaseTile.size*2)));
+                e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
             }
-            // Draws Graph of GameWorld if user desires to see it.
+        }
 
+        // Draws Graph of GameWorld if user desires to see it.
         public void DrawBackground() {
             Bitmap bm = new Bitmap(600, 600);
             Graphics g = Graphics.FromImage(bm);

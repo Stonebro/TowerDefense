@@ -24,7 +24,7 @@ namespace TowerDefense.Towers {
 
         public override void BuildTower(BaseTile pos) {
             base.BuildTower(pos);
-            if (GameWorld.instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
+            if (GameWorld.Instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
                 Console.WriteLine("ATTACKING!");
             }
 

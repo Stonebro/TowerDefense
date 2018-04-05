@@ -34,7 +34,7 @@ namespace TowerDefense.Towers {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos.pos + new Vector2D(BaseTile.size, BaseTile.size);
             Console.WriteLine("pos: " + position);
-            GameWorld.instance.towers.Add(this);
+            GameWorld.Instance.towers.Add(this);
 
         }
 

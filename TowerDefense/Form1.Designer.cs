@@ -39,9 +39,8 @@
             // 
             this.GameWorldPB.InitialImage = ((System.Drawing.Image)(resources.GetObject("GameWorldPB.InitialImage")));
             this.GameWorldPB.Location = new System.Drawing.Point(0, 0);
-            this.GameWorldPB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.GameWorldPB.Name = "GameWorldPB";
-            this.GameWorldPB.Size = new System.Drawing.Size(800, 738);
+            this.GameWorldPB.Size = new System.Drawing.Size(600, 600);
             this.GameWorldPB.TabIndex = 0;
             this.GameWorldPB.TabStop = false;
             this.GameWorldPB.Paint += new System.Windows.Forms.PaintEventHandler(this.GameWorldPB_Paint);
@@ -55,10 +54,9 @@
             this.Tower1PB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTower;
             this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
-            this.Tower1PB.Location = new System.Drawing.Point(963, 15);
-            this.Tower1PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Tower1PB.Location = new System.Drawing.Point(722, 12);
             this.Tower1PB.Name = "Tower1PB";
-            this.Tower1PB.Size = new System.Drawing.Size(67, 62);
+            this.Tower1PB.Size = new System.Drawing.Size(50, 50);
             this.Tower1PB.TabIndex = 1;
             this.Tower1PB.TabStop = false;
             this.Tower1PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower1PB_MouseDown);
@@ -67,20 +65,18 @@
             // 
             this.Tower2PB.BackColor = System.Drawing.SystemColors.InfoText;
             this.Tower2PB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Tower2PB.Location = new System.Drawing.Point(963, 84);
-            this.Tower2PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Tower2PB.Location = new System.Drawing.Point(722, 68);
             this.Tower2PB.Name = "Tower2PB";
-            this.Tower2PB.Size = new System.Drawing.Size(67, 62);
+            this.Tower2PB.Size = new System.Drawing.Size(50, 50);
             this.Tower2PB.TabIndex = 2;
             this.Tower2PB.TabStop = false;
             this.Tower2PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower2PB_MouseDown);
             // 
             // showVerticesBtn
             // 
-            this.showVerticesBtn.Location = new System.Drawing.Point(884, 698);
-            this.showVerticesBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.showVerticesBtn.Location = new System.Drawing.Point(663, 567);
             this.showVerticesBtn.Name = "showVerticesBtn";
-            this.showVerticesBtn.Size = new System.Drawing.Size(145, 41);
+            this.showVerticesBtn.Size = new System.Drawing.Size(109, 33);
             this.showVerticesBtn.TabIndex = 3;
             this.showVerticesBtn.Text = "Show Vertices";
             this.showVerticesBtn.UseVisualStyleBackColor = true;
@@ -93,14 +89,14 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1045, 937);
+            this.ClientSize = new System.Drawing.Size(784, 709);
             this.Controls.Add(this.showVerticesBtn);
             this.Controls.Add(this.Tower2PB);
             this.Controls.Add(this.Tower1PB);
             this.Controls.Add(this.GameWorldPB);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.GameWorldPB)).EndInit();
