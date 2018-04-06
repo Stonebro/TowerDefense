@@ -8,12 +8,14 @@ using TowerDefense.Tiles;
 using TowerDefense.World;
 using TowerDefense.Util;
 using TowerDefense.Enemies;
-
+using TowerDefense.CommandPattern;
+using System.Threading;
 
 namespace TowerDefense.Towers {
     class ArrowTower : Tower {
         /// ArrowTower constructor.
-        public ArrowTower() { 
+        public ArrowTower() {
+            name = "Arrow Tower";
             goldCost = 5;
             attackPower = 8;
             attackRange = 4;
@@ -22,16 +24,29 @@ namespace TowerDefense.Towers {
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 
-        public override void BuildTower(BaseTile pos) {
+        public override void BuildTower(List<BaseTile> pos) {
             base.BuildTower(pos);
             if (GameWorld.Instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
-                Console.WriteLine("ATTACKING!");
+                enemiesInRange.Add(GameWorld.Instance.enemies[0]);
             }
 
         }
 
         public override void Update() {
-            base.Update();
+            //base.Update();
+            if (enemiesInRange.Count != 0) {
+                AttackNearestTarget();
+            }
+            else { DoNothing(); }
+        }
+
+        public override void AttackNearestTarget() {
+            if (enemiesInRange != null) {
+                //SetAction(ACTION_LIST.Attack);
+                AttackCommand atkCmd = new AttackCommand(this);
+                atkCmd.Execute();
+                //Thread.Sleep(1000);
+            }
         }
 
         //public List<Enemy> CalculateNeighbours(Vector2D targetPos, float queryRad) {

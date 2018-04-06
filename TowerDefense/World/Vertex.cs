@@ -17,6 +17,8 @@ namespace TowerDefense.World {
         public Vertex previous;
         // Used for Dijkstra (if Vertex has been visited or not). 
         public bool scratch;
+        // Enable or disable this vertex
+        public bool disabled;
 
         /// Vertex constructor.
         public Vertex(BaseTile parent) {

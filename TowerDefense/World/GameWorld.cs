@@ -27,7 +27,7 @@ namespace TowerDefense.World {
         // Amount of horizontal Tiles.
         public int tilesH = 40;
         // Amount of vertical Tiles
-        public int tilesV = 40; 
+        public int tilesV = 40;
         // Total amount of Tiles.
         public int tiles;
         // List containing all Tiles.
@@ -39,8 +39,15 @@ namespace TowerDefense.World {
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
 
+        // UI Elements
+        public int gold { get; private set; }
+        public int lives { get; private set; }
+        public Tower tower { get; set; }
+
         /// GameWorld constructor. 
         public GameWorld() {
+            gold = 500;
+            lives = 50;
             // Initializes GameWorld.
             _instance = this;
 
@@ -83,9 +90,16 @@ namespace TowerDefense.World {
         public void RenderWorld(Graphics g) {
             // Loops through Tiles.
             for (int i = 0; i < tiles; i++) {
-                // Handles draw of not-buildable Tiles.
+                // Handles draw of not-buildable Tiles (Should be sprites).
                 if (tilesList[i].buildable == false) {
-                    g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    if (tilesList[i].tower is ArrowTower) {
+                        SolidBrush ATBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 200));
+                        g.FillRectangle(ATBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    } else if (tilesList[i].tower is CannonTower) {
+                        SolidBrush CTBrush = new SolidBrush(Color.FromArgb(128, 25, 25, 25));
+                        g.FillRectangle(CTBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    }
+                /*else g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));*/
                 }  else { // If Tile is buildable.
                     g.DrawRectangle(new Pen(Color.LightGray), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 }
@@ -123,8 +137,9 @@ namespace TowerDefense.World {
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
+
             // Used for determining if a Tile is present above/under/to the left/to the right of the Tile specified.
-            bool up=false, down=false, left=false, right=false;
+            bool up =false, down=false, left=false, right=false;
             if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
             if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true; // A tile to the right is present.
             if (tile.pos.y >= BaseTile.size) up = true; // A tile above the specified tile is present.
@@ -160,6 +175,13 @@ namespace TowerDefense.World {
             }
             // Returns list of neighbours.
             return neighbours;
+        }
+
+        public int AddGold(int amount) {
+            return gold += amount;
+        }
+        public int DeductGold(int amount) {
+            return gold -= amount;
         }
     }
 }

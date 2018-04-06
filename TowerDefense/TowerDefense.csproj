@@ -45,6 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandPattern\AttackCommand.cs" />
+    <Compile Include="CommandPattern\Command.cs" />
+    <Compile Include="CommandPattern\DoNothingCommand.cs" />
+    <Compile Include="CommandPattern\IReceiver.cs" />
     <Compile Include="Enemies\Enemy.cs" />
     <Compile Include="Enemies\Imp.cs" />
     <Compile Include="Form1.cs">
@@ -106,6 +110,7 @@
     <EmbeddedResource Include="images\basic_ground.bmp" />
     <Content Include="images\basic_ground.png" />
     <Content Include="Resources\ArrowTower.png" />
+    <None Include="Resources\ArrowTowerSprite.bmp" />
     <Content Include="Resources\ArrowTowerSprite.png" />
     <EmbeddedResource Include="Resources\basic_ground.bmp" />
     <Content Include="Resources\CannonTower.png" />
