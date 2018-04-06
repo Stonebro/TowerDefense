@@ -34,6 +34,7 @@ namespace TowerDefense.World {
         public BaseTile[] tilesList;
         // List of Towers.
         public List<Tower> towers;
+        // List of Enemies
         public List<Enemy> enemies;
         public Graph graph;
         // StartTile and EndTile.
@@ -125,7 +126,9 @@ namespace TowerDefense.World {
         public void SpawnEnemy()
         {
             ResetAllVertices();
-            Imp imp = new Imp(startTile.pos, 5, 10, new Vector2D(), Path.GetPath(startTile, endTile));
+            Imp imp = new Imp();
+            imp.pos = startTile.pos;
+            imp.path = Path.GetPath(startTile, endTile);
             Instance.enemies.Add(imp);
             foreach (Tower t in towers)
                 t.nearbyEnemies.Add(imp);
@@ -140,13 +143,13 @@ namespace TowerDefense.World {
 
         /// Checks if any of the Tiles within a 2x2 space (around the mouseclick) has something built on it already.
         public bool isBuildable(List<BaseTile> selectedTiles) {
-            if (selectedTiles.All(i => i.buildable)) return true;
+            if (selectedTiles.All(i => i.buildable) && selectedTiles.Count >= 4) return true;
             return false;
         }
 
         public void RecalculatePaths()
         {
-            BaseTile endTile = Instance.endTile;
+            //BaseTile endTile = Instance.endTile;
             foreach (Enemy enemy in Instance.enemies)
             {
                 int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
@@ -164,19 +167,17 @@ namespace TowerDefense.World {
         /// This method will only recalculate the path if the current path is obstructed by the new Tower.
         public void RecalculatePaths(List<BaseTile> tilesToCheck)
         {
-            
-            BaseTile endTile = Instance.endTile;
-            foreach (Enemy enemy in Instance.enemies)
-            {
-                if (enemy.path.IsBlocked(tilesToCheck))
-                {
-                    int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
-                    BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
-                    foreach (BaseTile tile in Instance.tilesList)
-                    {
-                        tile.vertex.Reset();
+            //BaseTile endTile = Instance.endTile;
+            foreach (Enemy enemy in Instance.enemies) {
+                if(!enemy.dead) { 
+                    if (enemy.path.IsBlocked(tilesToCheck)) {
+                        int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
+                        BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
+                        foreach (BaseTile tile in Instance.tilesList) {
+                            tile.vertex.Reset();
+                        }
+                        enemy.path = Path.GetPath(enemyTile, endTile);
                     }
-                    enemy.path = Path.GetPath(enemyTile, endTile);
                 }
             }
         }

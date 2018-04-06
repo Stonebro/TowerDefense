@@ -13,6 +13,7 @@ namespace TowerDefense.Enemies
 {
     public class Enemy : IReceiver
     {
+        public string name;
         public Vector2D pos;
         public float health;
         protected int size;
@@ -20,16 +21,6 @@ namespace TowerDefense.Enemies
         public Path path;
         public bool dead;
         public int bounty;
-
-        /// Enemy constructor.
-        public Enemy(Vector2D pos, float health, int size, Vector2D velocity, Path path)
-        {
-            this.pos = pos;
-            this.health = health;
-            this.size = size;
-            this.velocity = velocity;
-            this.path = path;
-        }
 
         /// Handles moving the enemy.
         public virtual void Update()

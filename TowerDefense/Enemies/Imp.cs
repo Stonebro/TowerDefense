@@ -4,14 +4,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefense.Tiles;
 using TowerDefense.Towers;
 using TowerDefense.Util;
 using TowerDefense.World;
 
 namespace TowerDefense.Enemies {
     public class Imp : Enemy {
-        
-        public Imp(Vector2D pos, float health, int size, Vector2D velocity, Path path) : base(pos, health, size, velocity, path) {
+        public Imp() {
+            name = "Imp";
+            health = 15;
+            size = 10;
             bounty = 3;
         }
 
@@ -20,7 +23,7 @@ namespace TowerDefense.Enemies {
         }
 
         public override void Render(Graphics g) {
-            g.FillRectangle(new SolidBrush(Color.Red), new RectangleF(pos.x, pos.y, size, size));
+            g.FillRectangle(new SolidBrush(Color.Red), new RectangleF(pos.x + ((BaseTile.size-size)/2), pos.y + ((BaseTile.size - size) / 2), size, size));
         }
 
         public override void Die() {

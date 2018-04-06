@@ -21,9 +21,9 @@ namespace TowerDefense {
         private Vector2D mousePos;
         // Currently selected Tower.
         private Tower selectedTower;
-        // Used for counting elapsed ticks of GlobalTimer.
         // Decides if Graph of GameWorld is drawn or not.
-        private bool drawVerts = false;
+        private bool drawVerts = false; 
+        // Used for counting elapsed ticks of GlobalTimer.
         public static int tickCounter { get; private set; }
 
         /// Gets Tile that corresponds to the current mouse position.
@@ -80,67 +80,64 @@ namespace TowerDefense {
 
             foreach (Tower t in world.towers)
             {
-                if (t.drawTowerRange)
-                    t.DrawAttackRange(g);
-
-                g.DrawImage(Resources.Resources.ArrowTowerSprite, t.position.x - BaseTile.size, t.position.y - BaseTile.size);
+                t.b = g; // CHEAT
+                if (t.drawTowerRange) t.DrawAttackRange(g);
+                g.DrawImage(t.sprite, t.position.x - BaseTile.size, t.position.y - BaseTile.size);
             }
-
             foreach (Enemy e in world.enemies) if(!e.dead) e.Render(g);
-
             GameWorldPB.Image = bm;
         }
 
         /// Handles placing a tower on the PictureBox.
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
-            // No tower to build selected, mouse can be used to select placed Towers
-            ///if(selectedTower == 0 && !GetTileAtMouse.buildable) {
-            if (selectedTower == null && !GetTileAtMouse.buildable) {
-                // Loop through all Towers
-                for (int i = 0; i < world.towers.Count; i++) {
-                    // Check if the clicked tile is occupied by a Tower
-                    for(int j = 0; j < world.towers[i].pos.Count; j++) {
-                        if (world.towers[i].pos[j] == GetTileAtMouse) {
-                        
-                            // Deselect the previously selected Tower (if there is one)
-                            DeselectTower();
-                            // Set the selected Tower, draw its Range and toggle the Details.
-                            world.tower = world.towers[i];
-                            SelectTower();
+            // Enemy placement testcode
+            if (e.Button == MouseButtons.Right) {
+                DeselectTower();
+                handSelectPB_Click(sender, e);
+                tickCounter = 0;
+            } else { 
+                // No tower to build selected, mouse can be used to select placed Towers
+                if (selectedTower == null && !GetTileAtMouse.buildable) {
+                    // Loop through all Towers
+                    for (int i = 0; i < world.towers.Count; i++) {
+                        // Check if the clicked tile is occupied by a Tower
+                        for(int j = 0; j < world.towers[i].pos.Count; j++) {
+                            if (world.towers[i].pos[j] == GetTileAtMouse) {
+                                // Deselect the previously selected Tower (if there is one)
+                                DeselectTower();
+                                // Set the selected Tower, draw its Range and toggle the Details.
+                                world.tower = world.towers[i];
+                                SelectTower();
+                            } 
                         }
                     }
+                } else DeselectTower();
+
+
+                // Gets 2x2 square of Tiles according to location of mouse.
+                List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
+                // If the selected tiles are buildable AND you have a tower selected AND you have enough money..
+                if (world.isBuildable(selectedTiles) && selectedTower != null && world.gold + selectedTower.goldCost >= 0) {
+                    // ..Check the selected tower's type and create a new object of that type
+                    Tower addTower = null;
+                    if (selectedTower is ArrowTower) addTower = new ArrowTower();
+                    if (selectedTower is CannonTower) addTower = new CannonTower();
+                    // ..Deduct gold
+                    world.DeductGold(selectedTower.goldCost);
+                    // Disable each selected tile
+                    foreach (BaseTile bt in selectedTiles) {
+                        bt.DisableTile();
+                        bt.tower = addTower;
+                    }
+                    // Build the tower, update the gold and redraw the background
+                    addTower.BuildTower(selectedTiles);
+                    DeselectTower();
+                    world.tower = addTower;
+                    SelectTower();
+                    DrawBackground();
                 }
             }
 
-
-            // Gets 2x2 square of Tiles according to location of mouse.
-            List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
-            // If the selected tiles are buildable AND you have a tower selected AND you have enough money..
-            if (world.isBuildable(selectedTiles) && selectedTower != null && world.gold + selectedTower.goldCost >= 0) {
-                // ..Check the selected tower's type and create a new object of that type
-                Tower addTower = null;
-                if (selectedTower is ArrowTower) addTower = new ArrowTower();
-                if (selectedTower is CannonTower) addTower = new CannonTower();
-                // ..Deduct gold
-                world.DeductGold(selectedTower.goldCost);
-                // Disable each selected tile
-                foreach (BaseTile bt in selectedTiles) {
-                    bt.DisableTile();
-                    bt.tower = addTower;
-                }
-                // Build the tower, update the gold and redraw the background
-                addTower.BuildTower(selectedTiles);               
-                DrawBackground();
-              
-            }
-
-            // Enemy placement testcode
-            if(e.Button == MouseButtons.Right) {
-                //BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
-                //Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
-                //GameWorld.Instance.enemies.Add(newEnemy);
-                tickCounter = 0;
-            }
         }
 
         /// Handles change of mouse location within PictureBox, redraws.
@@ -206,15 +203,12 @@ namespace TowerDefense {
         private void globalTimer_Tick(object sender, EventArgs e) {
             playerGoldAmount.Text = world.gold.ToString();
             playerLivesAmount.Text = world.lives.ToString();
-            if (tickCounter < 50 && tickCounter % 2 == 0)
-            {
+            if (tickCounter < (1000 / globalTimer.Interval * 50) && tickCounter % (1000 / globalTimer.Interval) == 0) {
                 world.SpawnEnemy();
             }
             DrawBackground();
             world.Update();
             tickCounter++;
-          
-            if (world.tower == null) deleteTowerBtn.Visible = false;
         }
 
         private void deleteTowerBtn_Click(object sender, EventArgs e) {
@@ -240,13 +234,11 @@ namespace TowerDefense {
                 deleteTowerBtn.Visible = true;
                 selectedTowerName.Text = world.tower.name;
                 selectedTowerDamage.Text = world.tower.attackPower.ToString();
-                selectedTowerAS.Text = world.tower.attackInterval.ToString();
+                selectedTowerAS.Text = "1atk/"+(world.tower.attackInterval/10).ToString()+"s";
                 selectedTowerKills.Text = world.tower.kills.ToString();
                 world.tower.drawTowerRange = true;
             }
         }
-
-       
 
         // Toggle information for a selected Tower off
         private void DeselectTower() {
