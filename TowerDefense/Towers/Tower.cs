@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefense.Enemies;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
@@ -40,8 +41,19 @@ namespace TowerDefense.Towers {
         public virtual void BuildTower(List<BaseTile> pos) {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
-            //Console.WriteLine("pos: " + position);
             GameWorld.Instance.towers.Add(this);
+            BaseTile endTile = GameWorld.Instance.endTile;
+            foreach (Enemy enemy in GameWorld.Instance.enemies)
+            {
+                int enemyTileIndex = GameWorld.Instance.GetIndexOfTile(enemy.pos);
+                BaseTile enemyTile = GameWorld.Instance.tilesList[enemyTileIndex];
+                foreach(BaseTile tile in GameWorld.Instance.tilesList)
+                {
+                    tile.vertex.Reset();
+                }
+                enemy.path = Path.GetPath(enemyTile, endTile);
+            }
+
         }
 
         // Draw a circle with a radius of 'this.attackRange' squares

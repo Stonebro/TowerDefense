@@ -9,7 +9,7 @@ using TowerDefense.Util;
 namespace TowerDefense.Enemies {
     public class Imp : Enemy {
         
-        public Imp(Vector2D pos, float health, int size, Vector2D velocity) : base(pos, health, size, velocity) {
+        public Imp(Vector2D pos, float health, int size, Vector2D velocity, Path path) : base(pos, health, size, velocity, path) {
             
         }
 

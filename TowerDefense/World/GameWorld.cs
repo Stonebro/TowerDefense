@@ -82,7 +82,7 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             // Sets endTile to not Buildable.
             endTile.buildable = false;
-            Enemy testEnemy = new Imp(tilesList[60].pos, 10, 10, new Vector2D());
+            Enemy testEnemy = new Imp(startTile.pos, 10, 10, new Vector2D(), Path.GetPath(startTile, endTile));
             Instance.enemies.Add(testEnemy);
         }
 
@@ -107,7 +107,12 @@ namespace TowerDefense.World {
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[0].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[tiles-1].pos, new Vector2D(BaseTile.size, BaseTile.size)));
             }
-            foreach (Enemy e in enemies) e.Render(g);
+            foreach (Enemy e in enemies)
+            {
+                Console.WriteLine(e.pos);
+                e.Render(g);
+                e.path.Render(g);
+            }
         }
 
         public void Update() {
