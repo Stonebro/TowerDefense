@@ -12,7 +12,7 @@ namespace TowerDefense.Enemies {
     public class Imp : Enemy {
         
         public Imp(Vector2D pos, float health, int size, Vector2D velocity, Path path) : base(pos, health, size, velocity, path) {
-            
+            bounty = 3;
         }
 
         public override void Update() {
@@ -26,6 +26,7 @@ namespace TowerDefense.Enemies {
         public override void Die() {
             dead = true;
             path = null;
+            GameWorld.Instance.AddGold(bounty);
             Console.WriteLine("IMP DIIEED");
             //GameWorld.Instance.enemies.Remove(this);
         }

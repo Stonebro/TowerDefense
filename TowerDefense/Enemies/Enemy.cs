@@ -18,6 +18,7 @@ namespace TowerDefense.Enemies
         private Vector2D velocity;
         public Path path;
         public bool dead;
+        public int bounty;
 
         public Enemy(Vector2D pos, float health, int size, Vector2D velocity, Path path)
         {

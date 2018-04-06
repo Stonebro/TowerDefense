@@ -25,7 +25,6 @@ namespace TowerDefense.Towers {
         }
 
         public override void Update() {
-            Console.WriteLine((nearbyEnemies != null) + "    " + (enemyInRange() != null) + "    " + (attackIntervalCounter % attackInterval == 0));
             if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
                 AttackHighestPriority(enemyInRange());
             }
@@ -33,6 +32,7 @@ namespace TowerDefense.Towers {
         }
 
         protected override void AttackHighestPriority(Enemy enemy) {
+            base.AttackHighestPriority(enemy);
             if(!enemy.dead) { 
                 Console.WriteLine("Attacking " + DateTime.Now + "   " + attackIntervalCounter);
                 enemy.health -= attackPower;

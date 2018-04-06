@@ -65,7 +65,9 @@ namespace TowerDefense.Towers {
             dnc.Execute();
         }
 
-        protected virtual void AttackHighestPriority(Enemy enemy) { }
+        protected virtual void AttackHighestPriority(Enemy enemy) {
+            if (enemy.health - attackPower <= 0) kills++;
+        }
 
         protected Enemy enemyInRange() {
             for(int i = 0; i < GameWorld.Instance.enemies.Count; i++)

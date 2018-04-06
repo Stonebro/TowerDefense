@@ -124,8 +124,7 @@ namespace TowerDefense {
                     bt.tower = addTower;
                 }
                 // Build the tower, update the gold and redraw the background
-                addTower.BuildTower(selectedTiles);
-                playerGoldAmount.Text = world.gold.ToString();
+                addTower.BuildTower(selectedTiles);               
                 DrawBackground();
               
             }
@@ -201,7 +200,8 @@ namespace TowerDefense {
       
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
-            //Graphics graphics = this.CreateGraphics();
+            playerGoldAmount.Text = world.gold.ToString();
+            playerLivesAmount.Text = world.lives.ToString();
             if (tickCounter < 50 && tickCounter % 2 == 0)
             {
                 world.SpawnEnemy();
