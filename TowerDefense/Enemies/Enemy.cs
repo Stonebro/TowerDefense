@@ -29,7 +29,10 @@ namespace TowerDefense.Enemies {
             //cmd.Execute();
             {
                 //Console.WriteLine(path.Current);
-                this.pos = path.Current;
+                if (path.Current != null)
+                {
+                    this.pos = path.Current;
+                }
                 path.GoNext();
             }
         }

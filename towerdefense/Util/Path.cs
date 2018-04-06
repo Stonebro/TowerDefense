@@ -140,11 +140,11 @@ namespace TowerDefense.Util
             // Create Path to return
             Path path = new Path();
 
-            Console.WriteLine(startTile.vertex);
-
-            // If startTile doesn't have a vertex return empty Path.
-            if (startTile.vertex == null)
+            // If startTile is disabled return empty Path.
+            if (startTile.vertex.disabled)
+            {
                 return path;
+            }
 
             PriorityQueue<Vertex> priorityQueue = new PriorityQueue<Vertex>();
 
@@ -163,14 +163,10 @@ namespace TowerDefense.Util
 
                 //Console.WriteLine("trying to get path x");
                 currentVertex = priorityQueue.GetHighestPriority();
-                Console.WriteLine(currentVertex + "null?");
-                if (currentVertex == null)
-                    continue;
 
                 // Algoritmn arrived at the target tile.
                 if(currentVertex.parentTile.pos == targetTile.pos)
-                {
-                    Console.WriteLine("arrived");
+                { 
                     Vertex tempVertex = currentVertex;
 
                     // While previous Vertex is not null.
@@ -181,35 +177,22 @@ namespace TowerDefense.Util
                         tempVertex = tempVertex.previous;
                     }
 
-                    foreach (Vector2D waypoint in path.waypoints)
-                    {
-
-                        int tileIndex = GameWorld.Instance.GetIndexOfTile(waypoint);
-                        if (GameWorld.Instance.tilesList[tileIndex].vertex != null)
-                        {
-                            GameWorld.Instance.tilesList[tileIndex].vertex.Reset();
-                        }
-                    }
                     // Returns the shortest path.
                     return path;
                 }
 
-
-                Console.WriteLine(currentVertex == null);
                     // Looks for neighbouring Vertices.
                     foreach (Edge edge in currentVertex.adj)
                     {
-                        //Console.WriteLine("check edge");
                         // Checks if there is not already a faster route to the destination vertex found.
                         if (edge.dest.distance >= currentVertex.distance + edge.cost)
                         {
-                            //Console.WriteLine("done if");
                             // Previous Vertex leading to the fastest route to the destination vertex is now the current vertex.
                             edge.dest.previous = currentVertex;
                             // Sets the distance of this neighbour to be the distance to the current Vertex + the cost. 
                             edge.dest.distance = currentVertex.distance + edge.cost;
                             // If the destination vertex hasn't been visited yet.
-                            if (!edge.dest.scratch)
+                            if (!edge.dest.scratch  && !edge.dest.disabled )
                             {
                                 // Set the Vertex to be visited.
                                 edge.dest.scratch = true;

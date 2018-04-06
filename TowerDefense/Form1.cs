@@ -134,8 +134,10 @@ namespace TowerDefense {
 
             // Enemy placement testcode
             if(e.Button == MouseButtons.Right) {
-                Enemy newEnemy = new Imp(e.Location, 5, 10, null);
-                world.enemies.Add(newEnemy);
+                BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
+                Console.WriteLine(clickedTile);
+                Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
+                GameWorld.Instance.enemies.Add(newEnemy);
             }
         }
 

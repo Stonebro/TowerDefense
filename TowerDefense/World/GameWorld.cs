@@ -109,6 +109,7 @@ namespace TowerDefense.World {
             }
             foreach (Enemy e in enemies)
             {
+                Console.WriteLine(e.pos);
                 e.Render(g);
                 e.path.Render(g);
             }

@@ -43,16 +43,18 @@ namespace TowerDefense.Towers {
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
             GameWorld.Instance.towers.Add(this);
             BaseTile endTile = GameWorld.Instance.endTile;
-            foreach(Enemy enemy in GameWorld.Instance.enemies)
+            foreach (Enemy enemy in GameWorld.Instance.enemies)
             {
                 int enemyTileIndex = GameWorld.Instance.GetIndexOfTile(enemy.pos);
                 BaseTile enemyTile = GameWorld.Instance.tilesList[enemyTileIndex];
-                Console.WriteLine(enemyTile + "hoitile");
-                Console.WriteLine(endTile + "endtile");
-             
+                foreach(BaseTile tile in GameWorld.Instance.tilesList)
+                {
+                    tile.vertex.Reset();
+                }
                 enemy.path = Path.GetPath(enemyTile, endTile);
-
             }
+
+        }
 
         // Draw a circle with a radius of 'this.attackRange' squares
         public void DrawAttackRange(Graphics g) {
