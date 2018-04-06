@@ -109,7 +109,7 @@ namespace TowerDefense.World {
             }
             foreach (Enemy e in enemies)
             {
-                Console.WriteLine(e.pos);
+                //Console.WriteLine(e.pos);
                 e.Render(g);
                 e.path.Render(g);
             }
@@ -118,6 +118,13 @@ namespace TowerDefense.World {
         public void Update() {
             foreach (Tower t in towers) t.Update();
             foreach (Enemy e in enemies) e.Update();
+        }
+
+        public void SpawnEnemy()
+        {
+            ResetAllVertices();
+            Imp imp = new Imp(startTile.pos, 5, 15, new Vector2D(), Path.GetPath(startTile, endTile));
+            Instance.enemies.Add(imp);
         }
 
         /// Returns index of clicked Tile.
@@ -133,7 +140,30 @@ namespace TowerDefense.World {
             return false;
         }
 
-   
+        public void RecalculatePaths()
+        {
+            BaseTile endTile = Instance.endTile;
+            foreach (Enemy enemy in Instance.enemies)
+            {
+                int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
+                BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
+                foreach (BaseTile tile in Instance.tilesList)
+                {
+                    tile.vertex.Reset();
+                }
+                enemy.path = Path.GetPath(enemyTile, endTile);
+            }
+
+        }
+
+        public void ResetAllVertices()
+        {
+            foreach (BaseTile tile in Instance.tilesList)
+            {
+                tile.vertex.Reset();
+            }
+        }
+
         /// Gets all neighbours of tile where building is allowed.
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
