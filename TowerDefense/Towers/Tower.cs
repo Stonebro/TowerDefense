@@ -36,6 +36,7 @@ namespace TowerDefense.Towers {
         public bool drawTowerRange;
         // Amount of kills this Tower made;
         public int kills;
+        protected PriorityQueue<Enemy> nearbyEnemies = new PriorityQueue<Enemy>();
 
         /// "Builds" Tower.
         public virtual void BuildTower(List<BaseTile> pos) {
@@ -75,6 +76,7 @@ namespace TowerDefense.Towers {
         public virtual void Update() {
             if (GameWorld.Instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
                 enemiesInRange.Add(GameWorld.Instance.enemies[0]);
+                Console.WriteLine("ATTACKINNNGGG");
             }
         }
     }

@@ -10,7 +10,7 @@ namespace TowerDefense.CommandPattern {
         }
 
         public override void Execute() {
-            //Console.WriteLine("Execute");
+            Console.WriteLine("Attacking");
         }
     }
 }

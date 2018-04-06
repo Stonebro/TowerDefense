@@ -33,7 +33,10 @@ namespace TowerDefense.Towers {
         }
 
         public override void Update() {
-            //base.Update();
+            if(GameWorld.Instance.enemies != null) {
+                
+            }
+            base.Update();
             if (enemiesInRange.Count != 0) {
                 AttackNearestTarget();
             }

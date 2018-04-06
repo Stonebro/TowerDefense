@@ -10,7 +10,7 @@ using TowerDefense.CommandPattern;
 namespace TowerDefense.Enemies {
     public class Enemy : IReceiver {
         public Vector2D pos;
-        private float health;
+        protected float health;
         protected int size;
         private Vector2D velocity;
         public Path path;

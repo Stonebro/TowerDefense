@@ -137,8 +137,9 @@ namespace TowerDefense {
 
         /// Handles change of mouse location within PictureBox, redraws.
         private void GameWorldPB_MouseMove(object sender, MouseEventArgs e) {
-            //if (selectedTower == 0 && !GetTileAtMouse.buildable) GameWorldPB.Cursor = Cursors.Hand;
             mousePos = e.Location;
+            if (selectedTower == null && !GetTileAtMouse.buildable) GameWorldPB.Cursor = Cursors.Hand;
+            else GameWorldPB.Cursor = Cursors.Default;
             GameWorldPB.Invalidate();
         }
 
@@ -151,7 +152,6 @@ namespace TowerDefense {
         /// Handles selecting ArrowTower as placement.
         private void Tower1PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = new ArrowTower();
-            //towertower = new ArrowTower(); // UGLY
             GameWorldPB.Invalidate();
             DeselectTower();
         }
@@ -160,7 +160,6 @@ namespace TowerDefense {
         private void Tower2PB_MouseDown(object sender, MouseEventArgs e)
         {
             this.selectedTower = new CannonTower();
-            //towertower = new CannonTower();
             GameWorldPB.Invalidate();
             DeselectTower();
         }
