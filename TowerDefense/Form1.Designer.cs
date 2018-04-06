@@ -52,9 +52,10 @@
             // 
             // showVerticesBtn
             // 
-            this.showVerticesBtn.Location = new System.Drawing.Point(663, 567);
+            this.showVerticesBtn.Location = new System.Drawing.Point(884, 698);
+            this.showVerticesBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.showVerticesBtn.Name = "showVerticesBtn";
-            this.showVerticesBtn.Size = new System.Drawing.Size(109, 33);
+            this.showVerticesBtn.Size = new System.Drawing.Size(145, 41);
             this.showVerticesBtn.TabIndex = 3;
             this.showVerticesBtn.Text = "Show Vertices";
             this.showVerticesBtn.UseVisualStyleBackColor = true;
@@ -67,36 +68,40 @@
             // playerGoldLabel
             // 
             this.playerGoldLabel.AutoSize = true;
-            this.playerGoldLabel.Location = new System.Drawing.Point(617, 162);
+            this.playerGoldLabel.Location = new System.Drawing.Point(823, 199);
+            this.playerGoldLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.playerGoldLabel.Name = "playerGoldLabel";
-            this.playerGoldLabel.Size = new System.Drawing.Size(32, 13);
+            this.playerGoldLabel.Size = new System.Drawing.Size(42, 17);
             this.playerGoldLabel.TabIndex = 4;
             this.playerGoldLabel.Text = "Gold:";
             // 
             // playerGoldAmount
             // 
             this.playerGoldAmount.AutoSize = true;
-            this.playerGoldAmount.Location = new System.Drawing.Point(656, 162);
+            this.playerGoldAmount.Location = new System.Drawing.Point(875, 199);
+            this.playerGoldAmount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.playerGoldAmount.Name = "playerGoldAmount";
-            this.playerGoldAmount.Size = new System.Drawing.Size(13, 13);
+            this.playerGoldAmount.Size = new System.Drawing.Size(16, 17);
             this.playerGoldAmount.TabIndex = 5;
             this.playerGoldAmount.Text = "0";
             // 
             // playerLivesLabel
             // 
             this.playerLivesLabel.AutoSize = true;
-            this.playerLivesLabel.Location = new System.Drawing.Point(615, 179);
+            this.playerLivesLabel.Location = new System.Drawing.Point(820, 220);
+            this.playerLivesLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.playerLivesLabel.Name = "playerLivesLabel";
-            this.playerLivesLabel.Size = new System.Drawing.Size(35, 13);
+            this.playerLivesLabel.Size = new System.Drawing.Size(45, 17);
             this.playerLivesLabel.TabIndex = 6;
             this.playerLivesLabel.Text = "Lives:";
             // 
             // playerLivesAmount
             // 
             this.playerLivesAmount.AutoSize = true;
-            this.playerLivesAmount.Location = new System.Drawing.Point(656, 179);
+            this.playerLivesAmount.Location = new System.Drawing.Point(875, 220);
+            this.playerLivesAmount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.playerLivesAmount.Name = "playerLivesAmount";
-            this.playerLivesAmount.Size = new System.Drawing.Size(13, 13);
+            this.playerLivesAmount.Size = new System.Drawing.Size(16, 17);
             this.playerLivesAmount.TabIndex = 7;
             this.playerLivesAmount.Text = "0";
             // 
@@ -104,9 +109,10 @@
             // 
             this.Tower2PB.BackColor = System.Drawing.SystemColors.InfoText;
             this.Tower2PB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Tower2PB.Location = new System.Drawing.Point(618, 68);
+            this.Tower2PB.Location = new System.Drawing.Point(824, 84);
+            this.Tower2PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Tower2PB.Name = "Tower2PB";
-            this.Tower2PB.Size = new System.Drawing.Size(50, 50);
+            this.Tower2PB.Size = new System.Drawing.Size(67, 62);
             this.Tower2PB.TabIndex = 2;
             this.Tower2PB.TabStop = false;
             this.Tower2PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower2PB_MouseDown);
@@ -117,9 +123,10 @@
             this.Tower1PB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTower;
             this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
-            this.Tower1PB.Location = new System.Drawing.Point(618, 12);
+            this.Tower1PB.Location = new System.Drawing.Point(824, 15);
+            this.Tower1PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Tower1PB.Name = "Tower1PB";
-            this.Tower1PB.Size = new System.Drawing.Size(50, 50);
+            this.Tower1PB.Size = new System.Drawing.Size(67, 62);
             this.Tower1PB.TabIndex = 1;
             this.Tower1PB.TabStop = false;
             this.Tower1PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower1PB_MouseDown);
@@ -128,8 +135,9 @@
             // 
             this.GameWorldPB.InitialImage = ((System.Drawing.Image)(resources.GetObject("GameWorldPB.InitialImage")));
             this.GameWorldPB.Location = new System.Drawing.Point(0, 0);
+            this.GameWorldPB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.GameWorldPB.Name = "GameWorldPB";
-            this.GameWorldPB.Size = new System.Drawing.Size(600, 600);
+            this.GameWorldPB.Size = new System.Drawing.Size(800, 738);
             this.GameWorldPB.TabIndex = 0;
             this.GameWorldPB.TabStop = false;
             this.GameWorldPB.Paint += new System.Windows.Forms.PaintEventHandler(this.GameWorldPB_Paint);
@@ -141,18 +149,20 @@
             // 
             this.handSelectPB.BackColor = System.Drawing.SystemColors.Highlight;
             this.handSelectPB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.handSelectPB.Location = new System.Drawing.Point(674, 12);
+            this.handSelectPB.Location = new System.Drawing.Point(899, 15);
+            this.handSelectPB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.handSelectPB.Name = "handSelectPB";
-            this.handSelectPB.Size = new System.Drawing.Size(50, 50);
+            this.handSelectPB.Size = new System.Drawing.Size(67, 62);
             this.handSelectPB.TabIndex = 8;
             this.handSelectPB.TabStop = false;
             this.handSelectPB.Click += new System.EventHandler(this.handSelectPB_Click);
             // 
             // deleteTowerBtn
             // 
-            this.deleteTowerBtn.Location = new System.Drawing.Point(620, 335);
+            this.deleteTowerBtn.Location = new System.Drawing.Point(827, 412);
+            this.deleteTowerBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.deleteTowerBtn.Name = "deleteTowerBtn";
-            this.deleteTowerBtn.Size = new System.Drawing.Size(51, 23);
+            this.deleteTowerBtn.Size = new System.Drawing.Size(68, 28);
             this.deleteTowerBtn.TabIndex = 9;
             this.deleteTowerBtn.Text = "Delete";
             this.deleteTowerBtn.UseVisualStyleBackColor = true;
@@ -162,9 +172,10 @@
             // selectedTowerNameLabel
             // 
             this.selectedTowerNameLabel.AutoSize = true;
-            this.selectedTowerNameLabel.Location = new System.Drawing.Point(617, 237);
+            this.selectedTowerNameLabel.Location = new System.Drawing.Point(823, 292);
+            this.selectedTowerNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerNameLabel.Name = "selectedTowerNameLabel";
-            this.selectedTowerNameLabel.Size = new System.Drawing.Size(38, 13);
+            this.selectedTowerNameLabel.Size = new System.Drawing.Size(49, 17);
             this.selectedTowerNameLabel.TabIndex = 10;
             this.selectedTowerNameLabel.Text = "Name:";
             this.selectedTowerNameLabel.Visible = false;
@@ -172,9 +183,10 @@
             // selectedTowerAtkDmgLabel
             // 
             this.selectedTowerAtkDmgLabel.AutoSize = true;
-            this.selectedTowerAtkDmgLabel.Location = new System.Drawing.Point(617, 250);
+            this.selectedTowerAtkDmgLabel.Location = new System.Drawing.Point(823, 308);
+            this.selectedTowerAtkDmgLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerAtkDmgLabel.Name = "selectedTowerAtkDmgLabel";
-            this.selectedTowerAtkDmgLabel.Size = new System.Drawing.Size(50, 13);
+            this.selectedTowerAtkDmgLabel.Size = new System.Drawing.Size(65, 17);
             this.selectedTowerAtkDmgLabel.TabIndex = 11;
             this.selectedTowerAtkDmgLabel.Text = "Damage:";
             this.selectedTowerAtkDmgLabel.Visible = false;
@@ -182,9 +194,10 @@
             // selectedTowerKillsLabel
             // 
             this.selectedTowerKillsLabel.AutoSize = true;
-            this.selectedTowerKillsLabel.Location = new System.Drawing.Point(617, 276);
+            this.selectedTowerKillsLabel.Location = new System.Drawing.Point(823, 340);
+            this.selectedTowerKillsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerKillsLabel.Name = "selectedTowerKillsLabel";
-            this.selectedTowerKillsLabel.Size = new System.Drawing.Size(28, 13);
+            this.selectedTowerKillsLabel.Size = new System.Drawing.Size(37, 17);
             this.selectedTowerKillsLabel.TabIndex = 12;
             this.selectedTowerKillsLabel.Text = "Kills:";
             this.selectedTowerKillsLabel.Visible = false;
@@ -192,9 +205,10 @@
             // selectedTowerASLabel
             // 
             this.selectedTowerASLabel.AutoSize = true;
-            this.selectedTowerASLabel.Location = new System.Drawing.Point(617, 263);
+            this.selectedTowerASLabel.Location = new System.Drawing.Point(823, 324);
+            this.selectedTowerASLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerASLabel.Name = "selectedTowerASLabel";
-            this.selectedTowerASLabel.Size = new System.Drawing.Size(75, 13);
+            this.selectedTowerASLabel.Size = new System.Drawing.Size(96, 17);
             this.selectedTowerASLabel.TabIndex = 13;
             this.selectedTowerASLabel.Text = "Attack Speed:";
             this.selectedTowerASLabel.Visible = false;
@@ -202,9 +216,10 @@
             // selectedTowerName
             // 
             this.selectedTowerName.AutoSize = true;
-            this.selectedTowerName.Location = new System.Drawing.Point(693, 237);
+            this.selectedTowerName.Location = new System.Drawing.Point(924, 292);
+            this.selectedTowerName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerName.Name = "selectedTowerName";
-            this.selectedTowerName.Size = new System.Drawing.Size(10, 13);
+            this.selectedTowerName.Size = new System.Drawing.Size(13, 17);
             this.selectedTowerName.TabIndex = 14;
             this.selectedTowerName.Text = "-";
             this.selectedTowerName.Visible = false;
@@ -212,9 +227,10 @@
             // selectedTowerDamage
             // 
             this.selectedTowerDamage.AutoSize = true;
-            this.selectedTowerDamage.Location = new System.Drawing.Point(696, 250);
+            this.selectedTowerDamage.Location = new System.Drawing.Point(928, 308);
+            this.selectedTowerDamage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerDamage.Name = "selectedTowerDamage";
-            this.selectedTowerDamage.Size = new System.Drawing.Size(13, 13);
+            this.selectedTowerDamage.Size = new System.Drawing.Size(16, 17);
             this.selectedTowerDamage.TabIndex = 15;
             this.selectedTowerDamage.Text = "0";
             this.selectedTowerDamage.Visible = false;
@@ -222,9 +238,10 @@
             // selectedTowerAS
             // 
             this.selectedTowerAS.AutoSize = true;
-            this.selectedTowerAS.Location = new System.Drawing.Point(696, 263);
+            this.selectedTowerAS.Location = new System.Drawing.Point(928, 324);
+            this.selectedTowerAS.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerAS.Name = "selectedTowerAS";
-            this.selectedTowerAS.Size = new System.Drawing.Size(13, 13);
+            this.selectedTowerAS.Size = new System.Drawing.Size(16, 17);
             this.selectedTowerAS.TabIndex = 16;
             this.selectedTowerAS.Text = "0";
             this.selectedTowerAS.Visible = false;
@@ -232,18 +249,19 @@
             // selectedTowerKills
             // 
             this.selectedTowerKills.AutoSize = true;
-            this.selectedTowerKills.Location = new System.Drawing.Point(696, 280);
+            this.selectedTowerKills.Location = new System.Drawing.Point(928, 345);
+            this.selectedTowerKills.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.selectedTowerKills.Name = "selectedTowerKills";
-            this.selectedTowerKills.Size = new System.Drawing.Size(13, 13);
+            this.selectedTowerKills.Size = new System.Drawing.Size(16, 17);
             this.selectedTowerKills.TabIndex = 17;
             this.selectedTowerKills.Text = "0";
             this.selectedTowerKills.Visible = false;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 709);
+            this.ClientSize = new System.Drawing.Size(1045, 873);
             this.Controls.Add(this.selectedTowerKills);
             this.Controls.Add(this.selectedTowerAS);
             this.Controls.Add(this.selectedTowerDamage);
@@ -263,6 +281,7 @@
             this.Controls.Add(this.Tower1PB);
             this.Controls.Add(this.GameWorldPB);
             this.DoubleBuffered = true;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.Tower2PB)).EndInit();

@@ -21,7 +21,7 @@ namespace TowerDefense {
         private Vector2D mousePos;
         // Currently selected Tower.
         private Tower selectedTower;
-
+        // Used for counting elapsed ticks of GlobalTimer.
         // Decides if Graph of GameWorld is drawn or not.
         private bool drawVerts = false;
         public static int tickCounter { get; private set; }
@@ -53,7 +53,8 @@ namespace TowerDefense {
                 // Tower selected: 4 square mouse cursor
                 else { 
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
-                    if(selectedTower != null) {
+                    if (selectedTower != null)
+                    {
                         selectedTower.position = GetTileAtMouse.pos + new Vector2D(BaseTile.size, BaseTile.size); ;
                         selectedTower.DrawAttackRange(e.Graphics);
                     }
@@ -78,10 +79,14 @@ namespace TowerDefense {
             }
 
             foreach (Tower t in world.towers)
+            {
                 if (t.drawTowerRange)
                     t.DrawAttackRange(g);
 
-            foreach (Enemy e in world.enemies) if (!e.dead) e.Render(g);
+                g.DrawImage(Resources.Resources.ArrowTowerSprite, t.position.x - BaseTile.size, t.position.y - BaseTile.size);
+            }
+
+            foreach (Enemy e in world.enemies) if(!e.dead) e.Render(g);
 
             GameWorldPB.Image = bm;
         }
@@ -96,7 +101,7 @@ namespace TowerDefense {
                     // Check if the clicked tile is occupied by a Tower
                     for(int j = 0; j < world.towers[i].pos.Count; j++) {
                         if (world.towers[i].pos[j] == GetTileAtMouse) {
-                            Console.WriteLine("Tower index: " + i + " selected");
+                        
                             // Deselect the previously selected Tower (if there is one)
                             DeselectTower();
                             // Set the selected Tower, draw its Range and toggle the Details.
@@ -132,7 +137,6 @@ namespace TowerDefense {
             // Enemy placement testcode
             if(e.Button == MouseButtons.Right) {
                 //BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
-                //Console.WriteLine(clickedTile);
                 //Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
                 //GameWorld.Instance.enemies.Add(newEnemy);
                 tickCounter = 0;
@@ -217,9 +221,9 @@ namespace TowerDefense {
             foreach(BaseTile bt in world.tower.pos)
                 bt.EnableTile();
             world.towers.Remove(world.tower);
+            world.RecalculatePaths();
             DeselectTower();
             DrawBackground();
-            world.RecalculatePaths();
         }
 
         // Toggle relevant information for the selected Tower on
@@ -241,6 +245,8 @@ namespace TowerDefense {
                 world.tower.drawTowerRange = true;
             }
         }
+
+       
 
         // Toggle information for a selected Tower off
         private void DeselectTower() {

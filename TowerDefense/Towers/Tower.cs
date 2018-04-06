@@ -9,7 +9,6 @@ using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
 using TowerDefense.CommandPattern;
-using TowerDefense.Enemies;
 
 namespace TowerDefense.Towers {
     public abstract class Tower : IReceiver {
@@ -46,7 +45,8 @@ namespace TowerDefense.Towers {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
             GameWorld.Instance.towers.Add(this);
-            GameWorld.Instance.RecalculatePaths();
+            
+            GameWorld.Instance.RecalculatePaths(pos);
         }
 
         // Draw a circle with a radius of 'this.attackRange' squares
