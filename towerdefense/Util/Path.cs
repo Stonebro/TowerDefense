@@ -114,8 +114,13 @@ namespace TowerDefense.Util
             //Console.WriteLine("render" + waypoints.Count);
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
-                g.DrawLine(new Pen(Color.Red, 10), waypoints[i], waypoints[i + 1]);
+                g.DrawLine(new Pen(Color.Green, 2), waypoints[i], waypoints[i + 1]);
             }
+        }
+
+        public bool isBlocked(List<BaseTile> newTiles)
+        {
+            return true;
         }
 
         /// Path setter (from other Path).
@@ -161,7 +166,6 @@ namespace TowerDefense.Util
             while(!priorityQueue.IsEmpty)
             {
 
-                //Console.WriteLine("trying to get path x");
                 currentVertex = priorityQueue.GetHighestPriority();
 
                 // Algoritmn arrived at the target tile.
@@ -191,7 +195,7 @@ namespace TowerDefense.Util
                             edge.dest.previous = currentVertex;
                             // Sets the distance of this neighbour to be the distance to the current Vertex + the cost. 
                             edge.dest.distance = currentVertex.distance + edge.cost;
-                            // If the destination vertex hasn't been visited yet.
+                            // If the destination vertex hasn't been visited yet and it is not a disabled vertex.
                             if (!edge.dest.scratch  && !edge.dest.disabled )
                             {
                                 // Set the Vertex to be visited.

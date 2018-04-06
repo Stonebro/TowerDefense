@@ -21,6 +21,8 @@ namespace TowerDefense {
         private Vector2D mousePos;
         // Currently selected Tower.
         private Tower selectedTower;
+        private int tickCounter;
+
         // Decides if Graph of GameWorld is drawn or not.
         private bool drawVerts = false;
         public int tickCounter { get; private set; }
@@ -80,6 +82,8 @@ namespace TowerDefense {
                 if (t.drawTowerRange)
                     t.DrawAttackRange(g);
 
+            foreach (Enemy e in world.enemies) e.Render(g);
+
             GameWorldPB.Image = bm;
         }
 
@@ -124,6 +128,7 @@ namespace TowerDefense {
                 addTower.BuildTower(selectedTiles);
                 playerGoldAmount.Text = world.gold.ToString();
                 DrawBackground();
+              
             }
 
             // Enemy placement testcode
@@ -197,9 +202,14 @@ namespace TowerDefense {
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
             //Graphics graphics = this.CreateGraphics();
+            if (tickCounter < 50 && tickCounter % 2 == 0)
+            {
+                world.SpawnEnemy();
+            }
             DrawBackground();
             world.Update();
             tickCounter++;
+          
             if (world.tower == null) deleteTowerBtn.Visible = false;
         }
 
@@ -209,6 +219,7 @@ namespace TowerDefense {
             world.towers.Remove(world.tower);
             DeselectTower();
             DrawBackground();
+            world.RecalculatePaths();
         }
 
         // Toggle relevant information for the selected Tower on
