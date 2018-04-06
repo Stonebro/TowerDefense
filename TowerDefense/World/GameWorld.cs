@@ -41,7 +41,7 @@ namespace TowerDefense.World {
 
         // UI Elements
         public int gold { get; private set; }
-        public int lives { get; private set; }
+        public int lives { get; set; }
         public Tower tower { get; set; }
 
         /// GameWorld constructor. 

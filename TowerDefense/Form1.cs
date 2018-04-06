@@ -53,9 +53,11 @@ namespace TowerDefense {
                 // Tower selected: 4 square mouse cursor
                 else { 
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
-                    if(selectedTower != null) {
+                    if (selectedTower != null)
+                    {
                         selectedTower.position = GetTileAtMouse.pos + new Vector2D(BaseTile.size, BaseTile.size); ;
                         selectedTower.DrawAttackRange(e.Graphics);
+                    }
                 }
             }
             if (world.tower != null) {
@@ -203,7 +205,7 @@ namespace TowerDefense {
       
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
-            //Graphics graphics = this.CreateGraphics();
+            playerLivesAmount.Text = world.lives.ToString();
             if (tickCounter < 500 && tickCounter % 10 == 0)
             {
                 world.SpawnEnemy();
@@ -243,6 +245,8 @@ namespace TowerDefense {
                 world.tower.drawTowerRange = true;
             }
         }
+
+       
 
         // Toggle information for a selected Tower off
         private void DeselectTower() {

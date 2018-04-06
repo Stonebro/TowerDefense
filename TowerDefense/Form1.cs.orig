@@ -22,17 +22,14 @@ namespace TowerDefense {
         // Currently selected Tower.
         private Tower selectedTower;
 <<<<<<< HEAD
+        // Used for counting elapsed ticks of GlobalTimer.
+        private int tickCounter;
 =======
 
-        private int tickCounter;
-
-        private Tower towertower; // UGLY
-        // enum that contains Available Towers.
-        private enum Towers { ArrowTower=1, CannonTower=2 };
->>>>>>> a079b5410fee7e6024ddf11b0854dab927c7f179
+>>>>>>> ca088e91b4ec24429a9783d06911def8618f3a93
         // Decides if Graph of GameWorld is drawn or not.
         private bool drawVerts = false;
-        public int tickCounter { get; private set; }
+        public static int tickCounter { get; private set; }
 
         /// Gets Tile that corresponds to the current mouse position.
         private BaseTile GetTileAtMouse {
@@ -61,10 +58,14 @@ namespace TowerDefense {
                 // Tower selected: 4 square mouse cursor
                 else { 
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
+<<<<<<< HEAD
+                  
+=======
                     if(selectedTower != null) {
                         selectedTower.position = GetTileAtMouse.pos + new Vector2D(BaseTile.size, BaseTile.size); ;
                         selectedTower.DrawAttackRange(e.Graphics);
                     }
+>>>>>>> ca088e91b4ec24429a9783d06911def8618f3a93
                 }
             }
             if (world.tower != null) {
@@ -86,10 +87,18 @@ namespace TowerDefense {
             }
 
             foreach (Tower t in world.towers)
+            {
                 if (t.drawTowerRange)
                     t.DrawAttackRange(g);
 
+<<<<<<< HEAD
+                g.DrawImage(Resources.Resources.ArrowTowerSprite, t.position.x - BaseTile.size, t.position.y - BaseTile.size);
+            }
+
             foreach (Enemy e in world.enemies) e.Render(g);
+=======
+            foreach (Enemy e in world.enemies) if (!e.dead) e.Render(g);
+>>>>>>> ca088e91b4ec24429a9783d06911def8618f3a93
 
             GameWorldPB.Image = bm;
         }
@@ -104,7 +113,7 @@ namespace TowerDefense {
                     // Check if the clicked tile is occupied by a Tower
                     for(int j = 0; j < world.towers[i].pos.Count; j++) {
                         if (world.towers[i].pos[j] == GetTileAtMouse) {
-                            Console.WriteLine("Tower index: " + i + " selected");
+                        
                             // Deselect the previously selected Tower (if there is one)
                             DeselectTower();
                             // Set the selected Tower, draw its Range and toggle the Details.
@@ -140,10 +149,17 @@ namespace TowerDefense {
 
             // Enemy placement testcode
             if(e.Button == MouseButtons.Right) {
+<<<<<<< HEAD
                 BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
-                Console.WriteLine(clickedTile);
                 Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
                 GameWorld.Instance.enemies.Add(newEnemy);
+=======
+                //BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
+                //Console.WriteLine(clickedTile);
+                //Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
+                //GameWorld.Instance.enemies.Add(newEnemy);
+                tickCounter = 0;
+>>>>>>> ca088e91b4ec24429a9783d06911def8618f3a93
             }
         }
 
@@ -209,17 +225,14 @@ namespace TowerDefense {
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
             //Graphics graphics = this.CreateGraphics();
-            if (tickCounter < 50 && tickCounter % 2 == 0)
+            if (tickCounter < 500 && tickCounter % 10 == 0)
             {
                 world.SpawnEnemy();
             }
             DrawBackground();
             world.Update();
             tickCounter++;
-<<<<<<< HEAD
-=======
           
->>>>>>> a079b5410fee7e6024ddf11b0854dab927c7f179
             if (world.tower == null) deleteTowerBtn.Visible = false;
         }
 
@@ -227,9 +240,9 @@ namespace TowerDefense {
             foreach(BaseTile bt in world.tower.pos)
                 bt.EnableTile();
             world.towers.Remove(world.tower);
+            world.RecalculatePaths();
             DeselectTower();
             DrawBackground();
-            world.RecalculatePaths();
         }
 
         // Toggle relevant information for the selected Tower on

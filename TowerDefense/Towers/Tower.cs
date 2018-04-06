@@ -9,7 +9,6 @@ using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
 using TowerDefense.CommandPattern;
-using TowerDefense.Enemies;
 
 namespace TowerDefense.Towers {
     public abstract class Tower : IReceiver {
