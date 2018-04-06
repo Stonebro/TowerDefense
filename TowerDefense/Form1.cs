@@ -20,14 +20,10 @@ namespace TowerDefense {
         // Current position of mouse.
         private Vector2D mousePos;
         // Currently selected Tower.
-        //private int selectedTower;
         private Tower selectedTower;
-
-        private Tower towertower; // UGLY
-        // enum that contains Available Towers.
-        private enum Towers { ArrowTower=1, CannonTower=2 };
         // Decides if Graph of GameWorld is drawn or not.
         private bool drawVerts = false;
+        public int tickCounter { get; private set; }
 
         /// Gets Tile that corresponds to the current mouse position.
         private BaseTile GetTileAtMouse {
@@ -51,16 +47,14 @@ namespace TowerDefense {
             if (mousePos != null) {
                 SolidBrush brush = new SolidBrush(Color.FromArgb(128, 200, 0, 0));
                 // No tower selected: 1 square mouse cursor
-                ///if (selectedTower == 0)
                 if (selectedTower == null)
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 // Tower selected: 4 square mouse cursor
                 else { 
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
-                    if(towertower != null) { // UGLY
-                        //towertower.drawTowerRange = true; // UGLY
-                        //towertower.position = GetTileAtMouse.pos + new Vector2D(BaseTile.size, BaseTile.size); // UGLY
-                        //towertower.DrawAttackRange(e.Graphics); // UGLY
+                    if(selectedTower != null) {
+                        selectedTower.position = GetTileAtMouse.pos + new Vector2D(BaseTile.size, BaseTile.size); ;
+                        selectedTower.DrawAttackRange(e.Graphics);
                     }
                 }
             }
@@ -198,11 +192,11 @@ namespace TowerDefense {
             GameWorldPB.Invalidate();
             DrawBackground();
         }
-
-        
+      
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
             world.Update();
+            tickCounter++;
             if (world.tower == null) deleteTowerBtn.Visible = false;
         }
 
@@ -214,7 +208,7 @@ namespace TowerDefense {
             DrawBackground();
         }
 
-        // Toggle relevant information for the selected Tower on or off
+        // Toggle relevant information for the selected Tower on
         private void SelectTower() {
             if (world.tower != null) {
                 selectedTowerNameLabel.Visible = true;
@@ -234,6 +228,7 @@ namespace TowerDefense {
             }
         }
 
+        // Toggle information for a selected Tower off
         private void DeselectTower() {
             selectedTowerNameLabel.Visible = false;
             selectedTowerName.Visible = false;
