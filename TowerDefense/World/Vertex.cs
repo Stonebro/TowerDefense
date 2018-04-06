@@ -12,7 +12,7 @@ namespace TowerDefense.World {
         // Edges that originate from this Vertex.
         public List<Edge> adj;
         // Distance from possible source to this Vertex.
-        public float distance;
+        public float distance = Graph.INFINITY;
         // Previous Vertex in possible path.
         public Vertex previous;
         // Used for Dijkstra (if Vertex has been visited or not). 

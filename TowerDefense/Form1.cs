@@ -150,6 +150,8 @@ namespace TowerDefense {
         
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
+            //Graphics graphics = this.CreateGraphics();
+            DrawBackground();
             world.Update();
         }
     }
