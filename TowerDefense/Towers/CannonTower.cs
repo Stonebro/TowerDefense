@@ -10,8 +10,9 @@ using TowerDefense.Util;
 namespace TowerDefense.Towers {
     class CannonTower : Tower{
         /// CannonTower constructor.
-        public CannonTower() { 
-            goldCost = -10;
+        public CannonTower() {
+            name = "Cannon Tower";
+            goldCost = 10;
             attackPower = 10;
             attackRange = 8;
             attackInterval = 0.2f;

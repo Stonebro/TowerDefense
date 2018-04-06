@@ -90,9 +90,16 @@ namespace TowerDefense.World {
         public void RenderWorld(Graphics g) {
             // Loops through Tiles.
             for (int i = 0; i < tiles; i++) {
-                // Handles draw of not-buildable Tiles.
+                // Handles draw of not-buildable Tiles (Should be sprites).
                 if (tilesList[i].buildable == false) {
-                    g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    if (tilesList[i].tower is ArrowTower) {
+                        SolidBrush ATBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 200));
+                        g.FillRectangle(ATBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    } else if (tilesList[i].tower is CannonTower) {
+                        SolidBrush CTBrush = new SolidBrush(Color.FromArgb(128, 25, 25, 25));
+                        g.FillRectangle(CTBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    }
+                /*else g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));*/
                 }  else { // If Tile is buildable.
                     g.DrawRectangle(new Pen(Color.LightGray), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 }
@@ -126,10 +133,7 @@ namespace TowerDefense.World {
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
-            if (tile.buildable == false) {
-                Console.WriteLine(tile.pos);
-                return neighbours;
-            }
+
             // Used for determining if a Tile is present above/under/to the left/to the right of the Tile specified.
             bool up =false, down=false, left=false, right=false;
             if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
@@ -163,14 +167,17 @@ namespace TowerDefense.World {
                 // Gets the Tile to the right of the current Tile.
                 BaseTile rightTile = tilesList[GetIndexOfTile(tile.pos + new Vector2D(BaseTile.size, 0))];
                 // Adds the Tile to List of neighbours if its possible to build on the Tile.
-                if (rightTile.buildable && rightTile.vertex != null) neighbours.Add(rightTile);
+                if (rightTile.buildable) neighbours.Add(rightTile);
             }
             // Returns list of neighbours.
             return neighbours;
         }
 
-        public int AddOrDeductGold(int amount) {
+        public int AddGold(int amount) {
             return gold += amount;
+        }
+        public int DeductGold(int amount) {
+            return gold -= amount;
         }
     }
 }

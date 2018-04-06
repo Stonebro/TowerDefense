@@ -20,7 +20,8 @@ namespace TowerDefense {
         // Current position of mouse.
         private Vector2D mousePos;
         // Currently selected Tower.
-        private int selectedTower;
+        //private int selectedTower;
+        private Tower selectedTower;
 
         private Tower towertower; // UGLY
         // enum that contains Available Towers.
@@ -46,13 +47,14 @@ namespace TowerDefense {
         /// Paints the GameWorld. 
         private void GameWorldPB_Paint(object sender, PaintEventArgs e) {
             base.OnPaint(e);
-            //world.RenderWorld(e.Graphics); // Renders the world, draws each Tile.
-
             // Previews location of Tower placement if mouse is on the PictureBox.
             if (mousePos != null) {
                 SolidBrush brush = new SolidBrush(Color.FromArgb(128, 200, 0, 0));
-                if (selectedTower == 0)
+                // No tower selected: 1 square mouse cursor
+                ///if (selectedTower == 0)
+                if (selectedTower == null)
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                // Tower selected: 4 square mouse cursor
                 else { 
                     e.Graphics.FillRectangle(brush, new Rectangle(GetTileAtMouse.pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
                     if(towertower != null) { // UGLY
@@ -65,9 +67,8 @@ namespace TowerDefense {
             if (world.tower != null) {
                 SolidBrush blue = new SolidBrush(Color.FromArgb(128, Color.Blue));
                 e.Graphics.FillRectangle(blue, new Rectangle(world.tower.pos[0].pos, new Vector2D(BaseTile.size * 2, BaseTile.size * 2)));
-                
+                world.tower.DrawAttackRange(e.Graphics);
             }
-            DrawBackground();
         }
 
         // Draws Graph of GameWorld if user desires to see it.
@@ -90,15 +91,20 @@ namespace TowerDefense {
 
         /// Handles placing a tower on the PictureBox.
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
-            // No tower to build selected.
-            if(selectedTower == 0 && !GetTileAtMouse.buildable) {
+            // No tower to build selected, mouse can be used to select placed Towers
+            ///if(selectedTower == 0 && !GetTileAtMouse.buildable) {
+            if (selectedTower == null && !GetTileAtMouse.buildable) {
+                // Loop through all Towers
                 for (int i = 0; i < world.towers.Count; i++) {
+                    // Check if the clicked tile is occupied by a Tower
                     for(int j = 0; j < world.towers[i].pos.Count; j++) {
                         if (world.towers[i].pos[j] == GetTileAtMouse) {
-                            Console.WriteLine(i);
-                            if (world.tower != null) world.tower.drawTowerRange = false;
+                            Console.WriteLine("Tower index: " + i + " selected");
+                            // Deselect the previously selected Tower (if there is one)
+                            DeselectTower();
+                            // Set the selected Tower, draw its Range and toggle the Details.
                             world.tower = world.towers[i];
-                            world.tower.drawTowerRange = true;
+                            SelectTower();
                         }
                     }
                 }
@@ -107,38 +113,25 @@ namespace TowerDefense {
 
             // Gets 2x2 square of Tiles according to location of mouse.
             List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
-            
-            // Tower to add.
-            Tower addTower = null;
-            
-            // Checks if the tiles selected are buildable and a tower is selected. 
-            if (world.isBuildable(selectedTiles) && selectedTower != 0) {
-                // Initializes new ArrowTower if ArrowTower is currently selected.
-                if (selectedTower == (int)Towers.ArrowTower)
-                    addTower = new ArrowTower();
-                // Initializes new CannonTower if CannonTower is currently selected.
-                if (selectedTower == (int)Towers.CannonTower)
-                    addTower = new CannonTower();
-
-                if (world.gold + addTower.goldCost >= 0) {
-                    world.AddOrDeductGold(addTower.goldCost);
-                    Console.WriteLine(world.gold + "  " + addTower.goldCost);
-                    // Sets all of the selected Tiles to not buildable (you cant build multiple Towers on the same Tiles).
-                    foreach (BaseTile bt in selectedTiles) {
-                        bt.buildable = false;
-                        bt.DestroyVertex();
-                        bt.tower = addTower;
-                    }
-                    // Adds the Tower to the list of Towers, with the position being the Tile where the mouse was clicked.
-                    addTower.BuildTower(selectedTiles);
-                    //towertower.drawTowerRange = false; // UGLY
-                    //towertower = null; // UGLY
-                    //towertower = addTower; // UGLY
+            // If the selected tiles are buildable AND you have a tower selected AND you have enough money..
+            if (world.isBuildable(selectedTiles) && selectedTower != null && world.gold + selectedTower.goldCost >= 0) {
+                // ..Check the selected tower's type and create a new object of that type
+                Tower addTower = null;
+                if (selectedTower is ArrowTower) addTower = new ArrowTower();
+                if (selectedTower is CannonTower) addTower = new CannonTower();
+                // ..Deduct gold
+                world.DeductGold(selectedTower.goldCost);
+                // Disable each selected tile
+                foreach (BaseTile bt in selectedTiles) {
+                    bt.DisableTile();
+                    bt.tower = addTower;
                 }
-
+                // Build the tower, update the gold and redraw the background
+                addTower.BuildTower(selectedTiles);
                 playerGoldAmount.Text = world.gold.ToString();
                 DrawBackground();
             }
+
             // Enemy placement testcode
             if(e.Button == MouseButtons.Right) {
                 Enemy newEnemy = new Imp(e.Location, 5, 10, null);
@@ -161,25 +154,23 @@ namespace TowerDefense {
 
         /// Handles selecting ArrowTower as placement.
         private void Tower1PB_MouseDown(object sender, MouseEventArgs e) {
-            this.selectedTower = (int)Towers.ArrowTower;
+            this.selectedTower = new ArrowTower();
             //towertower = new ArrowTower(); // UGLY
-            if (world.tower != null) world.tower.drawTowerRange = false;
             GameWorldPB.Invalidate();
-            world.tower = null;
+            DeselectTower();
         }
 
         /// Handles selecting CannonTower as placement.      
         private void Tower2PB_MouseDown(object sender, MouseEventArgs e)
         {
-            this.selectedTower = (int)Towers.CannonTower;
+            this.selectedTower = new CannonTower();
             //towertower = new CannonTower();
-            if (world.tower != null) world.tower.drawTowerRange = false;
             GameWorldPB.Invalidate();
-            world.tower = null;
+            DeselectTower();
         }
 
         private void handSelectPB_Click(object sender, EventArgs e) {
-            this.selectedTower = 0;
+            this.selectedTower = null;
             GameWorldPB.Invalidate();
         }
 
@@ -203,6 +194,7 @@ namespace TowerDefense {
         /// Handles "Show Vertices" Button click event.
         private void showVerticesBtn_Click(object sender, EventArgs e) {
             drawVerts = !drawVerts; // Toggles bool.
+            DeselectTower();
             GameWorldPB.Invalidate();
             DrawBackground();
         }
@@ -211,8 +203,49 @@ namespace TowerDefense {
         /// Handles timer tick to update gameworld. 
         private void globalTimer_Tick(object sender, EventArgs e) {
             world.Update();
+            if (world.tower == null) deleteTowerBtn.Visible = false;
         }
 
+        private void deleteTowerBtn_Click(object sender, EventArgs e) {
+            foreach(BaseTile bt in world.tower.pos)
+                bt.EnableTile();
+            world.towers.Remove(world.tower);
+            DeselectTower();
+            DrawBackground();
+        }
 
+        // Toggle relevant information for the selected Tower on or off
+        private void SelectTower() {
+            if (world.tower != null) {
+                selectedTowerNameLabel.Visible = true;
+                selectedTowerName.Visible = true;
+                selectedTowerAtkDmgLabel.Visible = true;
+                selectedTowerDamage.Visible = true;
+                selectedTowerASLabel.Visible = true;
+                selectedTowerAS.Visible = true;
+                selectedTowerKillsLabel.Visible = true;
+                selectedTowerKills.Visible = true;
+                deleteTowerBtn.Visible = true;
+                selectedTowerName.Text = world.tower.name;
+                selectedTowerDamage.Text = world.tower.attackPower.ToString();
+                selectedTowerAS.Text = world.tower.attackInterval.ToString();
+                selectedTowerKills.Text = world.tower.kills.ToString();
+                world.tower.drawTowerRange = true;
+            }
+        }
+
+        private void DeselectTower() {
+            selectedTowerNameLabel.Visible = false;
+            selectedTowerName.Visible = false;
+            selectedTowerAtkDmgLabel.Visible = false;
+            selectedTowerDamage.Visible = false;
+            selectedTowerASLabel.Visible = false;
+            selectedTowerAS.Visible = false;
+            selectedTowerKillsLabel.Visible = false;
+            selectedTowerKills.Visible = false;
+            deleteTowerBtn.Visible = false;
+            if(world.tower != null) world.tower.drawTowerRange = false;
+            world.tower = null;
+        }
     }
 }

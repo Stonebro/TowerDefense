@@ -14,8 +14,9 @@ using System.Threading;
 namespace TowerDefense.Towers {
     class ArrowTower : Tower {
         /// ArrowTower constructor.
-        public ArrowTower() { 
-            goldCost = -5;
+        public ArrowTower() {
+            name = "Arrow Tower";
+            goldCost = 5;
             attackPower = 8;
             attackRange = 4;
             attackInterval = 0.5f;

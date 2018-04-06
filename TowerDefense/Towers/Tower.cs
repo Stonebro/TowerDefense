@@ -12,11 +12,15 @@ using TowerDefense.Enemies;
 
 namespace TowerDefense.Towers {
     public abstract class Tower : IReceiver {
+        // Tower's name
+        public string name;
         // Gold cost of placing the Tower.
         public int goldCost;
         // Attacking power of the Tower.
         public int attackPower;
+        // Range of the Tower's attacks
         public int attackRange;
+        // Interval between Tower's attacks
         public float attackInterval;
         // Position of the Tower.
         public List<BaseTile> pos;
@@ -27,21 +31,22 @@ namespace TowerDefense.Towers {
         public Bitmap sprite;
         // Enemies in range
         protected List<Enemy> enemiesInRange = new List<Enemy>();
+        // Bool to see if the Tower's attackrange should be drawn
         public bool drawTowerRange;
+        // Amount of kills this Tower made;
+        public int kills;
 
         /// "Builds" Tower.
         public virtual void BuildTower(List<BaseTile> pos) {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
-            Console.WriteLine("pos: " + position);
-            //GameWorld.Instance.AddOrDeductGold(-goldCost);
+            //Console.WriteLine("pos: " + position);
             GameWorld.Instance.towers.Add(this);
-
         }
 
+        // Draw a circle with a radius of 'this.attackRange' squares
         public void DrawAttackRange(Graphics g) {
             int range = (attackRange * 2 + 2);
-            //Console.WriteLine(position.x + "  " + position.y + "   " + range);
             Pen pen = new Pen(Color.Red);
             g.DrawEllipse(pen, position.x - (range/2)*BaseTile.size, position.y - (range/2) * BaseTile.size, range*BaseTile.size, range*BaseTile.size);
         }

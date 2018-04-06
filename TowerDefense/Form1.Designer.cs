@@ -35,6 +35,15 @@
             this.Tower1PB = new System.Windows.Forms.PictureBox();
             this.GameWorldPB = new System.Windows.Forms.PictureBox();
             this.handSelectPB = new System.Windows.Forms.PictureBox();
+            this.deleteTowerBtn = new System.Windows.Forms.Button();
+            this.selectedTowerNameLabel = new System.Windows.Forms.Label();
+            this.selectedTowerAtkDmgLabel = new System.Windows.Forms.Label();
+            this.selectedTowerKillsLabel = new System.Windows.Forms.Label();
+            this.selectedTowerASLabel = new System.Windows.Forms.Label();
+            this.selectedTowerName = new System.Windows.Forms.Label();
+            this.selectedTowerDamage = new System.Windows.Forms.Label();
+            this.selectedTowerAS = new System.Windows.Forms.Label();
+            this.selectedTowerKills = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Tower2PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower1PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GameWorldPB)).BeginInit();
@@ -140,11 +149,111 @@
             this.handSelectPB.TabStop = false;
             this.handSelectPB.Click += new System.EventHandler(this.handSelectPB_Click);
             // 
+            // deleteTowerBtn
+            // 
+            this.deleteTowerBtn.Location = new System.Drawing.Point(620, 335);
+            this.deleteTowerBtn.Name = "deleteTowerBtn";
+            this.deleteTowerBtn.Size = new System.Drawing.Size(51, 23);
+            this.deleteTowerBtn.TabIndex = 9;
+            this.deleteTowerBtn.Text = "Delete";
+            this.deleteTowerBtn.UseVisualStyleBackColor = true;
+            this.deleteTowerBtn.Visible = false;
+            this.deleteTowerBtn.Click += new System.EventHandler(this.deleteTowerBtn_Click);
+            // 
+            // selectedTowerNameLabel
+            // 
+            this.selectedTowerNameLabel.AutoSize = true;
+            this.selectedTowerNameLabel.Location = new System.Drawing.Point(617, 237);
+            this.selectedTowerNameLabel.Name = "selectedTowerNameLabel";
+            this.selectedTowerNameLabel.Size = new System.Drawing.Size(38, 13);
+            this.selectedTowerNameLabel.TabIndex = 10;
+            this.selectedTowerNameLabel.Text = "Name:";
+            this.selectedTowerNameLabel.Visible = false;
+            // 
+            // selectedTowerAtkDmgLabel
+            // 
+            this.selectedTowerAtkDmgLabel.AutoSize = true;
+            this.selectedTowerAtkDmgLabel.Location = new System.Drawing.Point(617, 250);
+            this.selectedTowerAtkDmgLabel.Name = "selectedTowerAtkDmgLabel";
+            this.selectedTowerAtkDmgLabel.Size = new System.Drawing.Size(50, 13);
+            this.selectedTowerAtkDmgLabel.TabIndex = 11;
+            this.selectedTowerAtkDmgLabel.Text = "Damage:";
+            this.selectedTowerAtkDmgLabel.Visible = false;
+            // 
+            // selectedTowerKillsLabel
+            // 
+            this.selectedTowerKillsLabel.AutoSize = true;
+            this.selectedTowerKillsLabel.Location = new System.Drawing.Point(617, 276);
+            this.selectedTowerKillsLabel.Name = "selectedTowerKillsLabel";
+            this.selectedTowerKillsLabel.Size = new System.Drawing.Size(28, 13);
+            this.selectedTowerKillsLabel.TabIndex = 12;
+            this.selectedTowerKillsLabel.Text = "Kills:";
+            this.selectedTowerKillsLabel.Visible = false;
+            // 
+            // selectedTowerASLabel
+            // 
+            this.selectedTowerASLabel.AutoSize = true;
+            this.selectedTowerASLabel.Location = new System.Drawing.Point(617, 263);
+            this.selectedTowerASLabel.Name = "selectedTowerASLabel";
+            this.selectedTowerASLabel.Size = new System.Drawing.Size(75, 13);
+            this.selectedTowerASLabel.TabIndex = 13;
+            this.selectedTowerASLabel.Text = "Attack Speed:";
+            this.selectedTowerASLabel.Visible = false;
+            // 
+            // selectedTowerName
+            // 
+            this.selectedTowerName.AutoSize = true;
+            this.selectedTowerName.Location = new System.Drawing.Point(693, 237);
+            this.selectedTowerName.Name = "selectedTowerName";
+            this.selectedTowerName.Size = new System.Drawing.Size(10, 13);
+            this.selectedTowerName.TabIndex = 14;
+            this.selectedTowerName.Text = "-";
+            this.selectedTowerName.Visible = false;
+            // 
+            // selectedTowerDamage
+            // 
+            this.selectedTowerDamage.AutoSize = true;
+            this.selectedTowerDamage.Location = new System.Drawing.Point(696, 250);
+            this.selectedTowerDamage.Name = "selectedTowerDamage";
+            this.selectedTowerDamage.Size = new System.Drawing.Size(13, 13);
+            this.selectedTowerDamage.TabIndex = 15;
+            this.selectedTowerDamage.Text = "0";
+            this.selectedTowerDamage.Visible = false;
+            // 
+            // selectedTowerAS
+            // 
+            this.selectedTowerAS.AutoSize = true;
+            this.selectedTowerAS.Location = new System.Drawing.Point(696, 263);
+            this.selectedTowerAS.Name = "selectedTowerAS";
+            this.selectedTowerAS.Size = new System.Drawing.Size(13, 13);
+            this.selectedTowerAS.TabIndex = 16;
+            this.selectedTowerAS.Text = "0";
+            this.selectedTowerAS.Visible = false;
+            // 
+            // selectedTowerKills
+            // 
+            this.selectedTowerKills.AutoSize = true;
+            this.selectedTowerKills.Location = new System.Drawing.Point(696, 280);
+            this.selectedTowerKills.Name = "selectedTowerKills";
+            this.selectedTowerKills.Size = new System.Drawing.Size(13, 13);
+            this.selectedTowerKills.TabIndex = 17;
+            this.selectedTowerKills.Text = "0";
+            this.selectedTowerKills.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 709);
+            this.Controls.Add(this.selectedTowerKills);
+            this.Controls.Add(this.selectedTowerAS);
+            this.Controls.Add(this.selectedTowerDamage);
+            this.Controls.Add(this.selectedTowerName);
+            this.Controls.Add(this.selectedTowerASLabel);
+            this.Controls.Add(this.selectedTowerKillsLabel);
+            this.Controls.Add(this.selectedTowerAtkDmgLabel);
+            this.Controls.Add(this.selectedTowerNameLabel);
+            this.Controls.Add(this.deleteTowerBtn);
             this.Controls.Add(this.handSelectPB);
             this.Controls.Add(this.playerLivesAmount);
             this.Controls.Add(this.playerLivesLabel);
@@ -178,6 +287,15 @@
         private System.Windows.Forms.Label playerLivesLabel;
         private System.Windows.Forms.Label playerLivesAmount;
         private System.Windows.Forms.PictureBox handSelectPB;
+        private System.Windows.Forms.Button deleteTowerBtn;
+        private System.Windows.Forms.Label selectedTowerNameLabel;
+        private System.Windows.Forms.Label selectedTowerAtkDmgLabel;
+        private System.Windows.Forms.Label selectedTowerKillsLabel;
+        private System.Windows.Forms.Label selectedTowerASLabel;
+        private System.Windows.Forms.Label selectedTowerName;
+        private System.Windows.Forms.Label selectedTowerDamage;
+        private System.Windows.Forms.Label selectedTowerAS;
+        private System.Windows.Forms.Label selectedTowerKills;
     }
 }
 

@@ -37,24 +37,6 @@ namespace TowerDefense.Tiles {
 
         /// Destroys the Vertex that corresponds to the Tile. 
         public void DestroyVertex() {
-            //if (vertex != null) {
-            //    foreach (Edge e in vertex.adj) {
-            //        for(int i=0; i < e.dest.adj.Count; i++) {
-            //            if(e.dest.adj[i].dest == vertex) {
-            //                e.dest.adj[i] = null;
-            //            }
-            //        }
-            //    }
-            //    Console.WriteLine("AMOUNT OF EDGES: " + vertex.adj.Count);
-            //}
-
-
-
-            //if(vertex != null) {
-            //    foreach(Edge e in vertex.adj) {
-            //        Console.WriteLine(IsConnected(e.dest.parentTile));
-            //    }
-            //}
             this.vertex = null;
         }
 
@@ -81,22 +63,43 @@ namespace TowerDefense.Tiles {
         /// Draws the representation of the Vertex of the Tile
         public void DrawVertex(Graphics g) {
             if (vertex == null) return;
-            g.FillEllipse(new SolidBrush(Color.DarkTurquoise), vertexRectangle());
+            // Disabled Vert = RED
+            if (vertex.disabled) g.FillEllipse(new SolidBrush(Color.Red), vertexRectangle());
+            else g.FillEllipse(new SolidBrush(Color.DarkTurquoise), vertexRectangle());
             if (vertex.adj != null) {
                 PointF a, b;
                 a = new PointF(pos.x + size / 2, pos.y + size / 2);
                 foreach(Edge e in vertex.adj) {
-                    //if (!e.dest.parentTile.buildable) {
-                    //    e.dest.adj.Remove(e);
-                    //}
-                    //else { 
                     Vector2D ePos = e.dest.parentTile.pos;
                     b = new PointF(ePos.x + size / 2, ePos.y + size / 2);
-                    g.DrawLine(new Pen(Color.DarkTurquoise), a, b);
-                    //}
+                    // Draw a RED line if the Edge is disabled, draw a DARKTURQUOISE line if it is enabled.
+                    if(e.disabled) g.DrawLine(new Pen(Color.Red), a, b);
+                    else g.DrawLine(new Pen(Color.DarkTurquoise), a, b);
                 }
             }
 
+        }
+
+        public void DisableTile() {
+            buildable = false;
+            vertex.disabled = true;
+            foreach (Edge e in vertex.adj) {
+                e.disabled = true;
+                foreach (Edge n in e.dest.adj)
+                    if (n.dest == vertex)
+                        n.disabled = true;
+            }
+        }
+
+        public void EnableTile() {
+            buildable = true;
+            vertex.disabled = false;
+            foreach(Edge e in vertex.adj) {
+                e.disabled = false;
+                foreach (Edge n in e.dest.adj)
+                    if (n.dest == vertex)
+                        n.disabled = false;
+            }
         }
     }
 }
