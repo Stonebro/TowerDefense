@@ -6,16 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
 using TowerDefense.CommandPattern;
+using TowerDefense.World;
 
 namespace TowerDefense.Enemies
 {
     public class Enemy : IReceiver
     {
         public Vector2D pos;
-        protected float health;
+        public float health;
         protected int size;
         private Vector2D velocity;
         public Path path;
+        public bool dead;
 
         public Enemy(Vector2D pos, float health, int size, Vector2D velocity, Path path)
         {
@@ -29,18 +31,19 @@ namespace TowerDefense.Enemies
 
         public virtual void Update()
         {
-            //AttackCommand cmd = new AttackCommand(this);
-            //cmd.Execute();
+            if(!dead) { 
+                if (health <= 0) Die();
 
-            //Console.WriteLine(path.Current);
-            if (path.Current != null)
-            {
-                this.pos = path.Current;
+                else if (path.Current != null)
+                {
+                    this.pos = path.Current;
+                }
+                if(path != null) path.GoNext();
             }
-            path.GoNext();
 
         }
 
         public virtual void Render(Graphics g) { }
+        public virtual void Die() { }
     }
 }

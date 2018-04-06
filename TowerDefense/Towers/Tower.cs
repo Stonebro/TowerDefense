@@ -23,6 +23,8 @@ namespace TowerDefense.Towers {
         public int attackRange;
         // Interval between Tower's attacks
         public float attackInterval;
+        // Timer for interval
+        protected int attackIntervalCounter;
         // Position of the Tower.
         public List<BaseTile> pos;
         public Vector2D position;
@@ -36,14 +38,15 @@ namespace TowerDefense.Towers {
         public bool drawTowerRange;
         // Amount of kills this Tower made;
         public int kills;
-        protected PriorityQueue<Enemy> nearbyEnemies = new PriorityQueue<Enemy>();
+        //public PriorityQueue<Enemy> nearbyEnemies = new PriorityQueue<Enemy>();
+        public List<Enemy> nearbyEnemies = new List<Enemy>();
 
         /// "Builds" Tower.
         public virtual void BuildTower(List<BaseTile> pos) {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
             GameWorld.Instance.towers.Add(this);
-            GameWorld.Instance.RecalculateTowerPaths();
+            GameWorld.Instance.RecalculatePaths();
         }
 
         // Draw a circle with a radius of 'this.attackRange' squares
@@ -62,11 +65,17 @@ namespace TowerDefense.Towers {
             dnc.Execute();
         }
 
+        protected virtual void AttackHighestPriority(Enemy enemy) { }
+
+        protected Enemy enemyInRange() {
+            for(int i = 0; i < GameWorld.Instance.enemies.Count; i++)
+                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 2) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
+                    return GameWorld.Instance.enemies[i];
+            return null;
+        }
+
         public virtual void Update() {
-            if (GameWorld.Instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
-                enemiesInRange.Add(GameWorld.Instance.enemies[0]);
-                Console.WriteLine("ATTACKINNNGGG");
-            }
+            if (enemyInRange() != null || attackIntervalCounter % 10 != 0) attackIntervalCounter++;
         }
     }
 }

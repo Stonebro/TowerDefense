@@ -62,7 +62,6 @@
             // 
             // globalTimer
             // 
-            this.globalTimer.Interval = 250;
             this.globalTimer.Tick += new System.EventHandler(this.globalTimer_Tick);
             // 
             // playerGoldLabel

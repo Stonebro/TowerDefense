@@ -109,26 +109,25 @@ namespace TowerDefense.World {
             }
             foreach (Enemy e in enemies)
             {
-                if(!e.dead) { 
-                    e.Render(g);
-                    e.path.Render(g);
-                }
+<<<<<<< HEAD
+=======
+                //Console.WriteLine(e.pos);
+>>>>>>> a079b5410fee7e6024ddf11b0854dab927c7f179
+                e.Render(g);
+                e.path.Render(g);
             }
         }
 
         public void Update() {
             foreach (Tower t in towers) t.Update();
-            foreach (Enemy e in enemies) if(!e.dead) e.Update();
-            if (enemies.All(i => i.dead)) enemies = new List<Enemy>();
+            foreach (Enemy e in enemies) e.Update();
         }
 
         public void SpawnEnemy()
         {
             ResetAllVertices();
-            Imp imp = new Imp(startTile.pos, 5, 10, new Vector2D(), Path.GetPath(startTile, endTile));
+            Imp imp = new Imp(startTile.pos, 5, 15, new Vector2D(), Path.GetPath(startTile, endTile));
             Instance.enemies.Add(imp);
-            foreach (Tower t in towers)
-                t.nearbyEnemies.Add(imp);
         }
 
         /// Returns index of clicked Tile.

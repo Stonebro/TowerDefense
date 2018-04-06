@@ -17,60 +17,26 @@ namespace TowerDefense.Towers {
         public ArrowTower() {
             name = "Arrow Tower";
             goldCost = 5;
-            attackPower = 8;
+            attackPower = 1;
             attackRange = 4;
-            attackInterval = 0.5f;
+            attackInterval = 10;
             splash = new Bitmap(Resources.Resources.ArrowTower);
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 
-        public override void BuildTower(List<BaseTile> pos) {
-            base.BuildTower(pos);
-            if (GameWorld.Instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
-                enemiesInRange.Add(GameWorld.Instance.enemies[0]);
-            }
-
-        }
-
         public override void Update() {
-            if(GameWorld.Instance.enemies != null) {
-                
-            }
-            base.Update();
-            if (enemiesInRange.Count != 0) {
-                AttackNearestTarget();
+            Console.WriteLine((nearbyEnemies != null) + "    " + (enemyInRange() != null) + "    " + (attackIntervalCounter % attackInterval == 0));
+            if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
+                AttackHighestPriority(enemyInRange());
             }
             else { DoNothing(); }
         }
 
-        public override void AttackNearestTarget() {
-            if (enemiesInRange != null) {
-                //SetAction(ACTION_LIST.Attack);
-                AttackCommand atkCmd = new AttackCommand(this);
-                atkCmd.Execute();
-                //Thread.Sleep(1000);
+        protected override void AttackHighestPriority(Enemy enemy) {
+            if(!enemy.dead) { 
+                Console.WriteLine("Attacking " + DateTime.Now + "   " + attackIntervalCounter);
+                enemy.health -= attackPower;
             }
         }
-
-        //public List<Enemy> CalculateNeighbours(Vector2D targetPos, float queryRad) {
-        //    Rectangle targetRect = new Rectangle(targetPos - new Vector2D(queryRad, queryRad), new Vector2D(queryRad * 2, queryRad * 2));
-
-        //    List<Enemy> foundNeighbours = new List<Enemy>();
-
-        //    foreach (BaseTile grid in GameWorld.instance.tilesList) {
-        //        Rectangle gridRectangle = new Rectangle(grid.pos, new Vector2D(BaseTile.size, BaseTile.size));
-        //        if (targetRect.IntersectsWith(gridRectangle)) {
-        //            //if (grid.entityCount > 0) {
-        //                foreach (Enemy entity in GameWorld.instance.enemies) {
-        //                    if (Vector2D.Vec2DDistanceSq(entity.pos, targetPos) < queryRad * queryRad)
-        //                        foundNeighbours.Add(entity);
-        //                }
-        //            //}
-        //        }
-        //    }
-        //    Console.WriteLine(foundNeighbours[0]);
-        //    return foundNeighbours;
-        //}
-
     }
 }

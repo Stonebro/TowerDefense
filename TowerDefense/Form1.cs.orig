@@ -21,10 +21,18 @@ namespace TowerDefense {
         private Vector2D mousePos;
         // Currently selected Tower.
         private Tower selectedTower;
+<<<<<<< HEAD
+=======
 
+        private int tickCounter;
+
+        private Tower towertower; // UGLY
+        // enum that contains Available Towers.
+        private enum Towers { ArrowTower=1, CannonTower=2 };
+>>>>>>> a079b5410fee7e6024ddf11b0854dab927c7f179
         // Decides if Graph of GameWorld is drawn or not.
         private bool drawVerts = false;
-        public static int tickCounter { get; private set; }
+        public int tickCounter { get; private set; }
 
         /// Gets Tile that corresponds to the current mouse position.
         private BaseTile GetTileAtMouse {
@@ -81,7 +89,7 @@ namespace TowerDefense {
                 if (t.drawTowerRange)
                     t.DrawAttackRange(g);
 
-            foreach (Enemy e in world.enemies) if (!e.dead) e.Render(g);
+            foreach (Enemy e in world.enemies) e.Render(g);
 
             GameWorldPB.Image = bm;
         }
@@ -132,11 +140,10 @@ namespace TowerDefense {
 
             // Enemy placement testcode
             if(e.Button == MouseButtons.Right) {
-                //BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
-                //Console.WriteLine(clickedTile);
-                //Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
-                //GameWorld.Instance.enemies.Add(newEnemy);
-                tickCounter = 0;
+                BaseTile clickedTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(e.Location)];
+                Console.WriteLine(clickedTile);
+                Imp newEnemy = new Imp(e.Location, 5, 10, new Vector2D(), Path.GetPath(clickedTile, GameWorld.Instance.endTile));
+                GameWorld.Instance.enemies.Add(newEnemy);
             }
         }
 
@@ -209,7 +216,10 @@ namespace TowerDefense {
             DrawBackground();
             world.Update();
             tickCounter++;
+<<<<<<< HEAD
+=======
           
+>>>>>>> a079b5410fee7e6024ddf11b0854dab927c7f179
             if (world.tower == null) deleteTowerBtn.Visible = false;
         }
 
