@@ -6,16 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
 using TowerDefense.CommandPattern;
+using TowerDefense.World;
 
 namespace TowerDefense.Enemies
 {
     public class Enemy : IReceiver
     {
         public Vector2D pos;
-        private float health;
+        public float health;
         protected int size;
         private Vector2D velocity;
         public Path path;
+        public bool dead;
 
         /// Enemy constructor.
         public Enemy(Vector2D pos, float health, int size, Vector2D velocity, Path path)
@@ -30,10 +32,10 @@ namespace TowerDefense.Enemies
         /// Handles moving the enemy.
         public virtual void Update()
         {
-            //AttackCommand cmd = new AttackCommand(this);
-            //cmd.Execute();
-            if (path.Current != null)
-            {
+            if(!dead) { 
+                if (health <= 0) Die();
+                else if (path.Current != null)
+                {
                 // Calculates x difference in next waypoint on Path and the enemy. 
                 float deltaX = path.Current.x - this.pos.x;
                 // Is the difference a positive number or not (so should the enemy move to the left or to the right). 
@@ -66,7 +68,7 @@ namespace TowerDefense.Enemies
                         this.pos = new Vector2D(this.pos.x, this.pos.y - 3.75f);
                 }
                 // If the Enemy reached the waypoint
-                if (path.Current.x == this.pos.x && path.Current.y == this.pos.y)
+                if (path.Current.x == this.pos.x && path.Current.y == this.pos.y && path != null)
                     path.GoNext(); // Make the enemy go to the next waypoint (if there is one).
             }
 
@@ -74,5 +76,6 @@ namespace TowerDefense.Enemies
         }
 
         public virtual void Render(Graphics g) { }
+        public virtual void Die() { }
     }
 }

@@ -82,8 +82,8 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             // Sets endTile to not Buildable.
             endTile.buildable = false;
-            //Enemy testEnemy = new Imp(startTile.pos, 10, 10, new Vector2D(), Path.GetPath(startTile, endTile));
-            //Instance.enemies.Add(testEnemy);
+            Enemy testEnemy = new Imp(startTile.pos, 10, 10, new Vector2D(), Path.GetPath(startTile, endTile));
+            Instance.enemies.Add(testEnemy);
         }
 
         /// Draws each tile
@@ -109,26 +109,25 @@ namespace TowerDefense.World {
             }
             foreach (Enemy e in enemies)
             {
-                if(!e.dead) { 
-                    e.Render(g);
-                    e.path.Render(g);
-                }
+<<<<<<< HEAD
+=======
+                //Console.WriteLine(e.pos);
+>>>>>>> a079b5410fee7e6024ddf11b0854dab927c7f179
+                e.Render(g);
+                e.path.Render(g);
             }
         }
 
         public void Update() {
             foreach (Tower t in towers) t.Update();
-            foreach (Enemy e in enemies) if(!e.dead) e.Update();
-            if (enemies.All(i => i.dead)) enemies = new List<Enemy>();
+            foreach (Enemy e in enemies) e.Update();
         }
 
         public void SpawnEnemy()
         {
             ResetAllVertices();
-            Imp imp = new Imp(startTile.pos, 5, 10, new Vector2D(), Path.GetPath(startTile, endTile));
+            Imp imp = new Imp(startTile.pos, 5, 15, new Vector2D(), Path.GetPath(startTile, endTile));
             Instance.enemies.Add(imp);
-            foreach (Tower t in towers)
-                t.nearbyEnemies.Add(imp);
         }
 
         /// Returns index of clicked Tile.
@@ -158,27 +157,6 @@ namespace TowerDefense.World {
                 enemy.path = Path.GetPath(enemyTile, endTile);
             }
 
-        }
-
-        /// RecalculatePaths overload for after a Tower is placed. 
-        /// This method will only recalculate the path if the current path is obstructed by the new Tower.
-        public void RecalculatePaths(List<BaseTile> tilesToCheck)
-        {
-            
-            BaseTile endTile = Instance.endTile;
-            foreach (Enemy enemy in Instance.enemies)
-            {
-                if (enemy.path.IsBlocked(tilesToCheck))
-                {
-                    int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
-                    BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
-                    foreach (BaseTile tile in Instance.tilesList)
-                    {
-                        tile.vertex.Reset();
-                    }
-                    enemy.path = Path.GetPath(enemyTile, endTile);
-                }
-            }
         }
 
         public void ResetAllVertices()
