@@ -82,8 +82,8 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             // Sets endTile to not Buildable.
             endTile.buildable = false;
-            Enemy testEnemy = new Imp(startTile.pos, 10, 10, new Vector2D(), Path.GetPath(startTile, endTile));
-            Instance.enemies.Add(testEnemy);
+            //Enemy testEnemy = new Imp(startTile.pos, 10, 10, new Vector2D(), Path.GetPath(startTile, endTile));
+            //Instance.enemies.Add(testEnemy);
         }
 
         /// Draws each tile
@@ -154,6 +154,27 @@ namespace TowerDefense.World {
                 enemy.path = Path.GetPath(enemyTile, endTile);
             }
 
+        }
+
+        /// RecalculatePaths overload for after a Tower is placed. 
+        /// This method will only recalculate the path if the current path is obstructed by the new Tower.
+        public void RecalculatePaths(List<BaseTile> tilesToCheck)
+        {
+            
+            BaseTile endTile = Instance.endTile;
+            foreach (Enemy enemy in Instance.enemies)
+            {
+                if (enemy.path.IsBlocked(tilesToCheck))
+                {
+                    int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
+                    BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
+                    foreach (BaseTile tile in Instance.tilesList)
+                    {
+                        tile.vertex.Reset();
+                    }
+                    enemy.path = Path.GetPath(enemyTile, endTile);
+                }
+            }
         }
 
         public void ResetAllVertices()

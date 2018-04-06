@@ -17,6 +17,7 @@ namespace TowerDefense.Enemies
         private Vector2D velocity;
         public Path path;
 
+        /// Enemy constructor.
         public Enemy(Vector2D pos, float health, int size, Vector2D velocity, Path path)
         {
             this.pos = pos;
@@ -24,20 +25,51 @@ namespace TowerDefense.Enemies
             this.size = size;
             this.velocity = velocity;
             this.path = path;
-            // Console.WriteLine(path.Current + " " + path.End);
         }
 
+        /// Handles moving the enemy.
         public virtual void Update()
         {
             //AttackCommand cmd = new AttackCommand(this);
             //cmd.Execute();
-
-            //Console.WriteLine(path.Current);
             if (path.Current != null)
             {
-                this.pos = path.Current;
+                // Calculates x difference in next waypoint on Path and the enemy. 
+                float deltaX = path.Current.x - this.pos.x;
+                // Is the difference a positive number or not (so should the enemy move to the left or to the right). 
+                bool deltaXPositive = deltaX >= 0;
+                // Calculates y difference in next waypoint on Path and the enemy. 
+                float deltaY = path.Current.y - this.pos.y;
+                // Is the difference a positive number or not (so should the enemy move up or down).
+                bool deltaYPositive = deltaY >= 0;
+               
+
+                // If the enemy needs to move horizontally to reach the next waypoint.
+                if (deltaX != 0)
+                {
+                    // if the enemy should move to the right (delta is positive).
+                    if (deltaXPositive)
+                        // Move the enemy to the right.
+                        this.pos = new Vector2D(this.pos.x + 3.75f, this.pos.y);
+                    else // Move the enemy to the left.
+                        this.pos = new Vector2D(this.pos.x - 3.75f, this.pos.y);
+                }
+                // If the enemy needs to move vertically to reach the next waypoint.
+                if (deltaY != 0)
+                {
+                    // If the enemy should move down (delta is positive).
+                    if(deltaYPositive) 
+                        // Move the enemy downwards.
+                        this.pos = new Vector2D(this.pos.x, this.pos.y + 3.75f);
+                    else
+                        // Move the enemy upwards.
+                        this.pos = new Vector2D(this.pos.x, this.pos.y - 3.75f);
+                }
+                // If the Enemy reached the waypoint
+                if (path.Current.x == this.pos.x && path.Current.y == this.pos.y)
+                    path.GoNext(); // Make the enemy go to the next waypoint (if there is one).
             }
-            path.GoNext();
+
 
         }
 

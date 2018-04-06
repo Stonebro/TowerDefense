@@ -42,7 +42,8 @@ namespace TowerDefense.Towers {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
             GameWorld.Instance.towers.Add(this);
-            GameWorld.Instance.RecalculateTowerPaths();
+            
+            GameWorld.Instance.RecalculatePaths(pos);
         }
 
         // Draw a circle with a radius of 'this.attackRange' squares

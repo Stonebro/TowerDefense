@@ -118,9 +118,16 @@ namespace TowerDefense.Util
             }
         }
 
-        public bool isBlocked(List<BaseTile> newTiles)
+        public bool IsBlocked(List<BaseTile> newTiles)
         {
-            return true;
+            foreach(Vector2D waypoint in waypoints)
+            {
+                foreach(BaseTile tile in newTiles)
+                {   
+                    if (waypoint == tile.pos) return true;
+                }
+            }
+            return false;
         }
 
         /// Path setter (from other Path).
@@ -148,6 +155,7 @@ namespace TowerDefense.Util
             // If startTile is disabled return empty Path.
             if (startTile.vertex.disabled)
             {
+                Console.WriteLine("fucked");
                 return path;
             }
 
@@ -208,6 +216,7 @@ namespace TowerDefense.Util
                 
             }
 
+            Console.WriteLine("fucked");
             return path;
         }
     }
