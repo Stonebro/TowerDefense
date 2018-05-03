@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TowerDefense.Towers;
+using TowerDefense.Entities;
 using TowerDefense.Util;
 using TowerDefense.World;
 
@@ -63,17 +63,43 @@ namespace TowerDefense.Tiles {
         /// Draws the representation of the Vertex of the Tile
         public void DrawVertex(Graphics g) {
             if (vertex == null) return;
-            g.FillEllipse(new SolidBrush(Color.DarkTurquoise), vertexRectangle());
+            // Disabled Vert = RED
+            if (vertex.disabled) g.FillEllipse(new SolidBrush(Color.Red), vertexRectangle());
+            else g.FillEllipse(new SolidBrush(Color.DarkTurquoise), vertexRectangle());
             if (vertex.adj != null) {
                 PointF a, b;
                 a = new PointF(pos.x + size / 2, pos.y + size / 2);
                 foreach(Edge e in vertex.adj) {
                     Vector2D ePos = e.dest.parentTile.pos;
-                    b = new PointF(ePos.x + size/2, ePos.y + size/2);
-                    g.DrawLine(new Pen(Color.DarkTurquoise), a, b);
+                    b = new PointF(ePos.x + size / 2, ePos.y + size / 2);
+                    // Draw a RED line if the Edge is disabled, draw a DARKTURQUOISE line if it is enabled.
+                    if(e.disabled) g.DrawLine(new Pen(Color.Red), a, b);
+                    else g.DrawLine(new Pen(Color.DarkTurquoise), a, b);
                 }
             }
 
+        }
+
+        public void DisableTile() {
+            buildable = false;
+            vertex.disabled = true;
+            foreach (Edge e in vertex.adj) {
+                e.disabled = true;
+                foreach (Edge n in e.dest.adj)
+                    if (n.dest == vertex)
+                        n.disabled = true;
+            }
+        }
+
+        public void EnableTile() {
+            buildable = true;
+            vertex.disabled = false;
+            foreach(Edge e in vertex.adj) {
+                e.disabled = false;
+                foreach (Edge n in e.dest.adj)
+                    if (n.dest == vertex)
+                        n.disabled = false;
+            }
         }
     }
 }

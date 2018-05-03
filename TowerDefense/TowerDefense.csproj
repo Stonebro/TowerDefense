@@ -45,12 +45,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandPattern\AttackCommand.cs" />
+    <Compile Include="CommandPattern\Command.cs" />
+    <Compile Include="CommandPattern\DoNothingCommand.cs" />
+    <Compile Include="CommandPattern\IReceiver.cs" />
+    <Compile Include="Entities\Enemies\Bat.cs" />
+    <Compile Include="Entities\Enemies\Enemy.cs" />
+    <Compile Include="Entities\Enemies\Imp.cs" />
+    <Compile Include="Entities\Entity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FSM\Attack.cs" />
+    <Compile Include="FSM\Chase.cs" />
+    <Compile Include="FSM\Idle.cs" />
+    <Compile Include="FSM\Return.cs" />
+    <Compile Include="FSM\State.cs" />
+    <Compile Include="FSM\StateMachine.cs" />
     <Compile Include="Resources\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -58,8 +72,17 @@
     </Compile>
     <Compile Include="Towers\ArrowTower.cs" />
     <Compile Include="Towers\CannonTower.cs" />
+    <Compile Include="Towers\DogHouseTower.cs" />
+    <Compile Include="Entities\Projectiles\AttackDog.cs" />
+    <Compile Include="Towers\SplitShotTower.cs" />
     <Compile Include="Towers\Tower.cs" />
-    <Compile Include="Towers\Util\Vector2D.cs" />
+    <Compile Include="Util\C2DMatrix.cs" />
+    <Compile Include="Util\Path.cs" />
+    <Compile Include="Util\PriorityNode.cs" />
+    <Compile Include="Util\PriorityQueue.cs" />
+    <Compile Include="Util\SteeringBehaviours\ISteering.cs" />
+    <Compile Include="Util\SteeringBehaviours\Seek.cs" />
+    <Compile Include="Util\Vector2D.cs" />
     <Compile Include="World\Edge.cs" />
     <Compile Include="World\GameWorld.cs" />
     <Compile Include="Program.cs" />
@@ -101,6 +124,7 @@
     <EmbeddedResource Include="images\basic_ground.bmp" />
     <Content Include="images\basic_ground.png" />
     <Content Include="Resources\ArrowTower.png" />
+    <None Include="Resources\ArrowTowerSprite.bmp" />
     <Content Include="Resources\ArrowTowerSprite.png" />
     <EmbeddedResource Include="Resources\basic_ground.bmp" />
     <Content Include="Resources\CannonTower.png" />
