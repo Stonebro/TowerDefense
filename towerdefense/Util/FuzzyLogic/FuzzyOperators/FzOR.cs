@@ -9,7 +9,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
     public class FzOR : FuzzyTerm
     {
 
-        private List<FuzzyTerm> MemberTerms;
+        private List<FuzzyTerm> MemberTerms = new List<FuzzyTerm>();
 
         public FzOR(ref FuzzyTerm operator1, ref FuzzyTerm operator2)
         {

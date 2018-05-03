@@ -12,7 +12,7 @@ namespace TowerDefense.Util.FuzzyLogic
     /// </summary>
     public class FuzzyVariable
     {
-        private Dictionary<string, FuzzySet> _memberSets;
+        private Dictionary<string, FuzzySet> _memberSets = new Dictionary<string, FuzzySet>();
         private double _memberMinRange;
         private double _memberMaxRange;
 
@@ -163,11 +163,16 @@ namespace TowerDefense.Util.FuzzyLogic
             return new FzSet(_memberSets[name]);
         }
 
+        public FuzzySet GetSet(string name)
+        {
+            return _memberSets[name];
+        }
+
         public void PrintDOMs()
         {
             foreach(KeyValuePair<string, FuzzySet> set in _memberSets)
             {
-                Console.WriteLine("key = " + set.Key + " value is " + set.Value);
+                Console.WriteLine("key = " + set.Key + " value is " + set.Value.MemberDOM);
             }
 
             Console.WriteLine("minbound = " + _memberMinRange + " maxbound = " + _memberMaxRange);

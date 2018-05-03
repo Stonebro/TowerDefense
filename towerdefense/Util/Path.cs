@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TowerDefense.Entities;
+using TowerDefense.Entities.Projectiles;
 using TowerDefense.Tiles;
 using TowerDefense.World;
 
@@ -114,7 +116,7 @@ namespace TowerDefense.Util
             //Console.WriteLine("render" + waypoints.Count);
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
-                g.DrawLine(new Pen(Color.Green, 2), waypoints[i], waypoints[i + 1]);
+                g.DrawLine(new Pen(Color.Green, 2), waypoints[i].x+7, waypoints[i].y+7, waypoints[i + 1].x+7, waypoints[i + 1].y+7);
             }
         }
 
@@ -147,17 +149,9 @@ namespace TowerDefense.Util
             => (int)Math.Abs((a.x / BaseTile.size) - (b.x / BaseTile.size)) + (int)Math.Abs((a.y / BaseTile.size) - (b.y / BaseTile.size));
 
         // Gets a path between two tiles using A*, Manhattan Heuristics.
-        public static Path GetPath(BaseTile startTile, BaseTile targetTile)
-        {
+        public static Path GetPath(BaseTile startTile, BaseTile targetTile) {
             // Create Path to return
             Path path = new Path();
-
-            // If startTile is disabled return empty Path.
-            if (startTile.vertex.disabled)
-            {
-                Console.WriteLine("fucked");
-                return path;
-            }
 
             PriorityQueue<Vertex> priorityQueue = new PriorityQueue<Vertex>();
 
@@ -165,25 +159,21 @@ namespace TowerDefense.Util
             startTile.vertex.distance = 0;
             // Makes the algoritmn know this Vertex is visited. 
             startTile.vertex.scratch = true;
-    
+
             // Adds Vertex of startTile to queue (first Vertex to be visited).
             priorityQueue.Insert(startTile.vertex, Heuristics(startTile.pos, targetTile.pos));
 
-            Vertex currentVertex; 
+            Vertex currentVertex;
 
-            while(!priorityQueue.IsEmpty)
-            {
-
+            while (!priorityQueue.IsEmpty) {
                 currentVertex = priorityQueue.GetHighestPriority();
 
-                // Algoritmn arrived at the target tile.
-                if(currentVertex.parentTile.pos == targetTile.pos)
-                { 
+                // Algorithm arrived at the target tile.
+                if (currentVertex.parentTile.pos == targetTile.pos) {
                     Vertex tempVertex = currentVertex;
 
                     // While previous Vertex is not null.
-                    while(tempVertex.previous != null)
-                    {
+                    while (tempVertex.previous != null) {
                         // Forms the shortest path by going through the previous Vertices.
                         path.AddWaypointFront(tempVertex);
                         tempVertex = tempVertex.previous;
@@ -193,30 +183,26 @@ namespace TowerDefense.Util
                     return path;
                 }
 
-                    // Looks for neighbouring Vertices.
-                    foreach (Edge edge in currentVertex.adj)
-                    {
-                        // Checks if there is not already a faster route to the destination vertex found.
-                        if (edge.dest.distance >= currentVertex.distance + edge.cost)
-                        {
-                            // Previous Vertex leading to the fastest route to the destination vertex is now the current vertex.
-                            edge.dest.previous = currentVertex;
-                            // Sets the distance of this neighbour to be the distance to the current Vertex + the cost. 
-                            edge.dest.distance = currentVertex.distance + edge.cost;
-                            // If the destination vertex hasn't been visited yet and it is not a disabled vertex.
-                            if (!edge.dest.scratch  && !edge.dest.disabled )
-                            {
-                                // Set the Vertex to be visited.
-                                edge.dest.scratch = true;
-                                // Add the Vertex to the PriorityQueue with the priority being the (Manhattan) heuristic outcome + the distance to the vertex.
-                                priorityQueue.Insert(edge.dest, (int)edge.dest.distance + Heuristics(edge.dest.parentTile.pos, targetTile.pos));
-                            }
+                // Looks for neighbouring Vertices.
+                foreach (Edge edge in currentVertex.adj) {
+                    // Checks if there is not already a faster route to the destination vertex found.
+                    if (edge.dest.distance >= currentVertex.distance + edge.cost) {
+                        // Previous Vertex leading to the fastest route to the destination vertex is now the current vertex.
+                        edge.dest.previous = currentVertex;
+                        // Sets the distance of this neighbour to be the distance to the current Vertex + the cost. 
+                        edge.dest.distance = currentVertex.distance + edge.cost;
+                        // If the destination vertex hasn't been visited yet and it is not a disabled vertex.
+                        if (!edge.dest.scratch && !edge.dest.disabled) {
+                            // Set the Vertex to be visited.
+                            edge.dest.scratch = true;
+                            // Add the Vertex to the PriorityQueue with the priority being the (Manhattan) heuristic outcome + the distance to the vertex.
+                            priorityQueue.Insert(edge.dest, (int)edge.dest.distance + Heuristics(edge.dest.parentTile.pos, targetTile.pos));
                         }
                     }
-                
+                }
+
             }
 
-            Console.WriteLine("fucked");
             return path;
         }
     }

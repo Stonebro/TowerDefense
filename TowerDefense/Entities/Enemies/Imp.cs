@@ -29,7 +29,6 @@ namespace TowerDefense.Entities.Enemies {
         public override void Die() {
             dead = true;
             path = null;
-            Console.WriteLine("IMP DIIEED");
             //GameWorld.Instance.enemies.Remove(this);
         }
     }

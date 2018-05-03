@@ -9,20 +9,20 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
     public class FzAND : FuzzyTerm
     {
 
-        private List<FuzzyTerm> MemberTerms;
+        private List<FuzzyTerm> MemberTerms = new List<FuzzyTerm>();
 
-        public FzAND(ref FuzzyTerm operator1, ref FuzzyTerm operator2)
+        public FzAND(FuzzyTerm operator1, FuzzyTerm operator2)
         {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
 
         }
-        public FzAND(ref FuzzyTerm operator1, ref FuzzyTerm operator2, ref FuzzyTerm operator3) {
+        public FzAND(FuzzyTerm operator1, FuzzyTerm operator2, FuzzyTerm operator3) {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
             MemberTerms.Add(operator3.Clone());
         }
-        public FzAND(ref FuzzyTerm operator1, ref FuzzyTerm operator2, ref FuzzyTerm operator3, ref FuzzyTerm operator4)
+        public FzAND(FuzzyTerm operator1, FuzzyTerm operator2, FuzzyTerm operator3, FuzzyTerm operator4)
         {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());

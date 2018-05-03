@@ -8,8 +8,8 @@ namespace TowerDefense.Util.FuzzyLogic
 {
     class FuzzyModule
     {
-        private Dictionary<string, FuzzyVariable> _memberVarMap;
-        private List<FuzzyRule> _memberRules;
+        private Dictionary<string, FuzzyVariable> _memberVarMap = new Dictionary<string, FuzzyVariable>();
+        private List<FuzzyRule> _memberRules = new List<FuzzyRule>();
 
         public enum DefuzzifyMethod {MAX_AV, CENTROID}
         public const int NUMSAMPLES = 15;
@@ -51,6 +51,11 @@ namespace TowerDefense.Util.FuzzyLogic
             }
             return 0;
         } 
+
+        public FuzzyVariable GetVar(string name)
+        { 
+            return _memberVarMap[name];
+        }
 
         public void PrintAllDOMS()
         {

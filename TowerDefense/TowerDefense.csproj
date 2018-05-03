@@ -79,9 +79,6 @@
     <Compile Include="Towers\Tower.cs" />
     <Compile Include="Util\C2DMatrix.cs" />
     <Compile Include="Util\Path.cs" />
-    <Compile Include="Util\PriorityNode.cs" />
-    <Compile Include="Util\PriorityQueue.cs" />
-    <Compile Include="Util\Vector2D.cs" />
     <Compile Include="Util\FuzzyLogic\FuzzyModule.cs" />
     <Compile Include="Util\FuzzyLogic\FuzzyOperators\FzAND.cs" />
     <Compile Include="Util\FuzzyLogic\FuzzyOperators\FzOR.cs" />
@@ -94,7 +91,6 @@
     <Compile Include="Util\FuzzyLogic\FuzzyTerm.cs" />
     <Compile Include="Util\FuzzyLogic\FuzzyVariable.cs" />
     <Compile Include="Util\FuzzyLogic\FuzzySets\FzSet.cs" />
-    <Compile Include="Util\Path.cs" />
     <Compile Include="Util\PriorityNode.cs" />
     <Compile Include="Util\PriorityQueue.cs" />
     <Compile Include="Util\Vector2D.cs" />

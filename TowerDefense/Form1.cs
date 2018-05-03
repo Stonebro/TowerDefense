@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using TowerDefense.Entities;
 using TowerDefense.Entities.Enemies;
 using TowerDefense.Tiles;
+using TowerDefense.Towers;
 using TowerDefense.Util;
 using TowerDefense.World;
 
@@ -122,6 +123,7 @@ namespace TowerDefense {
                         if (selectedTower is CannonTower) addTower = new CannonTower();
                         if (selectedTower is SplitShotTower) addTower = new SplitShotTower();
                         if (selectedTower is DogHouseTower) addTower = new DogHouseTower();
+                        if (selectedTower is FuzzyTower) addTower = new FuzzyTower();
                         // ..Deduct gold
                         world.DeductGold(selectedTower.goldCost);
                         // Disable each selected tile
@@ -182,6 +184,13 @@ namespace TowerDefense {
             DeselectTower();
         }
 
+        private void FuzzyTowerPB_Click(object sender, EventArgs e)
+        {
+            this.selectedTower = new FuzzyTower();
+            GameWorldPB.Invalidate();
+            DeselectTower();
+        }
+
         private void handSelectPB_Click(object sender, EventArgs e) {
             this.selectedTower = null;
             GameWorldPB.Invalidate();
@@ -217,7 +226,7 @@ namespace TowerDefense {
             playerGoldAmount.Text = world.gold.ToString();
             playerLivesAmount.Text = world.lives.ToString();
             if (tickCounter < (1000 / globalTimer.Interval * 10) && tickCounter % (1000 / globalTimer.Interval) == 0) {
-                //world.SpawnEnemy();
+                world.SpawnEnemy();
             }
             DrawBackground();
             world.Update();
@@ -283,6 +292,6 @@ namespace TowerDefense {
             world.tower = null;
         }
 
-
+        
     }
 }
