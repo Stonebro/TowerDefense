@@ -64,7 +64,20 @@
     </Compile>
     <Compile Include="Towers\ArrowTower.cs" />
     <Compile Include="Towers\CannonTower.cs" />
+    <Compile Include="Towers\FuzzyTower.cs" />
     <Compile Include="Towers\Tower.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzyModule.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzyOperators\FzAND.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzyOperators\FzOR.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzyRule.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzySets\FuzzySet.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzySets\FuzzySet_LeftShoulder.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzySets\FuzzySet_RightShoulder.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzySets\FuzzySet_Singleton.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzySets\FuzzySet_Triangle.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzyTerm.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzyVariable.cs" />
+    <Compile Include="Util\FuzzyLogic\FuzzySets\FzSet.cs" />
     <Compile Include="Util\Path.cs" />
     <Compile Include="Util\PriorityNode.cs" />
     <Compile Include="Util\PriorityQueue.cs" />
@@ -116,5 +129,6 @@
     <Content Include="Resources\CannonTower.png" />
     <Content Include="Resources\CannonTowerSprite.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
