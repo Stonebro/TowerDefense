@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 using TowerDefense.Tiles;
 using TowerDefense.World;
 using TowerDefense.Util;
-using TowerDefense.Enemies;
+using TowerDefense.Entities;
 using TowerDefense.CommandPattern;
 using System.Threading;
+using TowerDefense.Entities.Enemies;
 
-namespace TowerDefense.Towers {
+namespace TowerDefense.Entities {
     class ArrowTower : Tower {
         /// ArrowTower constructor.
         public ArrowTower() {
             name = "Arrow Tower";
-            goldCost = 5;
+            goldCost = 6;
             attackPower = 1;
             attackRange = 4;
             attackInterval = 10;
@@ -25,16 +26,19 @@ namespace TowerDefense.Towers {
         }
 
         public override void Update() {
-            Console.WriteLine((nearbyEnemies != null) + "    " + (enemyInRange() != null) + "    " + (attackIntervalCounter % attackInterval == 0));
             if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
                 AttackHighestPriority(enemyInRange());
+                attackIntervalCounter++;
             }
             else { DoNothing(); }
         }
 
         protected override void AttackHighestPriority(Enemy enemy) {
-            if(!enemy.dead) { 
-                Console.WriteLine("Attacking " + DateTime.Now + "   " + attackIntervalCounter);
+            base.AttackHighestPriority(enemy);
+            shotsFired++;
+            if(!enemy.dead) {
+                if(b != null) // TEMP. CHEAT
+                    b.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
                 enemy.health -= attackPower;
             }
         }

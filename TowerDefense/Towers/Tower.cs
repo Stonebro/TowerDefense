@@ -4,13 +4,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TowerDefense.Enemies;
+using TowerDefense.Entities;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
 using TowerDefense.CommandPattern;
+using TowerDefense.Entities.Enemies;
 
-namespace TowerDefense.Towers {
+namespace TowerDefense.Entities {
     public abstract class Tower : IReceiver {
         // Tower's name
         public string name;
@@ -24,6 +25,8 @@ namespace TowerDefense.Towers {
         public float attackInterval;
         // Timer for interval
         protected int attackIntervalCounter;
+        // Amounts of targets the Tower can hit at once
+        public int attackTargets;
         // Position of the Tower.
         public List<BaseTile> pos;
         public Vector2D position;
@@ -39,13 +42,15 @@ namespace TowerDefense.Towers {
         public int kills;
         //public PriorityQueue<Enemy> nearbyEnemies = new PriorityQueue<Enemy>();
         public List<Enemy> nearbyEnemies = new List<Enemy>();
+        public int shotsFired;
+
+        public Graphics b; // TEMPORARY CHEAT
 
         /// "Builds" Tower.
         public virtual void BuildTower(List<BaseTile> pos) {
             this.pos = pos; // Sets position of tower to position specified.
             this.position = pos[0].pos + new Vector2D(BaseTile.size, BaseTile.size);
-            GameWorld.Instance.towers.Add(this);
-            
+            GameWorld.Instance.towers.Add(this);           
             GameWorld.Instance.RecalculatePaths(pos);
         }
 
@@ -61,21 +66,46 @@ namespace TowerDefense.Towers {
         }
 
         public virtual void DoNothing() {
+            if (attackIntervalCounter % attackInterval != 0) attackIntervalCounter++;
+            if (attackIntervalCounter == attackInterval) attackIntervalCounter = 0;
             DoNothingCommand dnc = new DoNothingCommand(this);
             dnc.Execute();
         }
 
-        protected virtual void AttackHighestPriority(Enemy enemy) { }
+        protected virtual void AttackHighestPriority(Enemy enemy) {
+            if (enemy.health - attackPower <= 0) {
+                kills++;
+                GameWorld.Instance.AddGold(enemy.bounty);
+            }
+        }
+
+        protected virtual void AttackHighestPriority(List<Enemy> enemies) {
+            foreach (Enemy e in enemies)
+                if (e.health - attackPower <= 0) {
+                    kills++;
+                    GameWorld.Instance.AddGold(e.bounty);
+                }
+        }
+
 
         protected Enemy enemyInRange() {
             for(int i = 0; i < GameWorld.Instance.enemies.Count; i++)
-                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 2) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
+                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1.5f) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
                     return GameWorld.Instance.enemies[i];
             return null;
         }
 
+        protected List<Enemy> enemyInRange(int amountTargets) {
+            List<Enemy> targets = new List<Enemy>();
+            for (int i = 0; i < GameWorld.Instance.enemies.Count; i++) { 
+                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1.5f) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
+                    targets.Add(GameWorld.Instance.enemies[i]);
+                if (targets.Count == amountTargets) return targets;
+            }
+            return targets;
+        }
+
         public virtual void Update() {
-            if (enemyInRange() != null || attackIntervalCounter % 10 != 0) attackIntervalCounter++;
         }
     }
 }
