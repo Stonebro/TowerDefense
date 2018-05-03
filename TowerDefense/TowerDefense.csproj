@@ -80,6 +80,8 @@
     <Compile Include="Util\Path.cs" />
     <Compile Include="Util\PriorityNode.cs" />
     <Compile Include="Util\PriorityQueue.cs" />
+    <Compile Include="Util\SteeringBehaviours\ISteering.cs" />
+    <Compile Include="Util\SteeringBehaviours\Seek.cs" />
     <Compile Include="Util\Vector2D.cs" />
     <Compile Include="World\Edge.cs" />
     <Compile Include="World\GameWorld.cs" />

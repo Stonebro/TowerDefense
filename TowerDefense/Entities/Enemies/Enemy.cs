@@ -44,6 +44,8 @@ namespace TowerDefense.Entities.Enemies
             }
         }
 
+        public virtual void Update(float time_elapsed) { }
+
         public virtual void Render(Graphics g) { }
         public virtual void Die() { }
     }

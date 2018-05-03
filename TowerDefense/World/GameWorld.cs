@@ -8,6 +8,7 @@ using TowerDefense.Entities;
 using TowerDefense.Entities.Enemies;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
+using TowerDefense.Util.SteeringBehaviours;
 
 namespace TowerDefense.World {
     /// Represents the GameWorld.
@@ -87,7 +88,9 @@ namespace TowerDefense.World {
             // Sets endTile to not Buildable.
             endTile.buildable = false;
             Bat testEnemy = new Bat(waveCount);
-            testEnemy._pos = startTile.pos;
+            testEnemy.pos = tilesList[125].pos;
+            testEnemy.path = Path.GetPath(startTile, tilesList[674]);
+            testEnemy.addForce = new Seek();
             Instance.enemies.Add(testEnemy);
         }
 
@@ -123,7 +126,8 @@ namespace TowerDefense.World {
 
         public void Update() {
             foreach (Tower t in towers) t.Update();
-            foreach (Enemy e in enemies) if(!e.dead) e.Update();
+            //foreach (Enemy e in enemies) if(!e.dead) e.Update();
+            foreach (Enemy e in enemies) e.Update(500);
             if (enemies.All(i => i.dead)) enemies = new List<Enemy>();
         }
 

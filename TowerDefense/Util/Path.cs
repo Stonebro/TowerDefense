@@ -61,6 +61,15 @@ namespace TowerDefense.Util
             else return false;
         }
 
+        public int Count {
+            get {
+                if (waypoints == null)
+                    return 0;
+                else
+                    return waypoints.Count;
+            }
+        }
+
         /// Goes to next waypoint in path. Returns false if no next waypoint.
         public bool GoNext()
         {
