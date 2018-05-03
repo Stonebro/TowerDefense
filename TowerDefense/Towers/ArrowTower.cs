@@ -7,52 +7,40 @@ using System.Threading.Tasks;
 using TowerDefense.Tiles;
 using TowerDefense.World;
 using TowerDefense.Util;
-using TowerDefense.Enemies;
+using TowerDefense.Entities;
+using TowerDefense.CommandPattern;
+using System.Threading;
+using TowerDefense.Entities.Enemies;
 
-
-namespace TowerDefense.Towers {
+namespace TowerDefense.Entities {
     class ArrowTower : Tower {
         /// ArrowTower constructor.
-        public ArrowTower() { 
-            goldCost = 5;
-            attackPower = 8;
+        public ArrowTower() {
+            name = "Arrow Tower";
+            goldCost = 6;
+            attackPower = 1;
             attackRange = 4;
-            attackInterval = 0.5f;
+            attackInterval = 10;
             splash = new Bitmap(Resources.Resources.ArrowTower);
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 
-        public override void BuildTower(BaseTile pos) {
-            base.BuildTower(pos);
-            if (GameWorld.Instance.enemies[0].pos.Distance(position) < (attackRange + 2) * BaseTile.size) {
-                Console.WriteLine("ATTACKING!");
-            }
-
-        }
-
         public override void Update() {
-            base.Update();
+            if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
+                AttackHighestPriority(enemyInRange());
+                attackIntervalCounter++;
+            }
+            else { DoNothing(); }
         }
 
-        //public List<Enemy> CalculateNeighbours(Vector2D targetPos, float queryRad) {
-        //    Rectangle targetRect = new Rectangle(targetPos - new Vector2D(queryRad, queryRad), new Vector2D(queryRad * 2, queryRad * 2));
-
-        //    List<Enemy> foundNeighbours = new List<Enemy>();
-
-        //    foreach (BaseTile grid in GameWorld.instance.tilesList) {
-        //        Rectangle gridRectangle = new Rectangle(grid.pos, new Vector2D(BaseTile.size, BaseTile.size));
-        //        if (targetRect.IntersectsWith(gridRectangle)) {
-        //            //if (grid.entityCount > 0) {
-        //                foreach (Enemy entity in GameWorld.instance.enemies) {
-        //                    if (Vector2D.Vec2DDistanceSq(entity.pos, targetPos) < queryRad * queryRad)
-        //                        foundNeighbours.Add(entity);
-        //                }
-        //            //}
-        //        }
-        //    }
-        //    Console.WriteLine(foundNeighbours[0]);
-        //    return foundNeighbours;
-        //}
-
+        protected override void AttackHighestPriority(Enemy enemy) {
+            base.AttackHighestPriority(enemy);
+            shotsFired++;
+            if(!enemy.dead) {
+                if(b != null) // TEMP. CHEAT
+                    b.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
+                enemy.health -= attackPower;
+            }
+        }
     }
 }

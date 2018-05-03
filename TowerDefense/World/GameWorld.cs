@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TowerDefense.Enemies;
+using TowerDefense.Entities;
+using TowerDefense.Entities.Enemies;
 using TowerDefense.Tiles;
-using TowerDefense.Towers;
 using TowerDefense.Util;
 
 namespace TowerDefense.World {
@@ -27,20 +27,31 @@ namespace TowerDefense.World {
         // Amount of horizontal Tiles.
         public int tilesH = 40;
         // Amount of vertical Tiles
-        public int tilesV = 40; 
+        public int tilesV = 40;
         // Total amount of Tiles.
         public int tiles;
         // List containing all Tiles.
         public BaseTile[] tilesList;
         // List of Towers.
         public List<Tower> towers;
+        // List of Enemies
         public List<Enemy> enemies;
         public Graph graph;
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
+        // Number of waves, this affects enemy strength
+        public int waveCount;
+        public bool pathBlocked;
+
+        // UI Elements
+        public int gold { get; private set; }
+        public int lives { get; set; }
+        public Tower tower { get; set; }
 
         /// GameWorld constructor. 
         public GameWorld() {
+            gold = 500;
+            lives = 50;
             // Initializes GameWorld.
             _instance = this;
 
@@ -75,7 +86,8 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             // Sets endTile to not Buildable.
             endTile.buildable = false;
-            Enemy testEnemy = new Imp(tilesList[60].pos, 10, 10, new Vector2D());
+            Bat testEnemy = new Bat(waveCount);
+            testEnemy._pos = startTile.pos;
             Instance.enemies.Add(testEnemy);
         }
 
@@ -83,9 +95,16 @@ namespace TowerDefense.World {
         public void RenderWorld(Graphics g) {
             // Loops through Tiles.
             for (int i = 0; i < tiles; i++) {
-                // Handles draw of not-buildable Tiles.
+                // Handles draw of not-buildable Tiles (Should be sprites).
                 if (tilesList[i].buildable == false) {
-                    g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    if (tilesList[i].tower is ArrowTower) {
+                        SolidBrush ATBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 200));
+                        g.FillRectangle(ATBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    } else if (tilesList[i].tower is CannonTower) {
+                        SolidBrush CTBrush = new SolidBrush(Color.FromArgb(128, 25, 25, 25));
+                        g.FillRectangle(CTBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                    }
+                /*else g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));*/
                 }  else { // If Tile is buildable.
                     g.DrawRectangle(new Pen(Color.LightGray), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 }
@@ -93,12 +112,29 @@ namespace TowerDefense.World {
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[0].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[tiles-1].pos, new Vector2D(BaseTile.size, BaseTile.size)));
             }
-            foreach (Enemy e in enemies) e.Render(g);
+            foreach (Enemy e in enemies)
+            {
+                if(!e.dead) { 
+                    e.Render(g);
+                    if(e.path != null) e.path.Render(g);
+                }
+            }
         }
 
         public void Update() {
             foreach (Tower t in towers) t.Update();
-            foreach (Enemy e in enemies) e.Update();
+            foreach (Enemy e in enemies) if(!e.dead) e.Update();
+            if (enemies.All(i => i.dead)) enemies = new List<Enemy>();
+        }
+
+        public void SpawnEnemy() {
+            ResetAllVertices();
+            Imp imp = new Imp(waveCount);
+            imp.pos = startTile.pos;
+            imp.path = Path.GetPath(startTile, endTile);
+            Instance.enemies.Add(imp);
+            foreach (Tower t in towers)
+                t.nearbyEnemies.Add(imp);
         }
 
         /// Returns index of clicked Tile.
@@ -109,18 +145,78 @@ namespace TowerDefense.World {
         }
 
         /// Checks if any of the Tiles within a 2x2 space (around the mouseclick) has something built on it already.
-        public bool isBuildable(List<BaseTile> selectedTiles) {
-            if (selectedTiles.All(i => i.buildable)) return true;
+        public bool IsBuildable(List<BaseTile> selectedTiles) {
+            if (selectedTiles.All(i => i.buildable) && selectedTiles.Count >= 4) return true;
             return false;
         }
 
-   
+        public bool CheckIfPathIsBlocked(List<BaseTile> tilesToCheck) {
+            // Create a temporary new Path and disable all selected tiles
+            Path path = new Path();
+            foreach(BaseTile bt in tilesToCheck) {
+                bt.DisableTile();
+            }
+            // Reset all vertices (to be safe) and try to find a Path
+            ResetAllVertices();
+            path = Path.GetPath(startTile, endTile);
+            // Re-enable the checked tiles after you looked for a path.
+            foreach (BaseTile bt in tilesToCheck) {
+                bt.EnableTile();
+            }
+            // If the Path is non-existent, return true. Otherwise return false.
+            if (path.Current == null) return true;
+            return false;
+        }
+
+        public void RecalculatePaths()
+        {
+            //BaseTile endTile = Instance.endTile;
+            foreach (Enemy enemy in Instance.enemies)
+            {
+                int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
+                BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
+                foreach (BaseTile tile in Instance.tilesList)
+                {
+                    tile.vertex.Reset();
+                }
+                enemy.path = Path.GetPath(enemyTile, endTile);
+            }
+
+        }
+
+        /// RecalculatePaths overload for after a Tower is placed. 
+        /// This method will only recalculate the path if the current path is obstructed by the new Tower.
+        public void RecalculatePaths(List<BaseTile> tilesToCheck)
+        {
+            foreach (Enemy enemy in Instance.enemies) {
+                if(!enemy.dead) { 
+                    if (enemy.path.IsBlocked(tilesToCheck)) {
+                        int enemyTileIndex = Instance.GetIndexOfTile(enemy.pos);
+                        BaseTile enemyTile = Instance.tilesList[enemyTileIndex];
+                        foreach (BaseTile tile in Instance.tilesList) {
+                            tile.vertex.Reset();
+                        }
+                        enemy.path = Path.GetPath(enemyTile, endTile);
+                    }
+                }
+            }
+        }
+
+        public void ResetAllVertices()
+        {
+            foreach (BaseTile tile in Instance.tilesList)
+            {
+                tile.vertex.Reset();
+            }
+        }
+
         /// Gets all neighbours of tile where building is allowed.
         public List<BaseTile> GetAvailableNeighbours(BaseTile tile) {
             // Initializes List of (available) neighbours.
             List<BaseTile> neighbours = new List<BaseTile>();
+
             // Used for determining if a Tile is present above/under/to the left/to the right of the Tile specified.
-            bool up=false, down=false, left=false, right=false;
+            bool up =false, down=false, left=false, right=false;
             if (tile.pos.x >= tilesH) left = true; // A tile to the left is present.
             if (tile.pos.x < (tilesH * BaseTile.size) - BaseTile.size) right = true; // A tile to the right is present.
             if (tile.pos.y >= BaseTile.size) up = true; // A tile above the specified tile is present.
@@ -132,6 +228,11 @@ namespace TowerDefense.World {
                 BaseTile upTile = tilesList[GetIndexOfTile(tile.pos - new Vector2D(0, BaseTile.size))];
                 // Adds the Tile to List of neighbours if its possible to build on the Tile.
                 if (upTile.buildable) neighbours.Add(upTile);
+                if (left)
+                    neighbours.Add(tilesList[GetIndexOfTile(tile.pos + new Vector2D(-BaseTile.size, -BaseTile.size))]);
+                if (right)
+                    neighbours.Add(tilesList[GetIndexOfTile(tile.pos + new Vector2D(BaseTile.size, -BaseTile.size))]);
+
             }
             // If there is a Tile under the specified Tile.
             if (down) {
@@ -139,6 +240,11 @@ namespace TowerDefense.World {
                 BaseTile downTile = tilesList[GetIndexOfTile(tile.pos + new Vector2D(0, BaseTile.size))];
                 // Adds the Tile to List of neighbours if its possible to build on the Tile.
                 if (downTile.buildable) neighbours.Add(downTile);
+                if (left)
+                    neighbours.Add(tilesList[GetIndexOfTile(tile.pos + new Vector2D(-BaseTile.size, BaseTile.size))]);
+                if (right)
+                    neighbours.Add(tilesList[GetIndexOfTile(tile.pos + new Vector2D(BaseTile.size, BaseTile.size))]);
+
             }
             // If there is a Tile to the left of the specified Tile.
             if (left) {
@@ -156,6 +262,13 @@ namespace TowerDefense.World {
             }
             // Returns list of neighbours.
             return neighbours;
+        }
+
+        public int AddGold(int amount) {
+            return gold += amount;
+        }
+        public int DeductGold(int amount) {
+            return gold -= amount;
         }
     }
 }

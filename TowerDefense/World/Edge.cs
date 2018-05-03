@@ -12,6 +12,8 @@ namespace TowerDefense.World {
         public Vertex dest;
         // Cost for travelling this Edge.
         public float cost;
+        // Enable or disable this Edge
+        public bool disabled;
 
        
         /// Edge constructor.
