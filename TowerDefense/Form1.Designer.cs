@@ -64,7 +64,7 @@
             // showVerticesBtn
             // 
             this.showVerticesBtn.Location = new System.Drawing.Point(884, 698);
-            this.showVerticesBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.showVerticesBtn.Margin = new System.Windows.Forms.Padding(4);
             this.showVerticesBtn.Name = "showVerticesBtn";
             this.showVerticesBtn.Size = new System.Drawing.Size(145, 41);
             this.showVerticesBtn.TabIndex = 3;
@@ -121,7 +121,7 @@
             this.Tower2PB.BackColor = System.Drawing.SystemColors.InfoText;
             this.Tower2PB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Tower2PB.Location = new System.Drawing.Point(824, 84);
-            this.Tower2PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Tower2PB.Margin = new System.Windows.Forms.Padding(4);
             this.Tower2PB.Name = "Tower2PB";
             this.Tower2PB.Size = new System.Drawing.Size(67, 62);
             this.Tower2PB.TabIndex = 2;
@@ -135,7 +135,7 @@
             this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTower;
             this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
             this.Tower1PB.Location = new System.Drawing.Point(824, 15);
-            this.Tower1PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Tower1PB.Margin = new System.Windows.Forms.Padding(4);
             this.Tower1PB.Name = "Tower1PB";
             this.Tower1PB.Size = new System.Drawing.Size(67, 62);
             this.Tower1PB.TabIndex = 1;
@@ -146,7 +146,7 @@
             // 
             this.GameWorldPB.InitialImage = ((System.Drawing.Image)(resources.GetObject("GameWorldPB.InitialImage")));
             this.GameWorldPB.Location = new System.Drawing.Point(0, 0);
-            this.GameWorldPB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.GameWorldPB.Margin = new System.Windows.Forms.Padding(4);
             this.GameWorldPB.Name = "GameWorldPB";
             this.GameWorldPB.Size = new System.Drawing.Size(800, 738);
             this.GameWorldPB.TabIndex = 0;
@@ -161,7 +161,7 @@
             this.handSelectPB.BackColor = System.Drawing.SystemColors.Highlight;
             this.handSelectPB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.handSelectPB.Location = new System.Drawing.Point(899, 15);
-            this.handSelectPB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.handSelectPB.Margin = new System.Windows.Forms.Padding(4);
             this.handSelectPB.Name = "handSelectPB";
             this.handSelectPB.Size = new System.Drawing.Size(67, 62);
             this.handSelectPB.TabIndex = 8;
@@ -171,7 +171,7 @@
             // deleteTowerBtn
             // 
             this.deleteTowerBtn.Location = new System.Drawing.Point(827, 412);
-            this.deleteTowerBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.deleteTowerBtn.Margin = new System.Windows.Forms.Padding(4);
             this.deleteTowerBtn.Name = "deleteTowerBtn";
             this.deleteTowerBtn.Size = new System.Drawing.Size(68, 28);
             this.deleteTowerBtn.TabIndex = 9;
@@ -272,7 +272,7 @@
             // 
             this.Tower3PB.BackColor = System.Drawing.Color.DarkRed;
             this.Tower3PB.Location = new System.Drawing.Point(900, 85);
-            this.Tower3PB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Tower3PB.Margin = new System.Windows.Forms.Padding(4);
             this.Tower3PB.Name = "Tower3PB";
             this.Tower3PB.Size = new System.Drawing.Size(65, 60);
             this.Tower3PB.TabIndex = 18;
@@ -327,7 +327,7 @@
             // 
             this.DogHouseTowerPB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.DogHouseTowerPB.Location = new System.Drawing.Point(932, 154);
-            this.DogHouseTowerPB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.DogHouseTowerPB.Margin = new System.Windows.Forms.Padding(4);
             this.DogHouseTowerPB.Name = "DogHouseTowerPB";
             this.DogHouseTowerPB.Size = new System.Drawing.Size(33, 31);
             this.DogHouseTowerPB.TabIndex = 23;
@@ -337,7 +337,7 @@
             // nextWaveBtn
             // 
             this.nextWaveBtn.Location = new System.Drawing.Point(884, 649);
-            this.nextWaveBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.nextWaveBtn.Margin = new System.Windows.Forms.Padding(4);
             this.nextWaveBtn.Name = "nextWaveBtn";
             this.nextWaveBtn.Size = new System.Drawing.Size(145, 42);
             this.nextWaveBtn.TabIndex = 24;
@@ -347,10 +347,10 @@
             // 
             // FuzzyTowerPB
             // 
-            this.FuzzyTowerPB.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.FuzzyTowerPB.BackColor = System.Drawing.SystemColors.HotTrack;
             this.FuzzyTowerPB.Location = new System.Drawing.Point(974, 15);
             this.FuzzyTowerPB.Name = "FuzzyTowerPB";
-            this.FuzzyTowerPB.Size = new System.Drawing.Size(55, 62);
+            this.FuzzyTowerPB.Size = new System.Drawing.Size(67, 62);
             this.FuzzyTowerPB.TabIndex = 25;
             this.FuzzyTowerPB.TabStop = false;
             this.FuzzyTowerPB.Click += new System.EventHandler(this.FuzzyTowerPB_Click);
@@ -387,7 +387,7 @@
             this.Controls.Add(this.Tower1PB);
             this.Controls.Add(this.GameWorldPB);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.Tower2PB)).EndInit();

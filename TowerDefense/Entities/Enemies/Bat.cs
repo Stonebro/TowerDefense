@@ -41,7 +41,7 @@ namespace TowerDefense.Entities.Enemies {
             name = "Bat";
             health = 10 + (waveBonus * 2);
             size = 7;
-            bounty = 2 + waveBonus;
+            bounty = 2 + waveBonus;     
             moveTarget = new Vector2D(100, 200);
             heading = Vector2D.Up;
             maxTurnRate = 0.19f;
@@ -97,7 +97,7 @@ namespace TowerDefense.Entities.Enemies {
         {
             //Console.WriteLine(velocity.x + " " + velocity.y);
             //Console.WriteLine(pos);
-            if (path.Count > 0)
+            if (path.Current != null)
             {
                 if (pos.Distance(path.Current) < 1)
                     if (!path.GoNext())

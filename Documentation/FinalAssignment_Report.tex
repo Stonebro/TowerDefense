@@ -1,0 +1,102 @@
+% Preamble
+\documentclass[12pt, a4paper]{article}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[nottoc]{tocbibind}
+\usepackage[tablegrid]{vhistory}
+\usepackage{enumitem} 
+\usepackage{url}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[paper=a4paper, margin=2.5cm]{geometry}
+\usepackage{titlesec}	
+
+\def \version {1.0}
+
+% Settings
+
+\hypersetup
+{
+	pdfauthor={Gijs Alberts, Anne Zweers},
+	pdfsubject={Report on Final Assignment},
+	pdftitle={Report on Final Assignment - v\version},
+	pdfkeywords={Final Assignment, Game AI, Report}
+}
+
+\parindent 0 pt 
+\title{Report on Final Assignment - v\version}
+\date{\today}
+\author{Gijs Alberts \\ Anne Zweers}
+\rhead{Report v\version}
+\lhead{Report - Final Assignment - Game AI}
+\rfoot{Page \thepage}
+\pagenumbering{arabic}
+\graphicspath{ {Images/} }
+\setlength{\parindent}{0em}
+
+% Document
+\begin{document}
+	\newgeometry{margin=1.1cm, lmargin=1.4cm, top=2cm}
+	\begin{titlepage}
+		
+		
+		\LARGE Report - Final Assignment v\version \\
+		\huge Game AI. \hfill
+		\vspace{0.5cm}
+		
+		\small HBO-ICT, Games Programming \\
+		Windesheim University of Applied Sciences \\
+		Lecturer: Gido Hakvoort
+		\begin{center}
+			\vspace{4cm}
+			\hspace*{-1.0cm}\textsl{}
+			\makebox[\textwidth]{\includegraphics[width=300pt]{Images/coverpage_logo.jpg}}
+		\end{center}
+		\vfill
+		\normalsize
+		Windesheim, Zwolle \\
+		Version: \version \\
+		\today \\
+		Authors : Gijs Alberts, Anne Zweers \\
+	\end{titlepage}
+	\restoregeometry
+	\thispagestyle{empty}
+	\newpage
+	\begin{versionhistory}
+		\vhEntry{1.0}{12-04-2018}{ Gijs Alberts \newline Anne Zweers}{Initial version of the document.}
+	
+	\end{versionhistory}
+	\thispagestyle{empty}
+	\newpage
+	\setcounter{page}{1}
+	\tableofcontents
+	\newpage
+	\section{Introduction}\label{sec:intro}
+	\input{Sections/Introduction}
+	\newpage
+	\section{Steering}\label{sec:steering}
+	\input{Sections/Steering}
+	\newpage
+	\section{Path Planning}
+	\input{Sections/PathPlanning}
+	\newpage
+	\section{Behavior}
+	\input{Sections/Behavior}
+	\newpage
+	\section{Fuzzy Logic}
+	\input{Sections/FuzzyLogic}
+	\newpage
+	\section{Conclusion}\label{sec:planning}
+	\input{Sections/Conclusion}
+	\newpage
+	\appendix
+	\begin{thebibliography}{9}
+		\bibitem{gitlabwebsite} 
+	  	\textit{GitLab: Issue Board}.
+	  		\\\textit{\url{https://docs.gitlab.com/ee/user/project/issue_board.html}}
+	  
+	\end{thebibliography}
+\end{document}          
