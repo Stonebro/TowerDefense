@@ -217,7 +217,7 @@ namespace TowerDefense {
             playerGoldAmount.Text = world.gold.ToString();
             playerLivesAmount.Text = world.lives.ToString();
             if (tickCounter < (1000 / globalTimer.Interval * 10) && tickCounter % (1000 / globalTimer.Interval) == 0) {
-                //world.SpawnEnemy();
+                world.SpawnEnemy();
             }
             DrawBackground();
             world.Update();

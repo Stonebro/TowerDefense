@@ -126,8 +126,7 @@ namespace TowerDefense.World {
 
         public void Update() {
             foreach (Tower t in towers) t.Update();
-            //foreach (Enemy e in enemies) if(!e.dead) e.Update();
-            foreach (Enemy e in enemies) e.Update(500);
+            foreach (Enemy e in enemies) if (!e.dead) e.Update();
             if (enemies.All(i => i.dead)) enemies = new List<Enemy>();
         }
 
