@@ -13,7 +13,8 @@ namespace TowerDefense.Entities.Enemies {
     public class Imp : Enemy {
         public Imp(int waveBonus) {
             name = "Imp";
-            health = 20 + (waveBonus*3);
+            maxHealth = 20 + (waveBonus * 3) ;
+            health = maxHealth;
             size = 10;
             bounty = 3 + waveBonus;
         }

@@ -32,9 +32,8 @@ namespace TowerDefense.Entities {
         protected override void AttackHighestPriority(Enemy enemy) {
             base.AttackHighestPriority(enemy);
             shotsFired++;
-            if (!enemy.dead) {
-                if(b!= null)
-                    b.DrawLine(new Pen(Color.Purple, 4), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
+            if (!enemy.dead & b != null) { // TEMP CHEAT
+                b.DrawLine(new Pen(Color.Purple, 4), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
                 enemy.health -= attackPower;
             }
         }

@@ -20,7 +20,7 @@ namespace TowerDefense.Util {
         public float y;
 
         /// <summary>
-        /// Emtpy constructor, setting both values to 0
+        /// Empty constructor, setting both values to 0
         /// </summary>
         public Vector2D() {
             x = y = 0.0f;
