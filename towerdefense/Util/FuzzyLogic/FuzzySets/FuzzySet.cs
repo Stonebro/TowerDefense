@@ -22,7 +22,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
 
         public FuzzySet(double repvalue)
         {
-
+            _memberRepValue = repvalue;
         }
 
         public abstract double CalculateDOM(double val);

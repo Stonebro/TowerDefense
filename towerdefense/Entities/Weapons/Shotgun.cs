@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Entities.Weapons
 {
-    class Shotgun
+    public class Shotgun : Weapon
     {
+        public Shotgun() {
+            attackRange = 3;
+            attackPower = 40; // This is a percentage!
+            attackInterval = 10;
+        }
     }
 }

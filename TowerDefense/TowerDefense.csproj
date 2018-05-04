@@ -53,6 +53,9 @@
     <Compile Include="Entities\Enemies\Enemy.cs" />
     <Compile Include="Entities\Enemies\Imp.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Weapons\Shotgun.cs" />
+    <Compile Include="Entities\Weapons\Sniper.cs" />
+    <Compile Include="Entities\Weapons\Weapon.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

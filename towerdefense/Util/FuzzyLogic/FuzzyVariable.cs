@@ -45,10 +45,8 @@ namespace TowerDefense.Util.FuzzyLogic
                 bottom += set.MemberDOM;
                 top += set.MemberRepValue * set.MemberDOM;
             }
-
             // Dividing by 0 is nonsense check.
             if (bottom == 0) return 0;
-
             return top / bottom;
         }
 
@@ -109,7 +107,6 @@ namespace TowerDefense.Util.FuzzyLogic
         public FzSet AddLeftShoulderSet(string name, double minBound, double peak, double maxBound)
         {
             _memberSets[name] = new FuzzySet_LeftShoulder(peak, peak - minBound, maxBound - peak);
-
             // Adjust range if necessary
             AdjustRangeToFit(minBound, maxBound);
 
@@ -123,7 +120,6 @@ namespace TowerDefense.Util.FuzzyLogic
         public FzSet AddRightShoulderSet(string name, double minBound, double peak, double maxBound)
         {
             _memberSets[name] = new FuzzySet_RightShoulder(peak, peak - minBound, maxBound - peak);
-
             //adjust range if necessary
             AdjustRangeToFit(minBound, maxBound);
 

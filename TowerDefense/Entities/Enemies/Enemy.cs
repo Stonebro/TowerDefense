@@ -14,6 +14,7 @@ namespace TowerDefense.Entities.Enemies
     public class Enemy : Entity
     {
         public string name;
+        public float maxHealth;
         public float health;
         protected int size;
         public Vector2D velocity;

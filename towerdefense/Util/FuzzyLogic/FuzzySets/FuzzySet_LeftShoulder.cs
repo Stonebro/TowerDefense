@@ -12,7 +12,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
         private double _memberLeftOffset;
         private double _memberRightOffset;
 
-        public FuzzySet_LeftShoulder(double peak, double left, double right) : base((peak + left) + peak / 2)
+        public FuzzySet_LeftShoulder(double peak, double left, double right) : base(((peak - left) + peak) / 2)
         {
             _memberPeak = peak;
             _memberLeftOffset = left;

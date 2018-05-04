@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Entities.Weapons
 {
-    class Weapon
+    public class Weapon
     {
+        public float attackRange;
+        public float attackPower;
+        public float attackInterval;
     }
 }

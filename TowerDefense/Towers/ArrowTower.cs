@@ -26,6 +26,7 @@ namespace TowerDefense.Entities {
         }
 
         public override void Update() {
+            Console.WriteLine(attackIntervalCounter);
             if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
                 AttackHighestPriority(enemyInRange());
                 attackIntervalCounter++;
@@ -36,9 +37,8 @@ namespace TowerDefense.Entities {
         protected override void AttackHighestPriority(Enemy enemy) {
             base.AttackHighestPriority(enemy);
             shotsFired++;
-            if(!enemy.dead) {
-                if(b != null) // TEMP. CHEAT
-                    b.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
+            if(!enemy.dead && b != null) { // TEMP CHEAT
+                b.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
                 enemy.health -= attackPower;
             }
         }

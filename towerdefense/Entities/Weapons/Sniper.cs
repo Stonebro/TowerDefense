@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Entities.Weapons
 {
-    class Sniper
+    public class Sniper : Weapon
     {
+        public Sniper() {
+            attackRange = 10;
+            attackPower = 5;
+            attackInterval = 10;
+        }
     }
 }

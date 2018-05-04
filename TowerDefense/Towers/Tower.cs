@@ -55,7 +55,7 @@ namespace TowerDefense.Entities {
         }
 
         // Draw a circle with a radius of 'this.attackRange' squares
-        public void DrawAttackRange(Graphics g) {
+        public virtual void DrawAttackRange(Graphics g) {
             int range = (attackRange * 2 + 2);
             Pen pen = new Pen(Color.Red);
             g.DrawEllipse(pen, position.x - (range/2)*BaseTile.size, position.y - (range/2) * BaseTile.size, range*BaseTile.size, range*BaseTile.size);
@@ -68,8 +68,6 @@ namespace TowerDefense.Entities {
         public virtual void DoNothing() {
             if (attackIntervalCounter % attackInterval != 0) attackIntervalCounter++;
             if (attackIntervalCounter == attackInterval) attackIntervalCounter = 0;
-            DoNothingCommand dnc = new DoNothingCommand(this);
-            dnc.Execute();
         }
 
         protected virtual void AttackHighestPriority(Enemy enemy) {
@@ -90,7 +88,7 @@ namespace TowerDefense.Entities {
 
         protected Enemy enemyInRange() {
             for(int i = 0; i < GameWorld.Instance.enemies.Count; i++)
-                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1.5f) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
+                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
                     return GameWorld.Instance.enemies[i];
             return null;
         }
@@ -98,7 +96,7 @@ namespace TowerDefense.Entities {
         protected List<Enemy> enemyInRange(int amountTargets) {
             List<Enemy> targets = new List<Enemy>();
             for (int i = 0; i < GameWorld.Instance.enemies.Count; i++) { 
-                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1.5f) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
+                if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
                     targets.Add(GameWorld.Instance.enemies[i]);
                 if (targets.Count == amountTargets) return targets;
             }

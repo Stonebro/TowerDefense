@@ -86,9 +86,9 @@ namespace TowerDefense.World {
             endTile = tilesList[tiles - 1];
             // Sets endTile to not Buildable.
             endTile.buildable = false;
-            Bat testEnemy = new Bat(waveCount);
-            testEnemy._pos = startTile.pos;
-            Instance.enemies.Add(testEnemy);
+            //Bat testEnemy = new Bat(waveCount);
+            //testEnemy._pos = startTile.pos;
+            //Instance.enemies.Add(testEnemy);
         }
 
         /// Draws each tile
