@@ -11,7 +11,7 @@ namespace TowerDefense.Entities.Weapons
         public Sniper() {
             attackRange = 10;
             attackPower = 5;
-            attackInterval = 10;
+            attackInterval = 20;
         }
     }
 }

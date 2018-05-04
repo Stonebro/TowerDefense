@@ -31,23 +31,17 @@ namespace TowerDefense.Entities.Enemies
                 Die();
             }
 
-            if (!dead)
-            {
-                if (path != null)
-                {
+            if (!dead) {
+                if (path != null) {
                     if (health <= 0) Die();
-
-                    else if (path.Current != null) {
-                        Move(3.75f);
-                    }
-
                 }
             }
         }
 
-        public virtual void Update(float time_elapsed) { }
-
         public virtual void Render(Graphics g) { }
-        public virtual void Die() { }
+        public virtual void Die() {
+            dead = true;
+            path = null;
+        }
     }
 }

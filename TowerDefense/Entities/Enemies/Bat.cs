@@ -25,7 +25,6 @@ namespace TowerDefense.Entities.Enemies {
         //a vector perpendicular to the heading vector
         public Vector2D side;
         
-        public float mass;
         //the maximum speed this entity may travel at.
         public float maxSpeed;
         //the maximum force this entity can produce to power itself 
@@ -76,7 +75,6 @@ namespace TowerDefense.Entities.Enemies {
             Vector2D toTarget = Vector2D.Vec2DNormalize(target - pos);
 
             double angle = Math.Acos(heading.Dot(toTarget));
-            Console.WriteLine(angle);
 
             if (angle < 0.2) return true;
 
@@ -89,62 +87,33 @@ namespace TowerDefense.Entities.Enemies {
             RotationMatrix.TransformVector2Ds(ref velocity);
 
             side = heading.Perp();
-            //Console.WriteLine(heading + "   " + side);
             return false;
         }
 
         public override void Update()
         {
-            //Console.WriteLine(velocity.x + " " + velocity.y);
-            //Console.WriteLine(pos);
-            if (path.Count > 0)
-            {
-                if (pos.Distance(path.Current) < 1)
-                    if (!path.GoNext())
-                        return;
+            base.Update();
+            if (path != null) {
+                if (path.Current != null) {
+                    if (pos.Distance(path.Current) < 1)
+                        if (!path.GoNext())
+                            return;
 
 
-                Vector2D target = Vector2D.Zero;
-                foreach (ISteering force in steeringForces)
-                {
-                    target += force.ApplySteering(this);
-                    if (target.Length() >= maxForce) break;
-                }
+                    Vector2D target = Vector2D.Zero;
+                    foreach (ISteering force in steeringForces) {
+                        target += force.ApplySteering(this);
+                        if (target.Length() >= maxForce) break;
+                    }
 
-                target += pos;
-                Console.WriteLine(RotateHeadingToFacePosition(target) + " " + DateTime.Now);
-                if (RotateHeadingToFacePosition(target))
-                {
-                    oldPos = pos;
-                    //Console.WriteLine(DateTime.Now);
-                    pos += heading * maxSpeed * 10;
+                    target += pos;
+                    if (RotateHeadingToFacePosition(target)) {
+                        oldPos = pos;
+                        pos += heading * maxSpeed * 10;
+                    }
                 }
             }
         }
-        //public override void Update(float time_elapsed) {
-        //    //Console.WriteLine(velocity.x + " " + velocity.y);
-        //    //Console.WriteLine(pos);
-        //    if (path.Count > 0) {
-        //        if (pos.Distance(path.Current) < 1)
-        //            if (!path.GoNext()) 
-        //                return;
-
-
-        //        Vector2D target = Vector2D.Zero;
-        //        foreach(ISteering force in steeringForces) {
-        //            target += force.ApplySteering(this);
-        //            if (target.Length() >= maxForce) break;
-        //        }
-
-        //        target += pos;
-
-        //        if(RotateHeadingToFacePosition(target)) {
-        //            oldPos = pos;
-        //            Console.WriteLine("hoi" + (heading * maxSpeed * 15));
-        //            pos += heading * maxSpeed * 15;
-        //        }
-        //    }
-        //}
 
         public override void Render(Graphics g) {
             g.FillRectangle(new SolidBrush(Color.Black), new RectangleF(pos.x + ((BaseTile.size - size) / 2), pos.y + ((BaseTile.size - size) / 2), size, size));

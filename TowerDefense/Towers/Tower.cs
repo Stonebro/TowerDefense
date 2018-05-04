@@ -15,6 +15,8 @@ namespace TowerDefense.Entities {
     public abstract class Tower : IReceiver {
         // Tower's name
         public string name;
+        // Tower's description
+        public string description = "";
         // Gold cost of placing the Tower.
         public int goldCost;
         // Attacking power of the Tower.

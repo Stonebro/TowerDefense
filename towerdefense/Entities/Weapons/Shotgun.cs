@@ -11,7 +11,7 @@ namespace TowerDefense.Entities.Weapons
         public Shotgun() {
             attackRange = 3;
             attackPower = 40; // This is a percentage!
-            attackInterval = 10;
+            attackInterval = 20;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace TowerDefense {
         // Used for counting elapsed ticks of GlobalTimer.
         public static int tickCounter { get; private set; }
 
-        /// Gets Tile that corresponds to the current mouse position.
+        // Gets Tile that corresponds to the current mouse position.
         private BaseTile GetTileAtMouse {
             get {
                 return world.tilesList[world.GetIndexOfTile(mousePos)];
@@ -42,7 +42,7 @@ namespace TowerDefense {
             globalTimer.Enabled = true;
         }
 
-        /// Paints the GameWorld. 
+        // Paints the GameWorld. 
         private void GameWorldPB_Paint(object sender, PaintEventArgs e) {
             base.OnPaint(e);
             // Previews location of Tower placement if mouse is on the PictureBox.
@@ -80,10 +80,11 @@ namespace TowerDefense {
             }
 
             foreach (Tower t in world.towers) {
-                t.b = g; // CHEAT
+                t.b = g; // Steal Form's graphics.
                 if (t.drawTowerRange) t.DrawAttackRange(g);
                 g.DrawImage(t.sprite, t.position.x - BaseTile.size, t.position.y - BaseTile.size);
             }
+            // Render each non-dead enemy
             foreach (Enemy e in world.enemies) if(!e.dead) e.Render(g);
             GameWorldPB.Image = bm;
         }
@@ -162,26 +163,29 @@ namespace TowerDefense {
             this.selectedTower = new ArrowTower();
             GameWorldPB.Invalidate();
             DeselectTower();
+            towerDescription.Text = selectedTower.description;
         }
 
         /// Handles selecting CannonTower as placement.      
-        private void Tower2PB_MouseDown(object sender, MouseEventArgs e)
-        {
+        private void Tower2PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = new CannonTower();
             GameWorldPB.Invalidate();
             DeselectTower();
+            towerDescription.Text = selectedTower.description;
         }
 
         private void Tower3PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = new SplitShotTower();
             GameWorldPB.Invalidate();
             DeselectTower();
+            towerDescription.Text = selectedTower.description;
         }
 
         private void DogHouseTowerPB_Click(object sender, EventArgs e) {
             this.selectedTower = new DogHouseTower();
             GameWorldPB.Invalidate();
             DeselectTower();
+            towerDescription.Text = selectedTower.description;
         }
 
         private void FuzzyTowerPB_Click(object sender, EventArgs e)
@@ -189,6 +193,7 @@ namespace TowerDefense {
             this.selectedTower = new FuzzyTower();
             GameWorldPB.Invalidate();
             DeselectTower();
+            towerDescription.Text = selectedTower.description;
         }
 
         private void handSelectPB_Click(object sender, EventArgs e) {
@@ -244,8 +249,7 @@ namespace TowerDefense {
 
         private void nextWaveBtn_Click(object sender, EventArgs e) {
             world.waveCount++;
-            //tickCounter = 0;
-            world.SpawnEnemy();
+            tickCounter = 0;
         }
 
         // Toggle relevant information for the selected Tower on
@@ -253,6 +257,7 @@ namespace TowerDefense {
             if (world.tower != null) {
                 selectedTowerNameLabel.Visible = true;
                 selectedTowerName.Visible = true;
+                towerDescription.Text = world.tower.description;
                 selectedTowerAtkDmgLabel.Visible = true;
                 selectedTowerDamage.Visible = true;
                 selectedTowerASLabel.Visible = true;
@@ -278,6 +283,7 @@ namespace TowerDefense {
         private void DeselectTower() {
             selectedTowerNameLabel.Visible = false;
             selectedTowerName.Visible = false;
+            towerDescription.Text = "";
             selectedTowerAtkDmgLabel.Visible = false;
             selectedTowerDamage.Visible = false;
             selectedTowerASLabel.Visible = false;

@@ -17,6 +17,7 @@ namespace TowerDefense.Entities {
         /// ArrowTower constructor.
         public ArrowTower() {
             name = "Arrow Tower";
+            description = "This is the most basic tower. It's deals low damage, but doesn't cost much. It's great for creating a large maze!";
             goldCost = 6;
             attackPower = 1;
             attackRange = 4;
@@ -26,7 +27,6 @@ namespace TowerDefense.Entities {
         }
 
         public override void Update() {
-            Console.WriteLine(attackIntervalCounter);
             if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
                 AttackHighestPriority(enemyInRange());
                 attackIntervalCounter++;

@@ -14,6 +14,7 @@ namespace TowerDefense.Entities {
         /// CannonTower constructor.
         public CannonTower() {
             name = "Cannon Tower";
+            description = "The Cannon Tower is the Arrow Tower's bigger brother. With increased range and damage, it's an excellent tower to put on a corner to cover ground.";
             goldCost = 15;
             attackPower = 10;
             attackRange = 8;

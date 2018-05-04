@@ -12,6 +12,7 @@ namespace TowerDefense.Entities {
     class SplitShotTower : Tower {
         public SplitShotTower() {
             name = "Splitshot Tower";
+            description = "This tower functions like an Arrow Tower, but can target up to 3 enemies at once! Place it on corners to maximize it's effect!";
             goldCost = 24;
             attackPower = 1;
             attackRange = 3;

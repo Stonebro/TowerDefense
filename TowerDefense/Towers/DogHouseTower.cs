@@ -13,11 +13,10 @@ using TowerDefense.Entities.Enemies;
 namespace TowerDefense.Entities {
     class DogHouseTower : Tower {
         AttackDog attackDog;
-        //StateMachine<AttackDog> stateMachine;
 
         public DogHouseTower() {            
-            //stateMachine = new StateMachine<AttackDog>(attackDog);
             name = "Dog House Tower";
+            description = "This tower has a pet! It's an attackdog that relentlessly chases and attacks the first enemy it sees! When there's no enemies in the tower's range, doggy will return home. (This tower uses a Finite State Machine";
             goldCost = 15;
             attackPower = 5;
             attackRange = 8;

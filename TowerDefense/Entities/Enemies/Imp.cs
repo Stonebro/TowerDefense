@@ -21,16 +21,13 @@ namespace TowerDefense.Entities.Enemies {
 
         public override void Update() {
             base.Update();
+            if (!dead) 
+                if (path.Current != null) 
+                    Move(3.75f);
         }
 
         public override void Render(Graphics g) {
             g.FillRectangle(new SolidBrush(Color.Red), new RectangleF(pos.x + ((BaseTile.size-size)/2), pos.y + ((BaseTile.size - size) / 2), size, size));
-        }
-
-        public override void Die() {
-            dead = true;
-            path = null;
-            //GameWorld.Instance.enemies.Remove(this);
         }
     }
 }
