@@ -11,11 +11,11 @@ using TowerDefense.World;
 namespace TowerDefense.FSM {
     class Attack : State<AttackDog> {
         public override void Enter(AttackDog t) {
-            //Console.WriteLine("Attack!");
         }
 
         public override void Execute(AttackDog t) {
-            if (t.attackIntervalCounter % t.home.attackInterval == 0 && t.target.pos.Distance(t.pos) < (t.attackRange + 1.5f) * BaseTile.size && !t.target.dead) {
+            // Check if the dog is ready to attack, if the target's in range and if the target is not dead
+            if (t.attackIntervalCounter % t.home.attackInterval == 0 && t.target.pos.Distance(t.pos) < (t.attackRange + 1f) * BaseTile.size && !t.target.dead) {
                 if (t.target.health - t.home.attackPower <= 0) {
                     t.home.kills++;
                     GameWorld.Instance.AddGold(t.target.bounty);
@@ -23,12 +23,13 @@ namespace TowerDefense.FSM {
                 t.target.health -= t.home.attackPower;
                 t.attackIntervalCounter = 0;
                 t.home.shotsFired++;
+                // Fills a little black circle to show the dog attacked
                 float range = (t.attackRange * 2 + 1);
                 if (!t.target.dead) {
-                    if (t.home.b != null) // TEMP. CHEAT
-                        t.home.b.FillEllipse(new SolidBrush(Color.FromArgb(200, 100, 100, 100)),
+                    if (t.home.g != null)
+                        t.home.g.FillEllipse(new SolidBrush(Color.FromArgb(200, 100, 100, 100)),
                             t.pos.x - t.attackRange * BaseTile.size,
-                            t.pos.y - t.attackRange * BaseTile.size, range * BaseTile.size, range * BaseTile.size); // TEMP. CHEAT
+                            t.pos.y - t.attackRange * BaseTile.size, range * BaseTile.size, range * BaseTile.size);
                 }
             }
         }

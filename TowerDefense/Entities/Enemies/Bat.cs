@@ -92,7 +92,6 @@ namespace TowerDefense.Entities.Enemies {
 
         public override void Update()
         {
-<<<<<<< HEAD
             base.Update();
             if (path != null) {
                 if (path.Current != null) {
@@ -112,31 +111,6 @@ namespace TowerDefense.Entities.Enemies {
                         oldPos = pos;
                         pos += heading * maxSpeed * 10;
                     }
-=======
-            //Console.WriteLine(velocity.x + " " + velocity.y);
-            //Console.WriteLine(pos);
-            if (path.Current != null)
-            {
-                if (pos.Distance(path.Current) < 1)
-                    if (!path.GoNext())
-                        return;
-
-
-                Vector2D target = Vector2D.Zero;
-                foreach (ISteering force in steeringForces)
-                {
-                    target += force.ApplySteering(this);
-                    if (target.Length() >= maxForce) break;
-                }
-
-                target += pos;
-                Console.WriteLine(RotateHeadingToFacePosition(target) + " " + DateTime.Now);
-                if (RotateHeadingToFacePosition(target))
-                {
-                    oldPos = pos;
-                    //Console.WriteLine(DateTime.Now);
-                    pos += heading * maxSpeed * 10;
->>>>>>> 6d8d5b9f0c3e4da626a19e4a5fd0a5ebfc2997ca
                 }
             }
         }

@@ -8,13 +8,11 @@ using TowerDefense.Tiles;
 using TowerDefense.World;
 using TowerDefense.Util;
 using TowerDefense.Entities;
-using TowerDefense.CommandPattern;
 using System.Threading;
 using TowerDefense.Entities.Enemies;
 
 namespace TowerDefense.Entities {
     class ArrowTower : Tower {
-        /// ArrowTower constructor.
         public ArrowTower() {
             name = "Arrow Tower";
             description = "This is the most basic tower. It's deals low damage, but doesn't cost much. It's great for creating a large maze!";
@@ -26,19 +24,21 @@ namespace TowerDefense.Entities {
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 
+        // Attack or Reload every tick.
         public override void Update() {
-            if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
-                AttackHighestPriority(enemyInRange());
+            if (enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
+                Attack(enemyInRange());
                 attackIntervalCounter++;
             }
-            else { DoNothing(); }
+            else Reload();
         }
 
-        protected override void AttackHighestPriority(Enemy enemy) {
-            base.AttackHighestPriority(enemy);
+        // Add a shot, draw a little line to show the attack and reduce the enemy's health
+        protected override void Attack(Enemy enemy) {
+            base.Attack(enemy);
             shotsFired++;
-            if(!enemy.dead && b != null) { // TEMP CHEAT
-                b.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7))); // TEMP. CHEAT
+            if (!enemy.dead && g != null) {
+                g.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7)));
                 enemy.health -= attackPower;
             }
         }

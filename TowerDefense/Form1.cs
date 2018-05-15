@@ -68,7 +68,7 @@ namespace TowerDefense {
             }
         }
 
-        // Draws Graph of GameWorld if user desires to see it.
+        // Draws the game, basically.
         public void DrawBackground() {
             Bitmap bm = new Bitmap(600, 600);
             Graphics g = Graphics.FromImage(bm);
@@ -80,7 +80,7 @@ namespace TowerDefense {
             }
 
             foreach (Tower t in world.towers) {
-                t.b = g; // Steal Form's graphics.
+                t.g = g; // Steal Form's graphics.
                 if (t.drawTowerRange) t.DrawAttackRange(g);
                 g.DrawImage(t.sprite, t.position.x - BaseTile.size, t.position.y - BaseTile.size);
             }
@@ -89,7 +89,7 @@ namespace TowerDefense {
             GameWorldPB.Image = bm;
         }
 
-        /// Handles placing a tower on the PictureBox.
+        // Handles placing a Tower and selecting Towers.
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Right) {
                 DeselectTower();
@@ -97,14 +97,11 @@ namespace TowerDefense {
             } else { 
                 // No tower to build selected, mouse can be used to select placed Towers
                 if (selectedTower == null && !GetTileAtMouse.buildable) {
-                    // Loop through all Towers
                     for (int i = 0; i < world.towers.Count; i++) {
                         // Check if the clicked tile is occupied by a Tower
                         for(int j = 0; j < world.towers[i].pos.Count; j++) {
                             if (world.towers[i].pos[j] == GetTileAtMouse) {
-                                // Deselect the previously selected Tower (if there is one)
                                 DeselectTower();
-                                // Set the selected Tower, draw its Range and toggle the Details.
                                 world.tower = world.towers[i];
                                 SelectTower();
                             } 
@@ -116,7 +113,8 @@ namespace TowerDefense {
                 // Gets 2x2 square of Tiles according to location of mouse.
                 List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
                 // If the selected tiles are buildable AND you have a tower selected AND you have enough money..
-                if (world.IsBuildable(selectedTiles) && selectedTower != null && world.gold + selectedTower.goldCost >= 0) {
+                if (world.IsBuildable(selectedTiles) && selectedTower != null && world.gold - selectedTower.goldCost >= 0) {
+                    // Check if the Tower doesn't completely block off the Path
                     if(world.CheckIfPathIsBlocked(selectedTiles) == false) { 
                         // ..Check the selected tower's type and create a new object of that type
                         Tower addTower = null;
@@ -144,7 +142,7 @@ namespace TowerDefense {
 
         }
 
-        /// Handles change of mouse location within PictureBox, redraws.
+        // Handles change of mouse location within PictureBox, redraws.
         private void GameWorldPB_MouseMove(object sender, MouseEventArgs e) {
             mousePos = e.Location;
             if (selectedTower == null && !GetTileAtMouse.buildable) GameWorldPB.Cursor = Cursors.Hand;
@@ -152,13 +150,13 @@ namespace TowerDefense {
             GameWorldPB.Invalidate();
         }
 
-        /// Sets mousePos to null after leaving main PictureBox, redraws PictureBox.       
+        // Sets mousePos to null after leaving main PictureBox, redraws PictureBox.       
         private void GameWorldPB_MouseLeave(object sender, EventArgs e) {
             mousePos = null;
             GameWorldPB.Invalidate();
         }
 
-        /// Handles selecting ArrowTower as placement.
+        // Selects ArrowTower.
         private void Tower1PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = new ArrowTower();
             GameWorldPB.Invalidate();
@@ -166,7 +164,7 @@ namespace TowerDefense {
             towerDescription.Text = selectedTower.description;
         }
 
-        /// Handles selecting CannonTower as placement.      
+        // Selects CannonTower.      
         private void Tower2PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = new CannonTower();
             GameWorldPB.Invalidate();
@@ -174,6 +172,7 @@ namespace TowerDefense {
             towerDescription.Text = selectedTower.description;
         }
 
+        // Selects SplitShotTower
         private void Tower3PB_MouseDown(object sender, MouseEventArgs e) {
             this.selectedTower = new SplitShotTower();
             GameWorldPB.Invalidate();
@@ -181,6 +180,7 @@ namespace TowerDefense {
             towerDescription.Text = selectedTower.description;
         }
 
+        // Selects DogHouseTower
         private void DogHouseTowerPB_Click(object sender, EventArgs e) {
             this.selectedTower = new DogHouseTower();
             GameWorldPB.Invalidate();
@@ -188,6 +188,7 @@ namespace TowerDefense {
             towerDescription.Text = selectedTower.description;
         }
 
+        // Selects FuzzyTower
         private void FuzzyTowerPB_Click(object sender, EventArgs e)
         {
             this.selectedTower = new FuzzyTower();
@@ -196,29 +197,26 @@ namespace TowerDefense {
             towerDescription.Text = selectedTower.description;
         }
 
+        // Clears the selected Tower so you can click on things again
         private void handSelectPB_Click(object sender, EventArgs e) {
             this.selectedTower = null;
             GameWorldPB.Invalidate();
         }
 
-        ///  Gets currently selected Tiles (used after clicking the main picturebox).
+        //  Gets currently selected Tiles (used after clicking the main picturebox).
         private List<BaseTile> GetSelectedTiles(Vector2D pos) {
             List<BaseTile> toReturn = new List<BaseTile>();
-            /* Checks if the tile clicked has a tile to the right and a tile to the bottom of it.
-             * This is needed because a tower is 2x2 tiles. 
-             * If this check isn't done while the user attempts to place a tower on the right/bottom edge of the picturebox 
-             * it causes unexpected behavior.
-             */
-                if (world.GetIndexOfTile(pos) % world.tilesH != world.tilesH-1 && world.GetIndexOfTile(pos) <= world.tiles-world.tilesH) {
-                    toReturn.Add(world.tilesList[world.GetIndexOfTile(pos)]); // Adds actual selected tile to list.
-                    toReturn.Add(world.tilesList[world.GetIndexOfTile(pos) + 1]); // Adds tile to the right to list.
-                    toReturn.Add(world.tilesList[world.GetIndexOfTile(pos) + world.tilesH]); // Adds tile to the bottom to list. 
-                    toReturn.Add(world.tilesList[world.GetIndexOfTile(pos) + world.tilesH + 1]); // Adds tile to the bottom-right to list.
-                }
+            //Check if all 4 squares of a tower are actually on the playing field
+            if (world.GetIndexOfTile(pos) % world.tilesH != world.tilesH-1 && world.GetIndexOfTile(pos) <= world.tiles-world.tilesH) {
+                toReturn.Add(world.tilesList[world.GetIndexOfTile(pos)]); // Adds actual selected tile to list.
+                toReturn.Add(world.tilesList[world.GetIndexOfTile(pos) + 1]); // Adds tile to the right to list.
+                toReturn.Add(world.tilesList[world.GetIndexOfTile(pos) + world.tilesH]); // Adds tile to the bottom to list. 
+                toReturn.Add(world.tilesList[world.GetIndexOfTile(pos) + world.tilesH + 1]); // Adds tile to the bottom-right to list.
+            }
             return toReturn;
         }
 
-        /// Handles "Show Vertices" Button click event.
+        // Handles "Show Vertices" Button click event.
         private void showVerticesBtn_Click(object sender, EventArgs e) {
             drawVerts = !drawVerts; // Toggles bool.
             DeselectTower();
@@ -226,10 +224,11 @@ namespace TowerDefense {
             DrawBackground();
         }
       
-        /// Handles timer tick to update gameworld. 
+        // Handles timer tick to update gameworld. (It ticks every 100 milliseconds, so 10 times a second)
         private void globalTimer_Tick(object sender, EventArgs e) {
             playerGoldAmount.Text = world.gold.ToString();
             playerLivesAmount.Text = world.lives.ToString();
+            // Every wave spawns 10 enemies
             if (tickCounter < (1000 / globalTimer.Interval * 10) && tickCounter % (1000 / globalTimer.Interval) == 0) {
                 world.SpawnEnemy();
             }
@@ -238,15 +237,17 @@ namespace TowerDefense {
             tickCounter++;
         }
 
+        // Deletes the selected Tower from the game
         private void deleteTowerBtn_Click(object sender, EventArgs e) {
             foreach(BaseTile bt in world.tower.pos)
                 bt.EnableTile();
             world.towers.Remove(world.tower);
-            world.RecalculatePaths();
+            world.RecalculatePaths(null);
             DeselectTower();
             DrawBackground();
         }
 
+        // Fast forward by spawning the next wave of enemies immediately
         private void nextWaveBtn_Click(object sender, EventArgs e) {
             world.waveCount++;
             tickCounter = 0;

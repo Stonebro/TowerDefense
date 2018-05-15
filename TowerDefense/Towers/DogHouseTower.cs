@@ -12,7 +12,7 @@ using TowerDefense.Entities.Enemies;
 
 namespace TowerDefense.Entities {
     class DogHouseTower : Tower {
-        AttackDog attackDog;
+        private AttackDog attackDog;
 
         public DogHouseTower() {            
             name = "Dog House Tower";
@@ -25,24 +25,20 @@ namespace TowerDefense.Entities {
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 
+        // Normal BuildTower, except it also adds a dog.
         public override void BuildTower(List<BaseTile> pos) {
             base.BuildTower(pos);
             attackDog = new AttackDog(this);
         }
 
-        protected override void AttackHighestPriority(Enemy enemy) {
-            base.AttackHighestPriority(enemy);
-            attackDog.AttackEnemy(enemy);
-        }
-
+        // Draw and Update the dog, and have it Chase its target and Return home.
         public override void Update() {
-            attackDog.Render(b);
+            attackDog.Render(g);
             attackDog.Update();
-            if (nearbyEnemies != null && enemyInRange() != null) {
+            if (enemyInRange() != null)
                 attackDog.ChaseEnemy(enemyInRange());
-            } else {
+            else
                 attackDog.Return();
-            }
         }
     }
 }

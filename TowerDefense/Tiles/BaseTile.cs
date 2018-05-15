@@ -21,31 +21,30 @@ namespace TowerDefense.Tiles {
         // Vertex of this Tile.
         public Vertex vertex;
         // Sprite of this Tile.
-        //public Bitmap sprite; 
 
-        /// BaseTile constructor.
+        // BaseTile constructor.
         public BaseTile(Vector2D pos) {
             this.pos = pos;
         }
         
-        /// ToString of BaseTile, returns position of Tile.
+        // ToString of BaseTile, returns position of Tile.
         public override string ToString() {
             if (tower != null)
                 Console.WriteLine(tower.GetType());
             return pos.ToString();
         }
 
-        /// Destroys the Vertex that corresponds to the Tile. 
+        // Destroys the Vertex that corresponds to the Tile. 
         public void DestroyVertex() {
             this.vertex = null;
         }
 
-        /// Creates a vertex corresponding to this Tile if it doesn't have one yet and the Tile is buildable.
+        // Creates a vertex corresponding to this Tile if it doesn't have one yet and the Tile is buildable.
         public void CreateVertex() {
             if (vertex == null && buildable) vertex = new Vertex(this);
         }
 
-        /// Returns if the vertex corresponding to this tile is connected with the vertex corresponding to the specified neighbouring Tile.
+        // Returns if the vertex corresponding to this tile is connected with the vertex corresponding to the specified neighbouring Tile.
         public bool IsConnected(BaseTile neighbour) {
             foreach(Edge e in vertex.adj) {
                 if (e.dest.parentTile == neighbour)
@@ -54,13 +53,13 @@ namespace TowerDefense.Tiles {
             return false;
         }
 
-        /// Creates a rectangle based on the position of the Tile (used for drawing).
+        // Creates a rectangle based on the position of the Tile (used for drawing).
         public RectangleF vertexRectangle() {
             return new RectangleF(pos.x + (size / 3), pos.y + (size / 3), size - (size / 3 * 2), size - (size / 3 * 2));
         }
 
       
-        /// Draws the representation of the Vertex of the Tile
+        // Draws the representation of the Vertex of the Tile
         public void DrawVertex(Graphics g) {
             if (vertex == null) return;
             // Disabled Vert = RED
@@ -80,6 +79,7 @@ namespace TowerDefense.Tiles {
 
         }
 
+        // Disable this Tile for all Entities. non-walkable, non-buildable.
         public void DisableTile() {
             buildable = false;
             vertex.disabled = true;
@@ -91,6 +91,7 @@ namespace TowerDefense.Tiles {
             }
         }
 
+        // Enable this Tile for all Entities. walkable and buildable.
         public void EnableTile() {
             buildable = true;
             vertex.disabled = false;

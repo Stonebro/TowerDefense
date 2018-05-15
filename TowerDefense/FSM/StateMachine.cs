@@ -14,6 +14,7 @@ namespace TowerDefense.FSM {
             this.entity = entity;
         }
 
+        // Changes States. Does not Change State if the target is already in that State
         public void ChangeState(State<T> newState) {
             if (PrevState == null) {
                 newState.Enter(entity);
@@ -27,6 +28,7 @@ namespace TowerDefense.FSM {
             }
         }
 
+        // Execute the CurrentState each tick
         public void Update() {
             if(CurrentState != null) CurrentState.Execute(entity);
         }
