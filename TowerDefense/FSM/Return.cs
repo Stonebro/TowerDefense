@@ -14,7 +14,6 @@ namespace TowerDefense.FSM {
             Console.WriteLine("Returning");
         }
 
-        // Finds a path home and move there.
         public override void Execute(AttackDog t) {
             BaseTile[] tilesList = GameWorld.Instance.tilesList;
             GameWorld instance = GameWorld.Instance;
@@ -25,6 +24,7 @@ namespace TowerDefense.FSM {
                     t.Move(4f);
                 }
             }
+            //if (t.attackIntervalCounter != t.attackInterval) t.attackIntervalCounter++;
         }
 
         public override void Exit(AttackDog t) {

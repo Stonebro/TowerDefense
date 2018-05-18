@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
-using TowerDefense.Util.SteeringBehaviours;
+using TowerDefense.Util.Steering;
 using TowerDefense.World;
 
 namespace TowerDefense.Entities.Enemies {
@@ -65,7 +65,8 @@ namespace TowerDefense.Entities.Enemies {
 
 
         public void SetHeading(Vector2D newheading) {
-            if (newheading.LengthSq() - 1 >= 0.00001) {
+            if ((newheading.LengthSq() - 1) < 0.00001) ;
+            {
                 heading = newheading;
                 side = heading.Perp();
             }
@@ -93,21 +94,25 @@ namespace TowerDefense.Entities.Enemies {
         public override void Update()
         {
             base.Update();
-            if (path != null) {
-                if (path.Current != null) {
+            if (path != null)
+            {
+                if (path.Current != null)
+                {
                     if (pos.Distance(path.Current) < 1)
                         if (!path.GoNext())
                             return;
 
 
                     Vector2D target = Vector2D.Zero;
-                    foreach (ISteering force in steeringForces) {
+                    foreach (ISteering force in steeringForces)
+                    {
                         target += force.ApplySteering(this);
                         if (target.Length() >= maxForce) break;
                     }
 
                     target += pos;
-                    if (RotateHeadingToFacePosition(target)) {
+                    if (RotateHeadingToFacePosition(target))
+                    {
                         oldPos = pos;
                         pos += heading * maxSpeed * 10;
                     }

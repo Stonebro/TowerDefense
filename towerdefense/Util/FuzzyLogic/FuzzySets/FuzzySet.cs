@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Util.FuzzyLogic.FuzzySets
 {
+    /// <summary>
+    ///  This is a rewrite of the FuzzySet class authored by Mat Buckland and all credit goes to him.
+    /// </summary>
     public abstract class FuzzySet
     {
         protected double _memberDOM;

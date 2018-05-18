@@ -22,22 +22,19 @@ namespace TowerDefense.Entities {
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 
-        // Attack up to 3 enemies or Reload every tick
         public override void Update() {
-            if (enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
-                Attack(enemyInRange(attackTargets));
+            if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
+                AttackHighestPriority(enemyInRange(attackTargets));
                 attackIntervalCounter++;
-            }
-            else Reload();
+            } else DoNothing();
         }
 
-        // Add up to 3 shots, draw a line for each attack and reduce each enemy's health
-        protected override void Attack(List<Enemy> enemies) {
-            base.Attack(enemies);
+        protected override void AttackHighestPriority(List<Enemy> enemies) {
+            base.AttackHighestPriority(enemies);
             foreach(Enemy e in enemies) {
                 shotsFired++;
-                if (!e.dead && g != null) {
-                    g.DrawLine(new Pen(Color.HotPink, 2), position, (e.pos + new Vector2D(7, 7)));
+                if (!e.dead && b != null) { // TEMP CHEAT
+                    b.DrawLine(new Pen(Color.LightGoldenrodYellow, 2), position, (e.pos + new Vector2D(7, 7))); // TEMP. CHEAT
                     e.health -= attackPower;
                 }
             }

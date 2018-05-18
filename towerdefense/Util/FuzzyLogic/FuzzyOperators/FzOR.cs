@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
 {
+    /// <summary>
+    ///  This is a rewrite of the FzOR class authored by Mat Buckland and all credit goes to him.
+    /// </summary>
     public class FzOR : FuzzyTerm
     {
 

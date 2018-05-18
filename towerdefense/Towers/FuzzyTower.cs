@@ -27,7 +27,7 @@ namespace TowerDefense.Towers
         private Weapon weapon;
         private FuzzyModule towerShotgunFuzzyModule;
         private FuzzyModule towerSniperFuzzyModule;
-
+        /// FuzzyTower constructor.
         public FuzzyTower()
         {
             name = "Fuzzy Tower";
@@ -35,56 +35,71 @@ namespace TowerDefense.Towers
             goldCost = 35;
             splash = new Bitmap(Resources.Resources.ArrowTower);
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
-            weapon = sniper; // Set Sniper as default
             towerShotgunFuzzyModule = InitFuzzyTowerBaseModule();
             towerSniperFuzzyModule = InitFuzzyTowerBaseModule();
+            weapon = sniper;
             FuzzyTowerCalcShotgun(towerShotgunFuzzyModule);
             FuzzyTowerCalcSniper(towerSniperFuzzyModule);           
         }
 
-        // Whenever the Tower's ready to attack, look for the most logical target and attack it.
-        public override void Update() {
+        public override void Update()
+        {
             if (attackIntervalCounter % weapon.attackInterval == 0) {
                 Enemy target = GetDesiredTarget();
                 if (target != null) {
-                    Attack(target);
+                    AttackHighestPriority(target);
                     attackIntervalCounter++;
                 }
             }
-            else Reload();
+            else DoNothing();
         }
 
-        // This Function uses Fuzzy Logic to decide which weapon to use on which Enemy
+        protected override void AttackHighestPriority(Enemy enemy)
+        {
+            if (!enemy.dead && b != null) {
+                if (weapon is Sniper) {
+                    b.DrawLine(new Pen(Color.Red, 2), position, (enemy.pos + new Vector2D(7, 7)));
+                    enemy.health -= weapon.attackPower;
+                }
+                if (weapon is Shotgun) {
+                    b.DrawLine(new Pen(Color.DarkTurquoise, 4), position, (enemy.pos + new Vector2D(7, 7)));
+                    enemy.health = (float)Math.Floor(enemy.health * (1 - (weapon.attackPower / 100)));
+                }
+            }
+        }
+
+        public override void DrawAttackRange(Graphics g) {
+            float sniperRange = (sniper.attackRange * 2 + 2);
+            float shotgunRange = (shotgun.attackRange * 2 + 2);
+            Pen pen = new Pen(Color.Red);
+            g.DrawEllipse(pen, position.x - (sniperRange / 2) * BaseTile.size, position.y - (sniperRange / 2) * BaseTile.size, sniperRange * BaseTile.size, sniperRange * BaseTile.size);
+            g.DrawEllipse(pen, position.x - (shotgunRange / 2) * BaseTile.size, position.y - (shotgunRange / 2) * BaseTile.size, shotgunRange * BaseTile.size, shotgunRange * BaseTile.size);
+        }
+
         public Enemy GetDesiredTarget() {
             Enemy toReturn = null;
             double highestOverall = -1;
-            foreach (Enemy e in GameWorld.Instance.enemies) {
+            foreach(Enemy e in GameWorld.Instance.enemies) {
                 double highestForThisLoop;
-                // Check only the Enemies that are in range of the Sniper.
-                if (position.Distance(e.pos) < (sniper.attackRange + 1) * BaseTile.size) {
-                    // Use Fuzzy Logic to calculate the desirability for the Shotgun on the current enemy
+                if(position.Distance(e.pos) < (sniper.attackRange+1) * BaseTile.size) {
                     double shotgunDesirability;
                     towerShotgunFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
                     towerShotgunFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
                     shotgunDesirability = towerShotgunFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
-                    
-                    // Use Fuzzy Logic to calculate the desirability for the Shotgun on the current enemy
+
                     double sniperDesirability;
                     towerSniperFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
                     towerSniperFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
                     sniperDesirability = towerSniperFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
 
-                    // If the Shotgun has a higher desirability, note the value..
-                    if (shotgunDesirability > sniperDesirability) {
+                    if (shotgunDesirability > sniperDesirability) {                     
                         highestForThisLoop = shotgunDesirability;
-                        // ..and check if it's the highest desirability overall
-                        if (highestForThisLoop > highestOverall) weapon = shotgun;
+                        if(highestForThisLoop > highestOverall) weapon = shotgun;
                     }
-                    else {
+                    else {                      
                         highestForThisLoop = sniperDesirability;
-                        if (highestForThisLoop > highestOverall) weapon = sniper;
+                        if(highestForThisLoop > highestOverall) weapon = sniper;
                     }
-                    // If the desirability of a weapon is higher than the known highest, set it and also set the Enemy to return.
                     if (highestForThisLoop > highestOverall) {
                         highestOverall = highestForThisLoop;
                         toReturn = e;
@@ -94,34 +109,10 @@ namespace TowerDefense.Towers
             return toReturn;
         }
 
-        // Add a shot, draw the attack and reduce Enemy's health.
-        protected override void Attack(Enemy enemy) {
-            if (!enemy.dead && g != null) {
-                shotsFired++;
-                if (weapon is Sniper) {
-                    g.DrawLine(new Pen(Color.Red, 2), position, (enemy.pos + new Vector2D(7, 7)));
-                    enemy.health -= weapon.attackPower;
-                }
-                if (weapon is Shotgun) {
-                    g.DrawLine(new Pen(Color.DarkTurquoise, 4), position, (enemy.pos + new Vector2D(7, 7)));
-                    enemy.health = (float)Math.Floor(enemy.health * (1 - (weapon.attackPower / 100))); // The Shotgun deals 40% of the target's current health.
-                }
-            }
-        }
-
-        // Since the Fuzzy Tower has 2 attack ranges, overriding this to draw both was neccesary
-        public override void DrawAttackRange(Graphics g) {
-            float sniperRange = (sniper.attackRange * 2 + 2);
-            float shotgunRange = (shotgun.attackRange * 2 + 2);
-            Pen pen = new Pen(Color.Red);
-            g.DrawEllipse(pen, position.x - (sniperRange / 2) * BaseTile.size, position.y - (sniperRange / 2) * BaseTile.size, sniperRange * BaseTile.size, sniperRange * BaseTile.size);
-            g.DrawEllipse(pen, position.x - (shotgunRange / 2) * BaseTile.size, position.y - (shotgunRange / 2) * BaseTile.size, shotgunRange * BaseTile.size, shotgunRange * BaseTile.size);
-        }
-
-        // Initializes the base module.
-        public FuzzyModule InitFuzzyTowerBaseModule() {
+        public FuzzyModule InitFuzzyTowerBaseModule()
+        {
             FuzzyModule towerFuzzyModule = new FuzzyModule();
-            
+
             FuzzyVariable health = towerFuzzyModule.CreateFLV("Health");
             health.AddLeftShoulderSet("Low", 0, 12.5, 25);
             health.AddTriangularSet("Middle", 20, 40, 65);

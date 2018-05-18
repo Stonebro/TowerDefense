@@ -19,7 +19,6 @@ namespace TowerDefense.Entities.Enemies {
             bounty = 3 + waveBonus;
         }
 
-        // Move towards the endTile if it's not dead.
         public override void Update() {
             base.Update();
             if (!dead) 
@@ -27,7 +26,6 @@ namespace TowerDefense.Entities.Enemies {
                     Move(3.75f);
         }
 
-        // Fill a little red square to represent the Imp.
         public override void Render(Graphics g) {
             g.FillRectangle(new SolidBrush(Color.Red), new RectangleF(pos.x + ((BaseTile.size-size)/2), pos.y + ((BaseTile.size - size) / 2), size, size));
         }

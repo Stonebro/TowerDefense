@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
+using TowerDefense.CommandPattern;
 using TowerDefense.World;
 using TowerDefense.Tiles;
 
@@ -20,11 +21,12 @@ namespace TowerDefense.Entities.Enemies
         public bool dead;
         public int bounty;
 
-        // Checks if the enemy made it to the endTile or died.
+        /// Handles moving the enemy.
         public virtual void Update()
         {
             BaseTile enemyTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(this.pos)];
-            if (enemyTile == GameWorld.Instance.endTile) {
+            if (enemyTile == GameWorld.Instance.endTile)
+            {
                 GameWorld.Instance.lives--;
                 Die();
             }
@@ -36,14 +38,10 @@ namespace TowerDefense.Entities.Enemies
             }
         }
 
-        // Flips a bool and nulls the path.
+        public virtual void Render(Graphics g) { }
         public virtual void Die() {
             dead = true;
             path = null;
         }
-
-        public virtual void Render(Graphics g) { }
-
-
     }
 }

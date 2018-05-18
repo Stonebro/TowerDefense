@@ -11,9 +11,9 @@ using TowerDefense.Tiles;
 namespace TowerDefense.FSM {
     class Chase : State<AttackDog> {
         public override void Enter(AttackDog t) {
+            //Console.WriteLine("Chasing a target!   counter = " + t.attackIntervalCounter);
         }
 
-        // Get a path to the target and move there quickly
         public override void Execute(AttackDog t) {
             BaseTile[] tilesList = GameWorld.Instance.tilesList;
             GameWorld instance = GameWorld.Instance;
@@ -24,6 +24,7 @@ namespace TowerDefense.FSM {
                     t.Move(8f);
                 }
             }
+            //if (t.attackIntervalCounter != t.attackInterval) t.attackIntervalCounter++;
         }
 
         public override void Exit(AttackDog t) {
