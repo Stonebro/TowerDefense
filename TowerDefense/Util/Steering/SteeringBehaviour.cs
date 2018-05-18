@@ -64,8 +64,9 @@ namespace TowerDefense.Util.Steering
         private DecelerationRate decelerationRate;
         #endregion
 
+        #region Attributes
         private Vehicle _vehicle;
-        private Vector2D _steeringForce;
+        private Vector2D _steeringForce = Vector2D.Zero;
         private Vehicle _targetAgent1;
         private Vehicle _targetAgent2;
         private Vector2D _target;
@@ -98,17 +99,17 @@ namespace TowerDefense.Util.Steering
         private double _weightFollowPath = 0.05;
 
         // Used for setting the probability that a steering behaviour will be used when Prioritzed dithering is used.
-        private float _chanceWallAvoidance;
-        private float _chanceObstacleAvoidance;
-        private float _chanceSeparation;
-        private float _chanceAlignment;
-        private float _chanceCohesion;
-        private float _chanceWander;
-        private float _chanceSeek;
-        private float _chanceFlee;
-        private float _chanceEvade;
-        private float _chanceHide;
-        private float _chanceArrive;
+        private float _chanceWallAvoidance = 0.5f;
+        private float _chanceObstacleAvoidance = 0.5f;
+        private float _chanceSeparation = 0.2f;
+        private float _chanceAlignment = 0.3f;
+        private float _chanceCohesion = 0.6f;
+        private float _chanceWander = 0.8f;
+        private float _chanceSeek = 0.8f;
+        private float _chanceFlee = 0.6f;
+        private float _chanceEvade = 1f;
+        private float _chanceHide = 0.8f;
+        private float _chanceArrive = 0.5f;
 
         private int _flags;
         private double _viewDistance = 50;
@@ -116,6 +117,7 @@ namespace TowerDefense.Util.Steering
         private Vector2D _offset;
         private double _waypointSeekDistSq;
         private double theta = new Random().NextDouble() * (Math.PI * 2);
+        #endregion
 
         public SteeringBehaviour(Vehicle agent)
         {
@@ -242,14 +244,6 @@ namespace TowerDefense.Util.Steering
         {
             Vector2D force = Vector2D.Zero;
 
-            //if (On(BehaviourType.OBSTACLEAVOIDANCE))
-            //{
-            //    force = ObstacleAvoidance(_vehicle.World->Obstacles()) *
-            //            _weightObstacleAvoidance;
-
-            //    if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            //}
-
             if (On(BehaviourType.EVADE))
             {
                 if (_targetAgent1 != null)
@@ -368,13 +362,6 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D CalculateWeightedSum()
         {
-
-            //if (On(BehaviourType.OBSTACLEAVOIDANCE))
-            //{
-            //    _steeringForce += ObstacleAvoidance(_vehicle.World->Obstacles()) *
-            //            _weightObstacleAvoidance;
-            //}
-
             if (On(BehaviourType.EVADE))
             {
                 if (_targetAgent1 != null)
@@ -467,20 +454,6 @@ namespace TowerDefense.Util.Steering
         {
             //reset the steering force
             _steeringForce = Vector2D.Zero;
-
-            //if (On(BehaviourType.OBSTACLEAVOIDANCE) && new Random().NextDouble() < _chanceObstacleAvoidance)
-            //{
-            //    _steeringForce += ObstacleAvoidance(_vehicle.World->Obstacles()) *
-            //            _weightObstacleAvoidance / _chanceObstacleAvoidance;
-
-            //    if (!_steeringForce.isZero())
-            //    {
-            //        _steeringForce.Truncate((float)_vehicle.MaxForce);
-
-            //        return _steeringForce;
-            //    }
-            //}
-
 
             if (On(BehaviourType.SEPARATION) && new Random().NextDouble() < _chanceSeparation)
             {
@@ -602,9 +575,14 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D Seek(Vector2D TargetPos)
         {
+            float deltaX = _vehicle.Pos.x - TargetPos.x;
+            float deltaY = _vehicle.Pos.y - TargetPos.y;
+            if (-5 < deltaX && deltaX < 5) _vehicle.Pos.x = TargetPos.x;
+            if (-5 < deltaY && deltaY < 5) _vehicle.Pos.y = TargetPos.y;
+            if (_vehicle.Pos.x == TargetPos.x && _vehicle.Pos.y == TargetPos.y) return Vector2D.Zero;
+
             Vector2D DesiredVelocity = Vector2D.Normalize(TargetPos - _vehicle.Pos)
                                       * _vehicle.MaxSpeed;
-
             return (DesiredVelocity - _vehicle.Velocity);
         }
 
@@ -758,200 +736,6 @@ namespace TowerDefense.Util.Steering
             // And steer towards it.
             return Target - _vehicle.Pos;
         }
-
-        ///// <summary>
-        ///// Given a list of Obstacles, this method returns a steering force
-        ///// that will prevent the agent colliding with the closest obstacle
-        ///// </summary>
-        ///// <returns>Steering Force</returns>
-        //public Vector2D ObstacleAvoidance(List<Entity> obstacles)
-        //{
-        //    // The detection box length is proportional to the agent's velocity.
-        //    _dBoxLength = _dBoxLength +
-        //                     (_vehicle.Speed() / _vehicle.MaxSpeed) *
-        //                     _dBoxLength;
-
-        //    // Tag all obstacles within range of the box for processing.
-        //    _vehicle.World->TagObstaclesWithinViewRange(_vehicle, _dBoxLength);
-
-        //    // This will keep track of the closest intersecting obstacle (CIB).
-        //    Entity ClosestIntersectingObstacle = null;
-
-        //    // This will be used to track the distance to the CIB.
-        //    double DistToClosestIP = Double.MaxValue;
-
-        //    // This will record the transformed local coordinates of the CIB.
-        //    Vector2D LocalPosOfClosestObstacle = null;
-
-        //    foreach (Entity obstacle in obstacles)
-        //    {
-        //        // If the obstacle has been tagged within range proceed.
-        //        if (obstacle.IsTagged())
-        //        {
-        //            // Calculate this obstacle's position in local space.
-        //            Vector2D LocalPos = PointToLocalSpace(obstacle.Pos,
-        //                                                   _vehicle.Heading,
-        //                                                   _vehicle.Side,
-        //                                                   _vehicle.Pos);
-
-        //            /* If the local position has a negative x value then it must lay
-        //               behind the agent. (in which case it can be ignored) */
-        //            if (LocalPos.x >= 0)
-        //            {
-        //                /* If the distance from the x axis to the object's position is less
-        //                 * than its radius + half the width of the detection box then there
-        //                 * is a potential intersection. */
-        //                double ExpandedRadius = obstacle.BRadius() + _vehicle.BRadius();
-
-        //                if (Math.Abs(LocalPos.y) < ExpandedRadius)
-        //                {
-        //                    /* Now to do a line/circle intersection test. The center of the 
-        //                     * circle is represented by (cX, cY). The intersection points are 
-        //                     * given by the formula x = cX +/-sqrt(r^2-cY^2) for y=0. 
-        //                     * Only the smallest possible value of x needs to be used because that is
-        //                     * the smallest point of intersection. */
-        //                    double cX = LocalPos.x;
-        //                    double cY = LocalPos.y;
-
-        //                    // The sqrt part of the above equation needs to be calculated only once.
-        //                    double SqrtPart = Math.Sqrt(ExpandedRadius * ExpandedRadius - cY * cY);
-
-        //                    double ip = cX - SqrtPart;
-
-        //                    if (ip <= 0.0)
-        //                    {
-        //                        ip = cX + SqrtPart;
-        //                    }
-
-        //                    /* Test to see if this is the closest so far. If it is keep a
-        //                     * record of the obstacle and its local coordinates. */
-        //                    if (ip < DistToClosestIP)
-        //                    {
-        //                        DistToClosestIP = ip;
-
-        //                        ClosestIntersectingObstacle = obstacle;
-
-        //                        LocalPosOfClosestObstacle = LocalPos;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    /* If we have found an intersecting obstacle, calculate a steering 
-        //     * force away from it */
-        //    Vector2D SteeringForce = Vector2D.Zero;
-
-        //    if (ClosestIntersectingObstacle != null)
-        //    {
-        //        /* The closer the agent is to an object, the stronger the 
-        //           steering force should be. */
-        //        double multiplier = 1.0 + (_dBoxLength - LocalPosOfClosestObstacle.x) /
-        //                           _dBoxLength;
-
-        //        // Calculate the lateral force.
-        //        SteeringForce.y = (ClosestIntersectingObstacle.BRadius() -
-        //                                       LocalPosOfClosestObstacle.y) * multiplier;
-
-        //        /* Apply a braking force proportional to the obstacles distance from
-        //         * the vehicle. */
-        //        const double BrakingWeight = 0.2;
-
-        //        SteeringForce.x = (ClosestIntersectingObstacle.BRadius() -
-        //                                       LocalPosOfClosestObstacle.x) *
-        //                                       BrakingWeight;
-        //    }
-
-        //    // Finally, convert the steering vector from local to world space.
-        //    return VectorToWorldSpace(SteeringForce,
-        //                              _vehicle.Heading,
-        //                              _vehicle.Side);
-        //}
-
-
-        //        /// <summary>
-        //        /// Returns a steering force that will direct the agent away from walls.
-        //        /// </summary>
-        //        /// <param name="walls"></param>
-        //        /// <returns>Steering Force</returns>
-        //        public Vector2D WallAvoidance(List<Wall> walls)
-        //{
-        //        //the feelers are contained in a std::vector, _feelers
-        //        CreateFeelers();
-
-        //        double DistToThisIP = 0.0;
-        //        double DistToClosestIP = Double.MaxValue;
-
-        //        //this will hold an index into the vector of walls
-        //        int ClosestWall = -1;
-
-        //        Vector2D SteeringForce,
-        //                  point,         //used for storing temporary info
-        //                  ClosestPoint;  //holds the closest intersection point
-
-        //    //examine each feeler in turn
-        //    for (int i = 0; i<_feelers.Count; ++i)
-        //    {
-        //        //run through each wall checking for any intersection points
-        //        for (int j = 0; j <walls.Count; ++j)
-        //        {
-        //            if (LineIntersection2D(_vehicle.Pos,
-        //                                   _feelers[i],
-        //                                   walls[j].From(),
-        //                                   walls[j].To(),
-        //                                   DistToThisIP,
-        //                                   point))
-        //            {
-        //                //is this the closest found so far? If so keep a record
-        //                if (DistToThisIP<DistToClosestIP)
-        //                {
-        //                    DistToClosestIP = DistToThisIP;
-
-        //                    ClosestWall = w;
-
-        //                    ClosestPoint = point;
-        //                }
-        //}
-        //        }//next wall
-
-
-        //        //if an intersection point has been detected, calculate a force  
-        //        //that will direct the agent away
-        //        if (ClosestWall >= 0)
-        //        {
-        //            //calculate by what distance the projected position of the agent
-        //            //will overshoot the wall
-        //            Vector2D OverShoot = _feelers[i] - ClosestPoint;
-
-        ////create a force in the direction of the wall normal, with a 
-        ////magnitude of the overshoot
-        //SteeringForce = walls[ClosestWall].Normal() * OverShoot.Length();
-        //        }
-
-        //    }//next feeler
-
-        //    return SteeringForce;
-        //}
-
-        ////------------------------------- CreateFeelers --------------------------
-        ////
-        ////  Creates the antenna utilized by WallAvoidance
-        ////------------------------------------------------------------------------
-        //void CreateFeelers()
-        //{
-        //    //feeler pointing straight in front
-        //    _feelers[0] = _vehicle.Pos + _wallDetectionFeelerLength * _vehicle.Heading;
-
-        //    //feeler to left
-        //    Vector2D temp = _vehicle.Heading;
-        //    Vec2DRotateAroundOrigin(temp, HalfPi * 3.5f);
-        //    _feelers[1] = _vehicle.Pos + _wallDetectionFeelerLength / 2.0f * temp;
-
-        //    //feeler to right
-        //    temp = _vehicle.Heading;
-        //    Vec2DRotateAroundOrigin(temp, HalfPi * 0.5f);
-        //    _feelers[2] = _vehicle.Pos + _wallDetectionFeelerLength / 2.0f * temp;
-        //}
 
         /// <summary>
         /// Returns a force that repels the agent from other agents.

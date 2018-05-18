@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TowerDefense.CommandPattern {
+namespace TowerDefense.CommandPattern
+{
     class DoNothingCommand : Command {
 
         public DoNothingCommand(IReceiver receiver) : base(receiver) {

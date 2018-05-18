@@ -118,6 +118,8 @@ namespace TowerDefense.Util
 
         public static Vector2D Normalize(Vector2D v)
         {
+            if(float.IsNaN(v.Length())) return Vector2D.Zero;
+
             Vector2D vec = v;
             vec.x /= vec.Length();
             vec.y /= vec.Length();

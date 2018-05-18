@@ -43,6 +43,7 @@ namespace TowerDefense.World
         // List of Enemies
         public List<Enemy> enemies;
         public List<Vehicle> Vehicles;
+        public Eagle testEagle;
         public Graph graph;
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
@@ -70,6 +71,7 @@ namespace TowerDefense.World
             // Initializes list of Towers.
             towers = new List<Tower>();
             enemies = new List<Enemy>();
+            Vehicles = new List<Vehicle>();
             // Creates Graph.
             graph = new Graph();
 
@@ -97,10 +99,12 @@ namespace TowerDefense.World
             // Sets endTile to not Buildable.
             endTile.buildable = false;
             Bat testEnemy = new Bat(waveCount);
+            testEagle = new Eagle(new Vector2D(100,100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 5, 10, 10);
             testEnemy.pos = tilesList[125].pos;
             testEnemy.path = Path.GetPath(startTile, tilesList[674]);
             testEnemy.addForce = new Seek();
             Instance.enemies.Add(testEnemy);
+            Instance.Vehicles.Add(testEagle.Vehicle);
         }
 
         /// Draws each tile
@@ -140,6 +144,8 @@ namespace TowerDefense.World
                     if (e.path != null) e.path.Render(g);
                 }
             }
+            testEagle.Update();
+                g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
         }
 
         public void Update()
@@ -312,7 +318,7 @@ namespace TowerDefense.World
 
         public Vector2D Crosshair()
         {
-            return new Vector2D(Cursor.Position.X, Cursor.Position.Y);
+            return new Vector2D(250,250);
         }
 
         /// <summary>
