@@ -9,19 +9,14 @@ using TowerDefense.Entities.Projectiles;
 using TowerDefense.Tiles;
 using TowerDefense.World;
 
-namespace TowerDefense.Util
-{
-    public class Path
-    {
+namespace TowerDefense.Util {
+    public class Path {
         // Waypoints along the path, these waypoints define the path.
         private List<Vector2D> waypoints;
         // Returns current waypoint if there is one, otherwise returns null.
-        public Vector2D Current
-        {
-            get
-            {
-                if(waypoints != null)
-                {
+        public Vector2D Current {
+            get {
+                if(waypoints != null) {
                     if (waypoints.Count > 0)
                         return waypoints[0];
                     else return null;
@@ -30,10 +25,8 @@ namespace TowerDefense.Util
             }
         }
         // Returns last waypoint if there is one, otherwise returns null.
-        public Vector2D End
-        {
-            get
-            {
+        public Vector2D End {
+            get {
                 if (waypoints != null)
                     if (waypoints.Count > 0)
                         return waypoints[waypoints.Count - 1];
@@ -42,39 +35,24 @@ namespace TowerDefense.Util
             }
         }
 
-        /// Default/empty constructor
-        public Path() : this(new List<Vector2D>()) {
+        // Default/empty constructor
+        public Path() : this(new List<Vector2D>()) { }
 
-        }
-
-        /// Creates path from list of vec2.
-        public Path(List<Vector2D> path)
-        {
+        // Creates path from list of vec2.
+        public Path(List<Vector2D> path) {
             waypoints = path;
         }
 
-        /// Returns if path is finished.
-        public bool IsFinished()
-        {
+        // Returns if path is finished.
+        public bool IsFinished(){
             if (waypoints != null)
                 return waypoints.Count == 0;
             else return false;
         }
 
-        public int Count {
-            get {
-                if (waypoints == null)
-                    return 0;
-                else
-                    return waypoints.Count;
-            }
-        }
-
-        /// Goes to next waypoint in path. Returns false if no next waypoint.
-        public bool GoNext()
-        {
-            if(waypoints != null)
-            {
+        // Goes to next waypoint in path. Returns false if no next waypoint.
+        public bool GoNext(){
+            if(waypoints != null) {
                 if (waypoints.Count > 0)
                     waypoints.RemoveAt(0);
                 return waypoints.Count > 0;
@@ -82,78 +60,66 @@ namespace TowerDefense.Util
             return false;
         }
         
-        /// Adds (vec2) waypoint to the end of the list of waypoints.
-        public void AddWaypoint(Vector2D waypoint)
-        {
+        // Adds (vec2) waypoint to the end of the list of waypoints.
+        public void AddWaypoint(Vector2D waypoint){
             waypoints.Add(waypoint);
         }
 
-        /// Adds (vec2) position of vertex to the end of the list of waypoints.
-        public void AddWaypoint(Vertex wayPointVertex)
-        {
+        // Adds (vec2) position of vertex to the end of the list of waypoints.
+        public void AddWaypoint(Vertex wayPointVertex){
             waypoints.Add(wayPointVertex.parentTile.pos);
         }
 
-        /// Adds (vec2) position of tile to the end of the list of waypoints.
-        public void AddWaypoint(BaseTile waypointTile)
-        {
+        // Adds (vec2) position of tile to the end of the list of waypoints.
+        public void AddWaypoint(BaseTile waypointTile){
             waypoints.Add(waypointTile.pos);
         }
 
-        /// Adds (vec2) waypoint to the start of the list of waypoints.
-        public void AddWaypointFront(Vector2D waypoint)
-        {
+        // Adds (vec2) waypoint to the start of the list of waypoints.
+        public void AddWaypointFront(Vector2D waypoint){
             waypoints.Insert(0, waypoint);
         }
 
-        /// Adds(vec2) position of vertex to the start of the list of waypoints.
-        /// // + new Vector2D(BaseTile.size / 2, BaseTile.size / 2)
-        public void AddWaypointFront(Vertex waypointVertex)
-        {
+        // Adds(vec2) position of vertex to the start of the list of waypoints.
+        // // + new Vector2D(BaseTile.size / 2, BaseTile.size / 2)
+        public void AddWaypointFront(Vertex waypointVertex) {
             waypoints.Insert(0, waypointVertex.parentTile.pos);
         }
 
-        /// Adds (vec2) position of tile to the start of the list of waypoints.
-        public void AddWaypointFront(BaseTile waypointTile)
-        {
+        // Adds (vec2) position of tile to the start of the list of waypoints.
+        public void AddWaypointFront(BaseTile waypointTile) {
             waypoints.Insert(0, waypointTile.pos);
         }
 
-        /// Draws the path
-        public void Render(Graphics g)
-        {
-            //Console.WriteLine("render" + waypoints.Count);
-            for (int i = 0; i < waypoints.Count - 1; i++)
-            {
-                g.DrawLine(new Pen(Color.Green, 2), waypoints[i].x+7, waypoints[i].y+7, waypoints[i + 1].x+7, waypoints[i + 1].y+7);
+        // Draws the path and center it inside a Tile
+        public void Render(Graphics g) {
+            for (int i = 0; i < waypoints.Count - 1; i++) {
+                g.DrawLine(new Pen(Color.FromArgb(128, 0, 255, 0), 1), waypoints[i].x+7, waypoints[i].y+7, waypoints[i + 1].x+7, waypoints[i + 1].y+7);
             }
         }
 
-        public bool IsBlocked(List<BaseTile> newTiles)
-        {
-            foreach(Vector2D waypoint in waypoints)
-            {
-                foreach(BaseTile tile in newTiles)
-                {   
+        // Returns if any of the Tiles in newTiles are placed onto the Path
+        public bool IsBlocked(List<BaseTile> newTiles) {
+            if (newTiles == null) return true;
+            foreach(Vector2D waypoint in waypoints) {
+                foreach(BaseTile tile in newTiles){   
                     if (waypoint == tile.pos) return true;
                 }
             }
             return false;
         }
 
-        /// Path setter (from other Path).
-        public void Set(Path path)
-        {
+        // Path setter (from other Path).
+        public void Set(Path path) {
             this.waypoints = path.waypoints;
         }
 
-        /// Clears Path.
-        public void Clear()
-        {
+        // Clears Path.
+        public void Clear() {
             waypoints.Clear();
         }
 
-        /// Returns a estimate of the distance in Tiles between 2 points.
+        // Returns a estimate of the distance in Tiles between 2 points.
         private static int Heuristics(Vector2D a, Vector2D b) 
             => (int)Math.Abs((a.x / BaseTile.size) - (b.x / BaseTile.size)) + (int)Math.Abs((a.y / BaseTile.size) - (b.y / BaseTile.size));
 
@@ -180,14 +146,12 @@ namespace TowerDefense.Util
                 // Algorithm arrived at the target tile.
                 if (currentVertex.parentTile.pos == targetTile.pos) {
                     Vertex tempVertex = currentVertex;
-
                     // While previous Vertex is not null.
                     while (tempVertex.previous != null) {
                         // Forms the shortest path by going through the previous Vertices.
                         path.AddWaypointFront(tempVertex);
                         tempVertex = tempVertex.previous;
                     }
-
                     // Returns the shortest path.
                     return path;
                 }
@@ -211,7 +175,7 @@ namespace TowerDefense.Util
                 }
 
             }
-
+            // Simply return Path if it all goes wrong
             return path;
         }
     }
