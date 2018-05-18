@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Util.FuzzyLogic.FuzzySets
 {
+    /// <summary>
+    ///  This is a rewrite of the FuzzySet_LeftTriangle class authored by Mat Buckland and all credit goes to him.
+    /// </summary>
     public class FuzzySet_Triangle : FuzzySet
     {
         private double _memberPeak;

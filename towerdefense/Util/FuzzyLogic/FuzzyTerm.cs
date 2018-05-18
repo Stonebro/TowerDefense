@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Util.FuzzyLogic
 {
-    ///  Interface for classes which are able to be used as terms in a fuzzy if-then rule base. 
-    ///  Based on the FuzzyLogic source written by Mat Buckland.
+    /// <summary>
+    ///  This is a rewrite of the FuzzyTerm class authored by Mat Buckland and all credit goes to him.
+    /// </summary>
     public interface FuzzyTerm
     {
         FuzzyTerm Clone();

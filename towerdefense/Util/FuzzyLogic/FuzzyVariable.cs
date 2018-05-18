@@ -8,7 +8,7 @@ using TowerDefense.Util.FuzzyLogic.FuzzySets;
 namespace TowerDefense.Util.FuzzyLogic
 {
     /// <summary>
-    /// This is a conversion of the c++ source code for Fuzzy Logic provided by Mat Buckland.
+    ///  This is a rewrite of the FuzzyVariable class authored by Mat Buckland and all credit goes to him.
     /// </summary>
     public class FuzzyVariable
     {

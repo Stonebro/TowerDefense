@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.Util.FuzzyLogic
 {
+    /// <summary>
+    ///  This is a rewrite of the FuzzyRule class authored by Mat Buckland and all credit goes to him.
+    /// </summary>
     class FuzzyRule
     {
         private FuzzyTerm antecedent;
