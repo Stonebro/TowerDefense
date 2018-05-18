@@ -46,6 +46,17 @@ namespace TowerDefense.Util {
         }
 
         /// <summary>
+        /// Creates a vector from 2 double values
+        /// </summary>
+        /// <param name="a">X</param>
+        /// <param name="b">Y</param>
+        public Vector2D(double a, double b)
+        {
+            x = (float)a;
+            y = (float)b;
+        }
+
+        /// <summary>
         /// Sets both values to 0;
         /// </summary>
         public void SetZero() {
@@ -94,12 +105,20 @@ namespace TowerDefense.Util {
             y /= vectorLength;
         }
 
-        /// <summary>
-        /// checks on what side the other vector is
-        /// </summary>
-        /// <param name="other">The other vector</param>
-        /// <returns>returns -1 if other is anti-clockwise of the vector and 1 if clockwise</returns>
-        public int Sign(Vector2D other) {
+        public static Vector2D Normalize(Vector2D v) {
+            Vector2D vec = v;
+            vec.x /= vec.Length();
+            vec.y /= vec.Length();
+            return vec;
+        }
+
+
+/// <summary>
+/// checks on what side the other vector is
+/// </summary>
+/// <param name="other">The other vector</param>
+/// <returns>returns -1 if other is anti-clockwise of the vector and 1 if clockwise</returns>
+public int Sign(Vector2D other) {
             if (y * other.x > x * other.y)
                 return -1;
             else
@@ -147,6 +166,19 @@ namespace TowerDefense.Util {
         public float DistanceSq(Vector2D other) {
             float dx = other.x - x;
             float dy = other.y - y;
+
+            return (dy * dy + dx * dx);
+        }
+
+        /// <summary>
+        /// Calculates the unsquared distance between 2 vectors
+        /// </summary>
+        /// <param name="other">The other vector</param>
+        /// <returns>The unsquared distance between the 2 vectors</returns>
+        public static float DistanceSq(Vector2D v1, Vector2D v2)
+        {
+            float dx = v2.x - v1.x;
+            float dy = v2.y - v1.y;
 
             return (dy * dy + dx * dx);
         }
@@ -297,12 +329,30 @@ namespace TowerDefense.Util {
             return new Vector2D(v.x * f, v.y * f);
         }
 
+        public static Vector2D operator *(Vector2D v, double val)
+        {
+            return new Vector2D(v.x * val, v.y * val);
+        }
+        public static Vector2D operator *(double val, Vector2D v)
+        {
+            return new Vector2D(v.x * val, v.y * val);
+        }
+
         public static Vector2D operator /(Vector2D v, float f) {
             return new Vector2D(v.x / f, v.y / f);
         }
 
         public static Vector2D operator /(float f, Vector2D v) {
             return new Vector2D(v.x / f, v.y / f);
+        }
+        public static Vector2D operator /(Vector2D v, double val)
+        {
+            return new Vector2D(v.x / val, v.y / val);
+        }
+
+        public static Vector2D operator /(double val, Vector2D v)
+        {
+            return new Vector2D(v.x / val, v.y / val);
         }
 
         // IMPLICIT CONVERTIONS

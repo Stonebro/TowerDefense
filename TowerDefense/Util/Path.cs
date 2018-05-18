@@ -13,6 +13,10 @@ namespace TowerDefense.Util {
     public class Path {
         // Waypoints along the path, these waypoints define the path.
         private List<Vector2D> waypoints;
+
+        // If the path should be looped or not.
+        public bool Looped;
+
         // Returns current waypoint if there is one, otherwise returns null.
         public Vector2D Current {
             get {
