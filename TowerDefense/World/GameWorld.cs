@@ -323,7 +323,8 @@ namespace TowerDefense.World
         /// <param name="radius"></param>
         public void TagVehiclesWithinViewRange(Vehicle vehicle, double radius)
         {
-            foreach(Vehicle veh in Vehicles) {
+            foreach (Vehicle veh in Vehicles)
+            {
 
                 // First clear any current tag.
                 vehicle.Tag = false;
