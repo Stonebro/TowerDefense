@@ -30,7 +30,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
                 return 1.0;
             }
 
-            //out of range of this FLV, return zero
+            // Out of range of this FLV, return zero.
             else
             {
                 return 0.0;

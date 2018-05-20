@@ -44,6 +44,8 @@ namespace TowerDefense.World
         public List<Enemy> enemies;
         public List<Vehicle> Vehicles;
         public Eagle testEagle;
+        // The target for seek/arrive like behaviors. Can be updated by pressing the middle mouse button on a position on the PictureBox.
+        public Vector2D Crosshair = new Vector2D(350, 350);
         public Graph graph;
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
@@ -99,7 +101,7 @@ namespace TowerDefense.World
             // Sets endTile to not Buildable.
             endTile.buildable = false;
             Bat testEnemy = new Bat(waveCount);
-            testEagle = new Eagle(new Vector2D(100,100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 5, 10, 10);
+            testEagle = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 50, 10, 10);
             testEnemy.pos = tilesList[125].pos;
             testEnemy.path = Path.GetPath(startTile, tilesList[674]);
             testEnemy.addForce = new Seek();
@@ -145,7 +147,7 @@ namespace TowerDefense.World
                 }
             }
             testEagle.Update();
-                g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
+            g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
         }
 
         public void Update()
@@ -315,12 +317,6 @@ namespace TowerDefense.World
         {
             return gold -= amount;
         }
-
-        public Vector2D Crosshair()
-        {
-            return new Vector2D(250,250);
-        }
-
         /// <summary>
         /// Tags any entities contained in a std container that are within the
         /// radius of the vehicle specified.

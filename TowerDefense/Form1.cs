@@ -91,6 +91,11 @@ namespace TowerDefense {
 
         /// Handles placing a tower on the PictureBox.
         private void GameWorldPB_MouseDown(object sender, MouseEventArgs e) {
+            if(e.Button == MouseButtons.Middle)
+            {
+                world.Crosshair.x = e.Location.X;
+                world.Crosshair.y = e.Location.Y;
+            }
             if (e.Button == MouseButtons.Right) {
                 DeselectTower();
                 handSelectPB_Click(sender, e);

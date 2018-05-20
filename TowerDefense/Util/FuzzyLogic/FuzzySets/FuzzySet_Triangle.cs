@@ -15,7 +15,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
         private double _memberLeftOffset;
         private double _memberRightOffset;
 
-        public FuzzySet_Triangle(double middle, double left, double right):base(middle)
+        public FuzzySet_Triangle(double middle, double left, double right) : base(middle)
         {
             _memberPeak = middle;
             _memberLeftOffset = left;
@@ -24,8 +24,8 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
 
         public override double CalculateDOM(double val)
         {
-            // Test for the case where the triangle's left or right offsets are zero. 
-            // This is to prevent divide by 0 errors.
+            /* Test for the case where the triangle's left or right offsets are zero. 
+             This is to prevent divide by 0 errors. */
 
             if ((_memberRightOffset == 0 && _memberPeak == val) || (_memberLeftOffset == 0 && _memberPeak == val)) return 1.0;
 

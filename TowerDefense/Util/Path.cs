@@ -24,7 +24,7 @@ namespace TowerDefense.Util
         {
             get
             {
-                if(waypoints != null)
+                if (waypoints != null)
                 {
                     if (waypoints.Count > 0)
                         return waypoints[0];
@@ -47,7 +47,8 @@ namespace TowerDefense.Util
         }
 
         /// Default/empty constructor
-        public Path() : this(new List<Vector2D>()) {
+        public Path() : this(new List<Vector2D>())
+        {
 
         }
 
@@ -68,7 +69,7 @@ namespace TowerDefense.Util
         /// Goes to next waypoint in path. Returns false if no next waypoint.
         public bool GoNext()
         {
-            if(waypoints != null)
+            if (waypoints != null)
             {
                 if (waypoints.Count > 0)
                     waypoints.RemoveAt(0);
@@ -76,7 +77,7 @@ namespace TowerDefense.Util
             }
             return false;
         }
-        
+
         /// Adds (vec2) waypoint to the end of the list of waypoints.
         public void AddWaypoint(Vector2D waypoint)
         {
@@ -120,16 +121,16 @@ namespace TowerDefense.Util
             //Console.WriteLine("render" + waypoints.Count);
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
-                g.DrawLine(new Pen(Color.Green, 2), waypoints[i].x+7, waypoints[i].y+7, waypoints[i + 1].x+7, waypoints[i + 1].y+7);
+                g.DrawLine(new Pen(Color.Green, 2), waypoints[i].x + 7, waypoints[i].y + 7, waypoints[i + 1].x + 7, waypoints[i + 1].y + 7);
             }
         }
 
         public bool IsBlocked(List<BaseTile> newTiles)
         {
-            foreach(Vector2D waypoint in waypoints)
+            foreach (Vector2D waypoint in waypoints)
             {
-                foreach(BaseTile tile in newTiles)
-                {   
+                foreach (BaseTile tile in newTiles)
+                {
                     if (waypoint == tile.pos) return true;
                 }
             }
@@ -149,11 +150,12 @@ namespace TowerDefense.Util
         }
 
         /// Returns a estimate of the distance in Tiles between 2 points.
-        private static int Heuristics(Vector2D a, Vector2D b) 
+        private static int Heuristics(Vector2D a, Vector2D b)
             => (int)Math.Abs((a.x / BaseTile.size) - (b.x / BaseTile.size)) + (int)Math.Abs((a.y / BaseTile.size) - (b.y / BaseTile.size));
 
         // Gets a path between two tiles using A*, Manhattan Heuristics.
-        public static Path GetPath(BaseTile startTile, BaseTile targetTile) {
+        public static Path GetPath(BaseTile startTile, BaseTile targetTile)
+        {
             // Create Path to return
             Path path = new Path();
 
@@ -169,15 +171,18 @@ namespace TowerDefense.Util
 
             Vertex currentVertex;
 
-            while (!priorityQueue.IsEmpty) {
+            while (!priorityQueue.IsEmpty)
+            {
                 currentVertex = priorityQueue.GetHighestPriority();
 
                 // Algorithm arrived at the target tile.
-                if (currentVertex.parentTile.pos == targetTile.pos) {
+                if (currentVertex.parentTile.pos == targetTile.pos)
+                {
                     Vertex tempVertex = currentVertex;
 
                     // While previous Vertex is not null.
-                    while (tempVertex.previous != null) {
+                    while (tempVertex.previous != null)
+                    {
                         // Forms the shortest path by going through the previous Vertices.
                         path.AddWaypointFront(tempVertex);
                         tempVertex = tempVertex.previous;
@@ -188,15 +193,18 @@ namespace TowerDefense.Util
                 }
 
                 // Looks for neighbouring Vertices.
-                foreach (Edge edge in currentVertex.adj) {
+                foreach (Edge edge in currentVertex.adj)
+                {
                     // Checks if there is not already a faster route to the destination vertex found.
-                    if (edge.dest.distance >= currentVertex.distance + edge.cost) {
+                    if (edge.dest.distance >= currentVertex.distance + edge.cost)
+                    {
                         // Previous Vertex leading to the fastest route to the destination vertex is now the current vertex.
                         edge.dest.previous = currentVertex;
                         // Sets the distance of this neighbour to be the distance to the current Vertex + the cost. 
                         edge.dest.distance = currentVertex.distance + edge.cost;
                         // If the destination vertex hasn't been visited yet and it is not a disabled vertex.
-                        if (!edge.dest.scratch && !edge.dest.disabled) {
+                        if (!edge.dest.scratch && !edge.dest.disabled)
+                        {
                             // Set the Vertex to be visited.
                             edge.dest.scratch = true;
                             // Add the Vertex to the PriorityQueue with the priority being the (Manhattan) heuristic outcome + the distance to the vertex.

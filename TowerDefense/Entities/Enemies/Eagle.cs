@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
 using TowerDefense.Util.Steering;
+using TowerDefense.World;
 
 namespace TowerDefense.Entities.Enemies
 {
@@ -15,17 +16,18 @@ namespace TowerDefense.Entities.Enemies
     {
         private SteeringBehaviour _behaviour;
         public Vehicle Vehicle;
-        public Eagle(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate) 
-            :  base(pos, scale, velocity, heading, radius, mass, maxSpeed, maxForce, maxTurnRate)
+        public Eagle(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate)
+            : base(pos, scale, velocity, heading, radius, mass, maxSpeed, maxForce, maxTurnRate)
         {
             Vehicle = new Vehicle(pos, scale, velocity, heading, radius, mass, maxSpeed, maxForce, maxTurnRate);
             _behaviour = new SteeringBehaviour(Vehicle);
-            _behaviour.behaviours = SteeringBehaviour.BehaviourType.SEEK;
+            _behaviour.behaviours = SteeringBehaviour.BehaviourType.FOLLOWPATH;
         }
 
         public void Update()
         {
-            Vehicle.Pos += _behaviour.Calculate();
+            Vector2D velocity = _behaviour.Calculate();
+            Vehicle.Pos += velocity;
         }
     }
 }

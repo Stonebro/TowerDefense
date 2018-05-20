@@ -21,7 +21,7 @@ namespace TowerDefense.Entities
         // A normalized vector pointing in the direction the entity is heading. 
         public Vector2D Heading { get; set; }
         // A vector perpendicular to the heading vector.
-        public Vector2D Side { get; set; }
+        public Vector2D Side { get; set; } = Vector2D.Zero;
 
         // The radius of the bounding box of the Entity.
         public double Radius { get; set; }
@@ -61,29 +61,6 @@ namespace TowerDefense.Entities
         public float SpeedSq()
         {
             return Velocity.LengthSq();
-        }
-
-        public bool RotateHeadingToFacePosition(Vector2D target)
-        {
-            Vector2D toTarget = Vector2D.Vec2DNormalize(target - Pos);
-
-            double angle = Math.Acos(Heading.Dot(toTarget));
-
-            if (angle < 0.2) return true;
-
-            if (angle > MaxTurnRate) angle = MaxTurnRate;
-
-            C2DMatrix RotationMatrix = new C2DMatrix();
-
-            RotationMatrix.Rotate((float)angle * Heading.Sign(toTarget));
-            Vector2D heading = Vector2D.Zero;
-            Vector2D velocity = Vector2D.Zero;
-            RotationMatrix.TransformVector2Ds(ref heading);
-            RotationMatrix.TransformVector2Ds(ref velocity);
-            Heading = heading;
-            Velocity = velocity;
-            Side = Heading.Perp();
-            return false;
         }
 
         public void SetHeading(Vector2D newheading)

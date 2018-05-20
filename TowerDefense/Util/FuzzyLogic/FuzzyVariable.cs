@@ -40,7 +40,7 @@ namespace TowerDefense.Util.FuzzyLogic
             double bottom = 0;
             double top = 0;
 
-            foreach(FuzzySet set in _memberSets.Values)
+            foreach (FuzzySet set in _memberSets.Values)
             {
                 bottom += set.MemberDOM;
                 top += set.MemberRepValue * set.MemberDOM;
@@ -73,9 +73,9 @@ namespace TowerDefense.Util.FuzzyLogic
             // the total area by the sum of the moments gives the centroid. (Just like
             // calculating the center of mass of an object)
 
-            for(int i = 0; i < numSamples; i++)
+            for (int i = 0; i < numSamples; i++)
             {
-                foreach(FuzzySet set in _memberSets.Values)
+                foreach (FuzzySet set in _memberSets.Values)
                 {
                     double contribution = Math.Min(set.CalculateDOM(_memberMinRange + i * stepSize), set.MemberDOM);
 
@@ -166,7 +166,7 @@ namespace TowerDefense.Util.FuzzyLogic
 
         public void PrintDOMs()
         {
-            foreach(KeyValuePair<string, FuzzySet> set in _memberSets)
+            foreach (KeyValuePair<string, FuzzySet> set in _memberSets)
             {
                 Console.WriteLine("key = " + set.Key + " value is " + set.Value.MemberDOM);
             }

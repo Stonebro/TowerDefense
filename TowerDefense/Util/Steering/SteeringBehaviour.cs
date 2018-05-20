@@ -8,6 +8,10 @@ using TowerDefense.World;
 
 namespace TowerDefense.Util.Steering
 {
+    /// <summary>
+    /// This is a (partial) rewrite of the Steeringbehaviours class by Mat Buckland (with a few extra functions added). All credit goes to him.
+    /// The behaviours that we didn't implement are: Wall avoidance, Obstacle avoidance, CohesionPlus, SeparationPlus and AlignmentPlus.
+    /// </summary>
     class SteeringBehaviour
     {
         #region Consts
@@ -77,9 +81,9 @@ namespace TowerDefense.Util.Steering
         private double _wallDetectionFeelerLength = 40;
 
         private Vector2D _wanderTarget;
-        private double _wanderJitter;
-        private double _wanderRadius;
-        private double _wanderDistance;
+        private double _wanderJitter = 0.1;
+        private double _wanderRadius = 0.1;
+        private double _wanderDistance = 0.1;
 
         // Used for setting the weights of behaviours when Prioritization is used.
         private double _weightSeparation = 1;
@@ -132,11 +136,12 @@ namespace TowerDefense.Util.Steering
             _flags = 0;
             decelerationRate = DecelerationRate.NORMAL;
             SummingMethod = SumMethod.WEIGHTED_AVG;
-            _path = new Path();
+            _path = Path.GetPath(GameWorld.Instance.startTile, GameWorld.Instance.endTile);
+            // _path = Path.GetPath(GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(_vehicle.Pos)], GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(GameWorld.Instance.Crosshair)]);
             _path.Looped = true;
 
         }
-
+        #region Calculation
         /// <summary>
         ///  Calculates the accumulated steering force according to the method set in SummingMethod.
         /// </summary> 
@@ -256,15 +261,10 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.FLEE))
             {
-                force = Flee(_vehicle.World.Crosshair()) * _weightFlee;
+                force = Flee(_vehicle.World.Crosshair) * _weightFlee;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
-
-
-
-            //these next three can be combined for flocking behavior (wander is
-            //also a good behavior to add into this mix)
 
             if (On(BehaviourType.SEPARATION))
             {
@@ -287,12 +287,9 @@ namespace TowerDefense.Util.Steering
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-
-
-
             if (On(BehaviourType.SEEK))
             {
-                force = Seek(_vehicle.World.Crosshair()) * _weightSeek;
+                force = Seek(_vehicle.World.Crosshair) * _weightSeek;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
@@ -300,7 +297,7 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.ARRIVE))
             {
-                force = Arrive(_vehicle.World.Crosshair(), decelerationRate) * _weightArrive;
+                force = Arrive(_vehicle.World.Crosshair, decelerationRate) * _weightArrive;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
@@ -351,7 +348,7 @@ namespace TowerDefense.Util.Steering
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            return _steeringForce;
+            return force;
         }
 
         /// <summary>
@@ -396,17 +393,17 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.SEEK))
             {
-                _steeringForce += Seek(_vehicle.World.Crosshair()) * _weightSeek;
+                _steeringForce += Seek(_vehicle.World.Crosshair) * _weightSeek;
             }
 
             if (On(BehaviourType.FLEE))
             {
-                _steeringForce += Flee(_vehicle.World.Crosshair()) * _weightFlee;
+                _steeringForce += Flee(_vehicle.World.Crosshair) * _weightFlee;
             }
 
             if (On(BehaviourType.ARRIVE))
             {
-                _steeringForce += Arrive(_vehicle.World.Crosshair(), decelerationRate) * _weightArrive;
+                _steeringForce += Arrive(_vehicle.World.Crosshair, decelerationRate) * _weightArrive;
             }
 
             if (On(BehaviourType.PURSUIT))
@@ -473,7 +470,7 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.FLEE) && new Random().NextDouble() < _chanceFlee)
             {
-                _steeringForce += Flee(_vehicle.World.Crosshair()) * _weightFlee / _chanceFlee;
+                _steeringForce += Flee(_vehicle.World.Crosshair) * _weightFlee / _chanceFlee;
 
                 if (!_steeringForce.isZero())
                 {
@@ -539,7 +536,7 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.SEEK) && new Random().NextDouble() < _chanceSeek)
             {
-                _steeringForce += Seek(_vehicle.World.Crosshair()) * _weightSeek / _chanceSeek;
+                _steeringForce += Seek(_vehicle.World.Crosshair) * _weightSeek / _chanceSeek;
 
                 if (!_steeringForce.isZero())
                 {
@@ -551,7 +548,7 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.ARRIVE) && new Random().NextDouble() < _chanceArrive)
             {
-                _steeringForce += Arrive(_vehicle.World.Crosshair(), decelerationRate) *
+                _steeringForce += Arrive(_vehicle.World.Crosshair, decelerationRate) *
                                     _weightArrive / _chanceArrive;
 
                 if (!_steeringForce.isZero())
@@ -565,6 +562,30 @@ namespace TowerDefense.Util.Steering
             return _steeringForce;
         }
 
+        /// <summary>
+        /// Makes position of Vehicle and targetPosition equal if the difference between them is very small.
+        /// </summary>
+        /// <param name="vehiclePos"></param>
+        /// <param name="targetPos"></param>
+        public void ClampPositions(ref Vehicle vehiclePos, Vector2D targetPos)
+        {
+            float deltaX = vehiclePos.Pos.x - targetPos.x;
+            float deltaY = vehiclePos.Pos.y - targetPos.y;
+            if (-5 < deltaX && deltaX < 5) vehiclePos.Pos.x = targetPos.x;
+            if (-5 < deltaY && deltaY < 5) vehiclePos.Pos.y = targetPos.y;
+        }
+
+        /// <summary>
+        /// Returns if specified BehaviourType is set or not.
+        /// </summary>
+        /// <param name="bt"></param>
+        /// <returns></returns>
+        public bool On(BehaviourType bt)
+        {
+            return (behaviours & bt) == bt;
+        }
+
+        #endregion
         #region Behaviours
 
         /// <summary>
@@ -575,14 +596,13 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D Seek(Vector2D TargetPos)
         {
-            float deltaX = _vehicle.Pos.x - TargetPos.x;
-            float deltaY = _vehicle.Pos.y - TargetPos.y;
-            if (-5 < deltaX && deltaX < 5) _vehicle.Pos.x = TargetPos.x;
-            if (-5 < deltaY && deltaY < 5) _vehicle.Pos.y = TargetPos.y;
             if (_vehicle.Pos.x == TargetPos.x && _vehicle.Pos.y == TargetPos.y) return Vector2D.Zero;
+
+            ClampPositions(ref _vehicle, TargetPos);
 
             Vector2D DesiredVelocity = Vector2D.Normalize(TargetPos - _vehicle.Pos)
                                       * _vehicle.MaxSpeed;
+
             return (DesiredVelocity - _vehicle.Velocity);
         }
 
@@ -619,6 +639,9 @@ namespace TowerDefense.Util.Steering
         public Vector2D Arrive(Vector2D TargetPos,
                                           DecelerationRate deceleration)
         {
+            if (_vehicle.Pos.x == TargetPos.x && _vehicle.Pos.y == TargetPos.y) return Vector2D.Zero;
+            ClampPositions(ref _vehicle, TargetPos);
+
             Vector2D ToTarget = TargetPos - _vehicle.Pos;
 
             // Calculate the distance to the target.
@@ -628,12 +651,11 @@ namespace TowerDefense.Util.Steering
             {
                 /* Because Deceleration is enumerated as an int, this value is required
                 to provide fine tweaking of the deceleration. */
-                const double DecelerationTweaker = 0.3;
+                const double DecelerationTweaker = 2.0;
 
                 /* Calculate the speed required to reach the target given the desired
                 deceleration. */
                 double speed = dist / ((double)deceleration * DecelerationTweaker);
-
                 // Make sure the velocity does not exceed the max.
                 speed = Math.Min(speed, _vehicle.MaxSpeed);
 
@@ -708,11 +730,12 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D Wander()
         {
+            Random rand1 = new Random();
+            Random rand2 = new Random(1);
             /* This behavior is dependent on the update rate, so this line must
             be included when using time independent framerate. */
-            double JitterThisTimeSlice = _wanderJitter * _vehicle.TimeElapsed;
-            double randomClamped = new Random().NextDouble() - new Random().NextDouble();
-
+            double JitterThisTimeSlice = _wanderJitter * 0.001;
+            double randomClamped = rand1.NextDouble() - rand2.NextDouble();
             // First, add a small random vector to the target's position.
             _wanderTarget += new Vector2D(randomClamped * JitterThisTimeSlice,
                                         randomClamped * JitterThisTimeSlice);
@@ -720,21 +743,12 @@ namespace TowerDefense.Util.Steering
             // Reproject this new vector back on to a unit circle.
             _wanderTarget.Normalize();
 
+            //Console.WriteLine(_wanderTarget);
             // Increase the length of the vector to the same as the radius
             // of the wander circle.
             _wanderTarget *= _wanderRadius;
 
-            // Move the target into a position WanderDist in front of the agent.
-            Vector2D target = _wanderTarget + new Vector2D(_wanderDistance, 0);
-
-            // Project the target into world space.
-            Vector2D Target = GameWorld.PointToWorldSpace(target,
-                                                 _vehicle.Heading,
-                                                 _vehicle.Side,
-                                                 _vehicle.Pos);
-
-            // And steer towards it.
-            return Target - _vehicle.Pos;
+            return _wanderTarget;
         }
 
         /// <summary>
@@ -887,6 +901,8 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D FollowPath()
         {
+            ClampPositions(ref _vehicle, _path.Current);
+            if (_path.Current == null) return Vector2D.Zero;
             /* Move to next target if close enough to current target (working in
              * distance squared space). */
             if (Vector2D.Vec2DDistanceSq(_path.Current, _vehicle.Pos) <
@@ -930,13 +946,6 @@ namespace TowerDefense.Util.Steering
 
             //now Arrive at the predicted future position of the offset
             return Arrive(WorldOffsetPos + leader.Velocity * LookAheadTime, DecelerationRate.FAST);
-        }
-
-
-
-        public bool On(BehaviourType bt)
-        {
-            return (behaviours & bt) == bt;
         }
     }
 }

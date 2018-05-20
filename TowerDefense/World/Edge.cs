@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TowerDefense.World {
+namespace TowerDefense.World
+{
     /// Represents Edge (between vertices).
-    public class Edge {
+    public class Edge
+    {
 
         // Destination Vertex.
         public Vertex dest;
@@ -15,9 +17,10 @@ namespace TowerDefense.World {
         // Enable or disable this Edge
         public bool disabled;
 
-       
+
         /// Edge constructor.
-        public Edge(Vertex dest, float cost) {
+        public Edge(Vertex dest, float cost)
+        {
             this.dest = dest;
             this.cost = cost;
         }
