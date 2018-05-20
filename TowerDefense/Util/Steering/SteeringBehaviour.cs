@@ -12,7 +12,7 @@ namespace TowerDefense.Util.Steering
     /// This is a (partial) rewrite of the Steeringbehaviours class by Mat Buckland (with a few extra functions added). All credit goes to him.
     /// The behaviours that we didn't implement are: Wall avoidance, Obstacle avoidance, CohesionPlus, SeparationPlus and AlignmentPlus.
     /// </summary>
-    class SteeringBehaviour
+    public class SteeringBehaviour
     {
         #region Consts
         // The radius of the constraining circle for the wander behavior.
@@ -69,10 +69,11 @@ namespace TowerDefense.Util.Steering
         #endregion
 
         #region Attributes
+        public Vehicle TargetAgent1;
+        public Vehicle TargetAgent2;
         private Vehicle _vehicle;
         private Vector2D _steeringForce = Vector2D.Zero;
-        private Vehicle _targetAgent1;
-        private Vehicle _targetAgent2;
+     
         private Vector2D _target;
 
         private double _dBoxLength = 40;
@@ -118,7 +119,7 @@ namespace TowerDefense.Util.Steering
         private int _flags;
         private double _viewDistance = 50;
         private Path _path;
-        private Vector2D _offset;
+        private Vector2D _offset = new Vector2D(5,5);
         private double _waypointSeekDistSq;
         private double theta = new Random().NextDouble() * (Math.PI * 2);
         #endregion
@@ -126,8 +127,8 @@ namespace TowerDefense.Util.Steering
         public SteeringBehaviour(Vehicle agent)
         {
             _vehicle = agent;
-            _targetAgent1 = null;
-            _targetAgent2 = null;
+            TargetAgent1 = null;
+            TargetAgent2 = null;
             _feelers = new List<Vector2D>();
             _wanderDistance = WanderDist;
             _wanderJitter = WanderJitterPerSec;
@@ -136,9 +137,8 @@ namespace TowerDefense.Util.Steering
             _flags = 0;
             decelerationRate = DecelerationRate.NORMAL;
             SummingMethod = SumMethod.WEIGHTED_AVG;
-            _path = Path.GetPath(GameWorld.Instance.startTile, GameWorld.Instance.endTile);
-            // _path = Path.GetPath(GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(_vehicle.Pos)], GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(GameWorld.Instance.Crosshair)]);
-            _path.Looped = true;
+            
+            //_path.Looped = true;
 
         }
         #region Calculation
@@ -230,7 +230,6 @@ namespace TowerDefense.Util.Steering
 
             else
             {
-                //
                 Vector2D maxForceLeft = ForceToAdd * MagnitudeRemaining;
                 maxForceLeft.Normalize();
                 RunningTot += maxForceLeft;
@@ -251,10 +250,10 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.EVADE))
             {
-                if (_targetAgent1 != null)
+                if (TargetAgent1 != null)
                 {
 
-                    force = Evade(_targetAgent1) * _weightEvade;
+                    force = Evade(TargetAgent1) * _weightEvade;
                 }
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
@@ -311,9 +310,9 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.PURSUIT))
             {
-                if (_targetAgent1 != null)
+                if (TargetAgent1 != null)
                 {
-                    force = Pursuit(_targetAgent1) * _weightPursuit;
+                    force = Pursuit(TargetAgent1) * _weightPursuit;
                 }
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
@@ -321,9 +320,9 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.OFFSETPURSUIT))
             {
-                if (_targetAgent1 != null && _offset != null)
+                if (TargetAgent1 != null && _offset != null)
                 {
-                    force = OffsetPursuit(_targetAgent1, _offset);
+                    force = OffsetPursuit(TargetAgent1, _offset);
                 }
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
@@ -331,10 +330,10 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.INTERPOSE))
             {
-                if (_targetAgent1 != null && _targetAgent2 != null)
+                if (TargetAgent1 != null && TargetAgent2 != null)
                 {
 
-                    force = Interpose(_targetAgent1, _targetAgent2) * _weightInterpose;
+                    force = Interpose(TargetAgent1, TargetAgent2) * _weightInterpose;
                 }
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
@@ -361,9 +360,9 @@ namespace TowerDefense.Util.Steering
         {
             if (On(BehaviourType.EVADE))
             {
-                if (_targetAgent1 != null)
+                if (TargetAgent1 != null)
                 {
-                    _steeringForce += Evade(_targetAgent1) * _weightEvade;
+                    _steeringForce += Evade(TargetAgent1) * _weightEvade;
                 }
             }
 
@@ -408,23 +407,23 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.PURSUIT))
             {
-                if (_targetAgent1 != null)
+                if (TargetAgent1 != null)
                 {
-                    _steeringForce += Pursuit(_targetAgent1) * _weightPursuit;
+                    _steeringForce += Pursuit(TargetAgent1) * _weightPursuit;
                 }
             }
 
             if (On(BehaviourType.OFFSETPURSUIT))
             {
-                if (_targetAgent1 != null && _offset != null)
+                if (TargetAgent1 != null && _offset != null)
                 {
-                    _steeringForce += OffsetPursuit(_targetAgent1, _offset) * _weightOffsetPursuit;
+                    _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit;
                 }
             }
 
             if (On(BehaviourType.INTERPOSE))
             {
-                if (_targetAgent1 != null && _targetAgent2 != null) _steeringForce += Interpose(_targetAgent1, _targetAgent2) * _weightInterpose;
+                if (TargetAgent1 != null && TargetAgent2 != null) _steeringForce += Interpose(TargetAgent1, TargetAgent2) * _weightInterpose;
             }
 
 
@@ -482,7 +481,7 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.EVADE) && new Random().NextDouble() < _chanceEvade)
             {
-                if (_targetAgent1 != null) _steeringForce += Evade(_targetAgent1) * _weightEvade / _chanceEvade;
+                if (TargetAgent1 != null) _steeringForce += Evade(TargetAgent1) * _weightEvade / _chanceEvade;
 
                 if (!_steeringForce.isZero())
                 {
@@ -766,7 +765,7 @@ namespace TowerDefense.Util.Steering
                  * the agent being examined is close enough. 
                  * Also make sure it doesn't include the evade target */
                 if ((neighbors[i] != _vehicle) && neighbors[i].Tag &&
-                  (neighbors[i] != _targetAgent1))
+                  (neighbors[i] != TargetAgent1))
                 {
                     Vector2D ToAgent = _vehicle.Pos - neighbors[i].Pos;
 
@@ -799,7 +798,7 @@ namespace TowerDefense.Util.Steering
                  * the agent being examined is close enough. 
                  * Also make sure it doesn't include any evade target */
                 if ((neighbors[i] != _vehicle) && neighbors[i].Tag &&
-                  (neighbors[i] != _targetAgent1))
+                  (neighbors[i] != TargetAgent1))
                 {
                     AverageHeading += neighbors[i].Heading;
 
@@ -840,7 +839,7 @@ namespace TowerDefense.Util.Steering
                  * the agent being examined is close enough. 
                  * Also make sure it doesn't include the evade target, */
                 if ((neighbors[i] != _vehicle) && neighbors[i].Tag &&
-                  (neighbors[i] != _targetAgent1))
+                  (neighbors[i] != TargetAgent1))
                 {
                     CenterOfMass += neighbors[i].Pos;
 
@@ -930,7 +929,7 @@ namespace TowerDefense.Util.Steering
         /// <returns></returns>
         public Vector2D OffsetPursuit(Vehicle leader, Vector2D offset)
         {
-            //calculate the offset's position in world space
+            // Calculate the offset's position in world space.
             Vector2D WorldOffsetPos = GameWorld.PointToWorldSpace(offset,
                                                             leader.Heading,
                                                             leader.Side,
@@ -938,13 +937,13 @@ namespace TowerDefense.Util.Steering
 
             Vector2D ToOffset = WorldOffsetPos - _vehicle.Pos;
 
-            //the lookahead time is propotional to the distance between the leader
-            //and the pursuer; and is inversely proportional to the sum of both
-            //agent's velocities
+            /* The lookahead time is propotional to the distance between the leader
+             * and the pursuer; and is inversely proportional to the sum of both
+             * agent's velocities. */
             double LookAheadTime = ToOffset.Length() /
                                   (_vehicle.MaxSpeed + leader.Speed());
 
-            //now Arrive at the predicted future position of the offset
+            // Now Arrive at the predicted future position of the offset.
             return Arrive(WorldOffsetPos + leader.Velocity * LookAheadTime, DecelerationRate.FAST);
         }
     }

@@ -10,6 +10,8 @@ using TowerDefense.Entities.Enemies;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.Util.Steering;
+using static TowerDefense.Util.Steering.SteeringBehaviour;
+
 namespace TowerDefense.World
 {
     /// Represents the GameWorld.
@@ -42,8 +44,10 @@ namespace TowerDefense.World
         public List<Tower> towers;
         // List of Enemies
         public List<Enemy> enemies;
+        public List<FlyingEntity> FlyingEntities;
         public List<Vehicle> Vehicles;
         public Eagle testEagle;
+        public Eagle testEagle2;
         // The target for seek/arrive like behaviors. Can be updated by pressing the middle mouse button on a position on the PictureBox.
         public Vector2D Crosshair = new Vector2D(350, 350);
         public Graph graph;
@@ -73,7 +77,7 @@ namespace TowerDefense.World
             // Initializes list of Towers.
             towers = new List<Tower>();
             enemies = new List<Enemy>();
-            Vehicles = new List<Vehicle>();
+            FlyingEntities = new List<FlyingEntity>();
             // Creates Graph.
             graph = new Graph();
 
@@ -101,12 +105,18 @@ namespace TowerDefense.World
             // Sets endTile to not Buildable.
             endTile.buildable = false;
             Bat testEnemy = new Bat(waveCount);
-            testEagle = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 50, 10, 10);
+            testEagle = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 50, 10, 10, BehaviourType.SEEK);
+            //testEagle2 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 50, 10, 10, BehaviourType.OFFSETPURSUIT);
+            //testEagle2.SetTargetAgent1(testEagle.Vehicle);
+
+            //FlyingEntities.Add(testEagle);
+            //FlyingEntities.Add(testEagle2);
             testEnemy.pos = tilesList[125].pos;
             testEnemy.path = Path.GetPath(startTile, tilesList[674]);
             testEnemy.addForce = new Seek();
             Instance.enemies.Add(testEnemy);
-            Instance.Vehicles.Add(testEagle.Vehicle);
+            //Instance.Vehicles.Add(testEagle.Vehicle);
+            //Instance.Vehicles.Add(testEagle2.Vehicle);
         }
 
         /// Draws each tile
@@ -146,8 +156,15 @@ namespace TowerDefense.World
                     if (e.path != null) e.path.Render(g);
                 }
             }
-            testEagle.Update();
-            g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
+            //foreach(FlyingEntity flyingEntity in FlyingEntities)
+            //{
+            //    g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(flyingEntity.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
+            //    flyingEntity.Update();
+            //}
+            //testEagle.Update();
+            //testEagle2.Update();
+            //g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
+            //g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle2.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
         }
 
         public void Update()

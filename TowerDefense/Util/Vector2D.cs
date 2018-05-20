@@ -121,7 +121,6 @@ namespace TowerDefense.Util
             Vector2D vec = v;
             if (float.IsNaN(vec.Length())) return Vector2D.Zero;
 
-            Console.WriteLine(vec.Length());
             vec.x /= vec.Length();
             vec.y /= vec.Length();
             return vec;

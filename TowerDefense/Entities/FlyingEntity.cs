@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
+using TowerDefense.Util.Steering;
+using static TowerDefense.Util.Steering.SteeringBehaviour;
 
 namespace TowerDefense.Entities
 {
@@ -22,6 +24,8 @@ namespace TowerDefense.Entities
         public Vector2D Heading { get; set; }
         // A vector perpendicular to the heading vector.
         public Vector2D Side { get; set; } = Vector2D.Zero;
+        // The vehicle that moves the Entity.
+        public Vehicle Vehicle;
 
         // The radius of the bounding box of the Entity.
         public double Radius { get; set; }
@@ -35,7 +39,9 @@ namespace TowerDefense.Entities
         public double MaxTurnRate { get; set; }
         public double BoundingRadius { get; set; }
 
-        public FlyingEntity(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate)
+        private SteeringBehaviour _behaviour;
+
+        public FlyingEntity(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate, BehaviourType behaviors) 
         {
             Pos = pos;
             Scale = scale;
@@ -46,6 +52,9 @@ namespace TowerDefense.Entities
             MaxSpeed = maxSpeed;
             MaxForce = maxForce;
             MaxTurnRate = maxTurnRate;
+            _behaviour = new SteeringBehaviour(Vehicle);
+            _behaviour.behaviours = behaviors;
+            Vehicle = new Vehicle(pos, scale, velocity, heading, radius, mass, maxSpeed, maxForce, maxTurnRate, behaviors);
         }
 
         public bool IsSpeedMaxedOut()
@@ -70,6 +79,17 @@ namespace TowerDefense.Entities
                 Heading = newheading;
                 Side = Heading.Perp();
             }
+        }
+
+        public void Update()
+        {
+            //Vector2D velocity = _behaviour.Calculate();
+            //Vehicle.Pos += velocity;
+        }
+
+        public void SetTargetAgent1(Vehicle target)
+        {
+            _behaviour.TargetAgent1 = target;
         }
     }
 }
