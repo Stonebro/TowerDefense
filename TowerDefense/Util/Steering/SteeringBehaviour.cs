@@ -86,6 +86,8 @@ namespace TowerDefense.Util.Steering
         private float _chanceArrive = 0.5f;
         private float _chanceExplore = 0.3f;
         private float _chanceOffsetPursuit = 0.9f;
+        private float _chancePursuit = 1;
+        private float _chanceFollowPath = 0.5f;
 
         private Path _path;
         private int _offset = 20;
@@ -243,17 +245,6 @@ namespace TowerDefense.Util.Steering
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
-
-            if (On(BehaviourType.OFFSETPURSUIT))
-            {
-                if (TargetAgent1 != null)
-                {
-                    force = OffsetPursuit(TargetAgent1, _offset);
-                }
-
-                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            }
-
 
             if (On(BehaviourType.FOLLOWPATH))
             {
@@ -436,6 +427,37 @@ namespace TowerDefense.Util.Steering
                     return _steeringForce;
                 }
             }
+
+            if (On(BehaviourType.PURSUIT) && new Random().NextDouble() < _chancePursuit)
+            {
+                if (TargetAgent1 != null)
+                {
+                    _steeringForce += Pursuit(TargetAgent1) * _weightPursuit / _chancePursuit;
+                }
+
+                if (!_steeringForce.IsZero())
+                {
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
+
+                    return _steeringForce;
+                }
+            }
+
+            if (On(BehaviourType.FOLLOWPATH) && new Random().NextDouble() < _chanceFollowPath)
+            {
+                if (TargetAgent1 != null)
+                {
+                    _steeringForce += FollowPath() * _weightFollowPath / _chanceFollowPath;
+                }
+
+                if (!_steeringForce.IsZero())
+                {
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
+
+                    return _steeringForce;
+                }
+            }
+
 
 
             return _steeringForce;
