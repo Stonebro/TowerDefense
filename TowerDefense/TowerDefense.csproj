@@ -105,7 +105,6 @@
     <Compile Include="Util\Steering\ISteering.cs" />
     <Compile Include="Util\Steering\Seek.cs" />
     <Compile Include="Util\Steering\SteeringBehaviour.cs" />
-    <Compile Include="Util\Steering\Vehicle.cs" />
     <Compile Include="Util\Vector2D.cs" />
     <Compile Include="World\Edge.cs" />
     <Compile Include="World\GameWorld.cs" />
