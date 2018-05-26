@@ -55,7 +55,7 @@ namespace TowerDefense.Tiles {
         }
 
         /// Creates a rectangle based on the position of the Tile (used for drawing).
-        public RectangleF vertexRectangle() {
+        public RectangleF VertexRectangle() {
             return new RectangleF(pos.x + (size / 3), pos.y + (size / 3), size - (size / 3 * 2), size - (size / 3 * 2));
         }
 
@@ -64,8 +64,8 @@ namespace TowerDefense.Tiles {
         public void DrawVertex(Graphics g) {
             if (vertex == null) return;
             // Disabled Vert = RED
-            if (vertex.disabled) g.FillEllipse(new SolidBrush(Color.Red), vertexRectangle());
-            else g.FillEllipse(new SolidBrush(Color.DarkTurquoise), vertexRectangle());
+            if (vertex.disabled) g.FillEllipse(new SolidBrush(Color.Red), VertexRectangle());
+            else g.FillEllipse(new SolidBrush(Color.DarkTurquoise), VertexRectangle());
             if (vertex.adj != null) {
                 PointF a, b;
                 a = new PointF(pos.x + size / 2, pos.y + size / 2);
