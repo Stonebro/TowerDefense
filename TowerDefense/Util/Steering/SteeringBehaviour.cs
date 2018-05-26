@@ -265,7 +265,7 @@ namespace TowerDefense.Util.Steering
             {
                 if (TargetAgent1 != null)
                 {
-                    _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit;
+                    force += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit;
                 }
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
