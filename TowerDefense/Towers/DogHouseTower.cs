@@ -38,8 +38,8 @@ namespace TowerDefense.Entities {
         public override void Update() {
             attackDog.Render(b);
             attackDog.Update();
-            if (nearbyEnemies != null && enemyInRange() != null) {
-                attackDog.ChaseEnemy(enemyInRange());
+            if (nearbyEnemies != null && EnemyInRange() != null) {
+                attackDog.ChaseEnemy(EnemyInRange());
             } else {
                 attackDog.Return();
             }

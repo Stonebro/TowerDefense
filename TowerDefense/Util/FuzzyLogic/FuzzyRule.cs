@@ -11,10 +11,10 @@ namespace TowerDefense.Util.FuzzyLogic
     /// </summary>
     class FuzzyRule
     {
-        private FuzzyTerm antecedent;
-        private FuzzyTerm consequent;
+        private IFuzzyTerm antecedent;
+        private IFuzzyTerm consequent;
 
-        public FuzzyRule(FuzzyTerm antecedent, FuzzyTerm consequent)
+        public FuzzyRule(IFuzzyTerm antecedent, IFuzzyTerm consequent)
         {
             this.antecedent = antecedent;
             this.consequent = consequent;

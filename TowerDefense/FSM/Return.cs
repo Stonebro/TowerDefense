@@ -17,14 +17,15 @@ namespace TowerDefense.FSM {
         public override void Execute(AttackDog t) {
             BaseTile[] tilesList = GameWorld.Instance.tilesList;
             GameWorld instance = GameWorld.Instance;
-            if (t.pos != t.homePos.pos) {
+            if (t.pos != t.homePos.pos)
+            {
                 instance.ResetAllVertices();
                 t.path = Path.GetPath(tilesList[instance.GetIndexOfTile(t.pos)], tilesList[instance.GetIndexOfTile(t.homePos.pos)]);
-                if (t.path.Current != null) {
+                if (t.path.Current != null)
+                {
                     t.Move(4f);
                 }
             }
-            //if (t.attackIntervalCounter != t.attackInterval) t.attackIntervalCounter++;
         }
 
         public override void Exit(AttackDog t) {

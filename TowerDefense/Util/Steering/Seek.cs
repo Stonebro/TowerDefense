@@ -7,6 +7,7 @@ using TowerDefense.Entities.Enemies;
 
 namespace TowerDefense.Util.Steering
 {
+    // Used in earlier implementation of Steering behaviors (Bat). We figured we might aswell keep it in.
     public class Seek : ISteering
     {
         public Vector2D ApplySteering(Enemy enemy)

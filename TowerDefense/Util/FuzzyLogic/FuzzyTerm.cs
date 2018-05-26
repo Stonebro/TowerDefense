@@ -9,9 +9,9 @@ namespace TowerDefense.Util.FuzzyLogic
     /// <summary>
     ///  This is a rewrite of the FuzzyTerm class authored by Mat Buckland and all credit goes to him.
     /// </summary>
-    public interface FuzzyTerm
+    public interface IFuzzyTerm
     {
-        FuzzyTerm Clone();
+        IFuzzyTerm Clone();
         double GetDOM();
         void ClearDOM();
         void ORWithDOM(double val);

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Entities;
+using TowerDefense.Entities.Powerups;
 using TowerDefense.World;
 
 namespace TowerDefense.Util.Steering
@@ -45,100 +47,63 @@ namespace TowerDefense.Util.Steering
             SEEK = 1,
             FLEE = 2,
             ARRIVE = 4,
-            WANDER = 8,
-            COHESION = 16,
-            SEPARATION = 32,
-            ALIGNMENT = 64,
-            OBSTACLEAVOIDANCE = 128,
-            WALLAVOIDANCE = 256,
-            FOLLOWPATH = 512,
-            PURSUIT = 1024,
-            EVADE = 2048,
-            INTERPOSE = 4096,
-            HIDE = 8192,
-            FLOCK = 16384,
-            OFFSETPURSUIT = 32768,
+            FOLLOWPATH = 8,
+            PURSUIT = 16,
+            EVADE = 32,
+            OFFSETPURSUIT = 64,
+            EXPLORE = 128
         }
 
         public BehaviourType behaviours;
 
-        /* Arrive makes use of this enum to determine how quickly a vehicle
+        /* Arrive makes use of this enum to determine how quickly a FlyingEntity
            should decelerate to its target*/
         public enum DecelerationRate { SLOW = 3, NORMAL = 2, FAST = 1 };
         private DecelerationRate decelerationRate;
         #endregion
 
         #region Attributes
-        public Vehicle TargetAgent1;
-        public Vehicle TargetAgent2;
-        private Vehicle _vehicle;
+        public FlyingEntity TargetAgent1;
+        public FlyingEntity TargetAgent2;
+        private FlyingEntity _flyingEntity;
         private Vector2D _steeringForce = Vector2D.Zero;
-     
-        private Vector2D _target;
-
-        private double _dBoxLength = 40;
-
-        private List<Vector2D> _feelers;
-        private double _wallDetectionFeelerLength = 40;
-
-        private Vector2D _wanderTarget;
-        private double _wanderJitter = 0.1;
-        private double _wanderRadius = 0.1;
-        private double _wanderDistance = 0.1;
 
         // Used for setting the weights of behaviours when Prioritization is used.
-        private double _weightSeparation = 1;
-        private double _weightCohesion = 2;
-        private double _weightAlignment = 1;
-        private double _weightWander = 1;
-        private double _weightObstacleAvoidance = 10;
-        private double _weightWallAvoidance = 10;
+
         private double _weightSeek = 1;
         private double _weightFlee = 1;
         private double _weightArrive = 1;
         private double _weightPursuit = 1;
         private double _weightOffsetPursuit = 1;
-        private double _weightInterpose = 1;
-        private double _weightHide = 1;
+        private double _weightExplore = 1;
         private double _weightEvade = 0.01;
         private double _weightFollowPath = 0.05;
 
         // Used for setting the probability that a steering behaviour will be used when Prioritzed dithering is used.
-        private float _chanceWallAvoidance = 0.5f;
-        private float _chanceObstacleAvoidance = 0.5f;
-        private float _chanceSeparation = 0.2f;
-        private float _chanceAlignment = 0.3f;
-        private float _chanceCohesion = 0.6f;
-        private float _chanceWander = 0.8f;
         private float _chanceSeek = 0.8f;
         private float _chanceFlee = 0.6f;
         private float _chanceEvade = 1f;
-        private float _chanceHide = 0.8f;
         private float _chanceArrive = 0.5f;
+        private float _chanceExplore = 0.3f;
+        private float _chanceOffsetPursuit = 0.9f;
 
-        private int _flags;
-        private double _viewDistance = 50;
         private Path _path;
-        private Vector2D _offset = new Vector2D(5,5);
-        private double _waypointSeekDistSq;
+        private int _offset = 20;
+
         private double theta = new Random().NextDouble() * (Math.PI * 2);
         #endregion
 
-        public SteeringBehaviour(Vehicle agent)
+        public SteeringBehaviour(FlyingEntity agent)
         {
-            _vehicle = agent;
+            _flyingEntity = agent;
             TargetAgent1 = null;
             TargetAgent2 = null;
-            _feelers = new List<Vector2D>();
-            _wanderDistance = WanderDist;
-            _wanderJitter = WanderJitterPerSec;
-            _wanderRadius = WanderRad;
-            _wanderTarget = new Vector2D(_wanderRadius * Math.Cos(theta), _wanderRadius * Math.Sin(theta));
-            _flags = 0;
             decelerationRate = DecelerationRate.NORMAL;
             SummingMethod = SumMethod.WEIGHTED_AVG;
-            
-            //_path.Looped = true;
+            _path = new Path
+            {
+                Looped = true
+            };
 
         }
         #region Calculation
@@ -149,18 +114,6 @@ namespace TowerDefense.Util.Steering
         {
             // Resets the steering force.
             _steeringForce = Vector2D.Zero;
-
-            /* Use space partitioning to calculate the neighbours of this vehicle
-               if switched on. If not, use the standard tagging system */
-
-            // Tag neighbors if any of the following 3 group behaviors are switched on.
-            if (On(BehaviourType.SEPARATION) || On(BehaviourType.ALIGNMENT) || On(BehaviourType.COHESION))
-            {
-                _vehicle.World.TagVehiclesWithinViewRange(_vehicle, _viewDistance);
-            }
-
-
-
             switch (SummingMethod)
             {
                 case SumMethod.WEIGHTED_AVG:
@@ -187,12 +140,12 @@ namespace TowerDefense.Util.Steering
 
         public double ForwardComponent()
         {
-            return _vehicle.Heading.Dot(_steeringForce);
+            return _flyingEntity.Heading.Dot(_steeringForce);
         }
 
         public double SideComponent()
         {
-            return _vehicle.Side.Dot(_steeringForce);
+            return _flyingEntity.Side.Dot(_steeringForce);
         }
 
         /// <summary>
@@ -203,7 +156,7 @@ namespace TowerDefense.Util.Steering
         /// <param name=""></param>
         /// <param name=""></param>
         /// <param name="ForceToAdd"></param>
-        /// <returns></returns>
+        /// <returns>If theres force left to use</returns>
         bool AccumulateForce(Vector2D RunningTot, Vector2D ForceToAdd)
         {
 
@@ -211,7 +164,7 @@ namespace TowerDefense.Util.Steering
             double MagnitudeSoFar = RunningTot.Length();
 
             //calculate how much steering force remains to be used by this vehicle
-            double MagnitudeRemaining = _vehicle.MaxForce - MagnitudeSoFar;
+            double MagnitudeRemaining = _flyingEntity.MaxForce - MagnitudeSoFar;
 
             //return false if there is no more force left to use
             if (MagnitudeRemaining <= 0.0) return false;
@@ -260,35 +213,15 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.FLEE))
             {
-                force = Flee(_vehicle.World.Crosshair) * _weightFlee;
+                force = Flee(_flyingEntity.World.Crosshair) * _weightFlee;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            if (On(BehaviourType.SEPARATION))
-            {
-                force = Separation(_vehicle.World.Vehicles) * _weightSeparation;
-
-                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            }
-
-            if (On(BehaviourType.ALIGNMENT))
-            {
-                force = Alignment(_vehicle.World.Vehicles) * _weightAlignment;
-
-                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            }
-
-            if (On(BehaviourType.COHESION))
-            {
-                force = Cohesion(_vehicle.World.Vehicles) * _weightCohesion;
-
-                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            }
 
             if (On(BehaviourType.SEEK))
             {
-                force = Seek(_vehicle.World.Crosshair) * _weightSeek;
+                force = Seek(_flyingEntity.World.Crosshair) * _weightSeek;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
@@ -296,14 +229,7 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.ARRIVE))
             {
-                force = Arrive(_vehicle.World.Crosshair, decelerationRate) * _weightArrive;
-
-                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            }
-
-            if (On(BehaviourType.WANDER))
-            {
-                force = Wander() * _weightWander;
+                force = Arrive(_flyingEntity.World.Crosshair, decelerationRate) * _weightArrive;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
@@ -320,20 +246,9 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.OFFSETPURSUIT))
             {
-                if (TargetAgent1 != null && _offset != null)
+                if (TargetAgent1 != null)
                 {
                     force = OffsetPursuit(TargetAgent1, _offset);
-                }
-
-                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
-            }
-
-            if (On(BehaviourType.INTERPOSE))
-            {
-                if (TargetAgent1 != null && TargetAgent2 != null)
-                {
-
-                    force = Interpose(TargetAgent1, TargetAgent2) * _weightInterpose;
                 }
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
@@ -346,6 +261,25 @@ namespace TowerDefense.Util.Steering
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
+
+            if (On(BehaviourType.EXPLORE))
+            {
+                if (_flyingEntity.goals.Count != 0)
+                    force = Explore(_flyingEntity.goals) * _weightExplore;
+
+                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
+            }
+
+            if (On(BehaviourType.OFFSETPURSUIT))
+            {
+                if (TargetAgent1 != null)
+                {
+                    _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit;
+                }
+                if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
+            }
+
+
 
             return force;
         }
@@ -367,42 +301,19 @@ namespace TowerDefense.Util.Steering
             }
 
 
-            if (On(BehaviourType.SEPARATION))
-            {
-                _steeringForce += Separation(_vehicle.World.Vehicles) * _weightSeparation;
-            }
-
-            if (On(BehaviourType.ALIGNMENT))
-            {
-                _steeringForce += Alignment(_vehicle.World.Vehicles) * _weightAlignment;
-            }
-
-            if (On(BehaviourType.COHESION))
-            {
-                _steeringForce += Cohesion(_vehicle.World.Vehicles) * _weightCohesion;
-            }
-
-
-
-
-            if (On(BehaviourType.WANDER))
-            {
-                _steeringForce += Wander() * _weightWander;
-            }
-
             if (On(BehaviourType.SEEK))
             {
-                _steeringForce += Seek(_vehicle.World.Crosshair) * _weightSeek;
+                _steeringForce += Seek(_flyingEntity.World.Crosshair) * _weightSeek;
             }
 
             if (On(BehaviourType.FLEE))
             {
-                _steeringForce += Flee(_vehicle.World.Crosshair) * _weightFlee;
+                _steeringForce += Flee(_flyingEntity.World.Crosshair) * _weightFlee;
             }
 
             if (On(BehaviourType.ARRIVE))
             {
-                _steeringForce += Arrive(_vehicle.World.Crosshair, decelerationRate) * _weightArrive;
+                _steeringForce += Arrive(_flyingEntity.World.Crosshair, decelerationRate) * _weightArrive;
             }
 
             if (On(BehaviourType.PURSUIT))
@@ -415,24 +326,24 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.OFFSETPURSUIT))
             {
-                if (TargetAgent1 != null && _offset != null)
+                if (TargetAgent1 != null)
                 {
                     _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit;
                 }
             }
-
-            if (On(BehaviourType.INTERPOSE))
-            {
-                if (TargetAgent1 != null && TargetAgent2 != null) _steeringForce += Interpose(TargetAgent1, TargetAgent2) * _weightInterpose;
-            }
-
-
             if (On(BehaviourType.FOLLOWPATH))
             {
                 _steeringForce += FollowPath() * _weightFollowPath;
             }
 
-            _steeringForce.Truncate((float)_vehicle.MaxForce);
+            if (On(BehaviourType.EXPLORE))
+            {
+                if (_flyingEntity.goals.Count != 0)
+                    _steeringForce += Explore(_flyingEntity.goals) * _weightExplore;
+            }
+
+
+            _steeringForce.Truncate((float)_flyingEntity.MaxForce);
 
             return _steeringForce;
         }
@@ -451,29 +362,13 @@ namespace TowerDefense.Util.Steering
             //reset the steering force
             _steeringForce = Vector2D.Zero;
 
-            if (On(BehaviourType.SEPARATION) && new Random().NextDouble() < _chanceSeparation)
-            {
-                _steeringForce += Separation(_vehicle.World.Vehicles) *
-                                    _weightSeparation / _chanceSeparation;
-
-                if (!_steeringForce.isZero())
-                {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
-
-                    return _steeringForce;
-                }
-            }
-
-
-
-
             if (On(BehaviourType.FLEE) && new Random().NextDouble() < _chanceFlee)
             {
-                _steeringForce += Flee(_vehicle.World.Crosshair) * _weightFlee / _chanceFlee;
+                _steeringForce += Flee(_flyingEntity.World.Crosshair) * _weightFlee / _chanceFlee;
 
-                if (!_steeringForce.isZero())
+                if (!_steeringForce.IsZero())
                 {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
 
                     return _steeringForce;
                 }
@@ -483,63 +378,22 @@ namespace TowerDefense.Util.Steering
             {
                 if (TargetAgent1 != null) _steeringForce += Evade(TargetAgent1) * _weightEvade / _chanceEvade;
 
-                if (!_steeringForce.isZero())
+                if (!_steeringForce.IsZero())
                 {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
 
                     return _steeringForce;
                 }
             }
 
-
-
-            if (On(BehaviourType.ALIGNMENT) && new Random().NextDouble() < _chanceAlignment)
-            {
-                _steeringForce += Alignment(_vehicle.World.Vehicles) *
-                                    _weightAlignment / _chanceAlignment;
-
-                if (!_steeringForce.isZero())
-                {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
-
-                    return _steeringForce;
-                }
-            }
-
-            if (On(BehaviourType.COHESION) && new Random().NextDouble() < _chanceCohesion)
-            {
-                _steeringForce += Cohesion(_vehicle.World.Vehicles) *
-                                    _weightCohesion / _chanceCohesion;
-
-                if (!_steeringForce.isZero())
-                {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
-
-                    return _steeringForce;
-                }
-            }
-
-
-
-            if (On(BehaviourType.WANDER) && new Random().NextDouble() < _chanceWander)
-            {
-                _steeringForce += Wander() * _weightWander / _chanceWander;
-
-                if (!_steeringForce.isZero())
-                {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
-
-                    return _steeringForce;
-                }
-            }
 
             if (On(BehaviourType.SEEK) && new Random().NextDouble() < _chanceSeek)
             {
-                _steeringForce += Seek(_vehicle.World.Crosshair) * _weightSeek / _chanceSeek;
+                _steeringForce += Seek(_flyingEntity.World.Crosshair) * _weightSeek / _chanceSeek;
 
-                if (!_steeringForce.isZero())
+                if (!_steeringForce.IsZero())
                 {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
 
                     return _steeringForce;
                 }
@@ -547,16 +401,42 @@ namespace TowerDefense.Util.Steering
 
             if (On(BehaviourType.ARRIVE) && new Random().NextDouble() < _chanceArrive)
             {
-                _steeringForce += Arrive(_vehicle.World.Crosshair, decelerationRate) *
+                _steeringForce += Arrive(_flyingEntity.World.Crosshair, decelerationRate) *
                                     _weightArrive / _chanceArrive;
 
-                if (!_steeringForce.isZero())
+                if (!_steeringForce.IsZero())
                 {
-                    _steeringForce.Truncate((float)_vehicle.MaxForce);
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
 
                     return _steeringForce;
                 }
             }
+
+            if (On(BehaviourType.EXPLORE))
+            {
+                if (_flyingEntity.goals.Count != 0)
+                    _steeringForce += Explore(_flyingEntity.goals) * _weightExplore / _chanceExplore;
+
+                if (!_steeringForce.IsZero())
+                {
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
+
+                    return _steeringForce;
+                }
+            }
+
+            if (On(BehaviourType.OFFSETPURSUIT) && new Random().NextDouble() < _chanceOffsetPursuit)
+            {
+                _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit / _chanceOffsetPursuit;
+
+                if (!_steeringForce.IsZero())
+                {
+                    _steeringForce.Truncate((float)_flyingEntity.MaxForce);
+
+                    return _steeringForce;
+                }
+            }
+
 
             return _steeringForce;
         }
@@ -564,14 +444,27 @@ namespace TowerDefense.Util.Steering
         /// <summary>
         /// Makes position of Vehicle and targetPosition equal if the difference between them is very small.
         /// </summary>
-        /// <param name="vehiclePos"></param>
+        /// <param name="flyingEntity"></param>
         /// <param name="targetPos"></param>
-        public void ClampPositions(ref Vehicle vehiclePos, Vector2D targetPos)
+        public bool ClampPositions(ref FlyingEntity flyingEntity, Vector2D targetPos)
         {
-            float deltaX = vehiclePos.Pos.x - targetPos.x;
-            float deltaY = vehiclePos.Pos.y - targetPos.y;
-            if (-5 < deltaX && deltaX < 5) vehiclePos.Pos.x = targetPos.x;
-            if (-5 < deltaY && deltaY < 5) vehiclePos.Pos.y = targetPos.y;
+            float deltaX = flyingEntity.Pos.x - targetPos.x;
+            float deltaY = flyingEntity.Pos.y - targetPos.y;
+            if (-10 < deltaX && deltaX < 10)
+            {
+                flyingEntity.Pos.x = targetPos.x;
+
+            }
+            if (-10 < deltaY && deltaY < 10)
+            {
+                flyingEntity.Pos.y = targetPos.y;
+            };
+            if ((-10 < deltaX && deltaX < 10) && (-10 < deltaY && deltaY < 10))
+            {
+                flyingEntity.Pos = targetPos;
+                return true;
+            };
+            return false;
         }
 
         /// <summary>
@@ -588,6 +481,42 @@ namespace TowerDefense.Util.Steering
         #region Behaviours
 
         /// <summary>
+        /// Explores queue of Powerups.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="goals"></param>
+        /// <returns>Steering force.</returns>
+        public Vector2D Explore<T>(Queue<T> goals) where T : Powerup
+        {
+            Vector2D goalPos;
+            Vector2D steeringForce = Vector2D.Zero;
+
+            // Check to see if there is a goal left.
+            if (goals.Peek() != null)
+            {
+                // Draw the goal
+                T goal = goals.Peek();
+                // Convert Rect pos to Vector.
+                goalPos = new Vector2D(goal.Pos.X, goal.Pos.Y);
+                // Calculate steering force to Arrive to goal.
+                steeringForce = Arrive(goalPos, DecelerationRate.FAST);
+                // If Flying Entity reached the goal. Go for the next goal.
+                if (goalPos == this._flyingEntity.Pos)
+                {
+                    // Bounty isn't included in Powerup so if the goal is a Coin we need to cast to Coin to add the bounty.
+                    if (goal is Coin)
+                    {
+                        Coin coin = goal as Coin;
+                        GameWorld.Instance.AddGold(coin.bounty);
+                    }
+                    goals.Dequeue();
+                }
+            }
+
+            return steeringForce;
+        }
+
+        /// <summary>
         /// Given a target, this behavior returns a steering force which will
         /// direct the agent towards the target
         /// </summary>
@@ -595,14 +524,17 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D Seek(Vector2D TargetPos)
         {
-            if (_vehicle.Pos.x == TargetPos.x && _vehicle.Pos.y == TargetPos.y) return Vector2D.Zero;
+            if (_flyingEntity.Pos.x == TargetPos.x && _flyingEntity.Pos.y == TargetPos.y) return Vector2D.Zero;
 
-            ClampPositions(ref _vehicle, TargetPos);
+            if (ClampPositions(ref _flyingEntity, TargetPos))
+            {
+                return Vector2D.Zero;
+            }
 
-            Vector2D DesiredVelocity = Vector2D.Normalize(TargetPos - _vehicle.Pos)
-                                      * _vehicle.MaxSpeed;
-
-            return (DesiredVelocity - _vehicle.Velocity);
+            Vector2D DesiredVelocity = Vector2D.Normalize(TargetPos - _flyingEntity.Pos)
+                                      * _flyingEntity.MaxSpeed;
+            // Console.WriteLine(DesiredVelocity - _flyingEntity.Velocity);
+            return (DesiredVelocity - _flyingEntity.Velocity);
         }
 
         /// <summary>
@@ -617,15 +549,15 @@ namespace TowerDefense.Util.Steering
              * Which makes sense. */
             if (_fleePanicDistanceOn)
             {
-                float distanceSq = Vector2D.Vec2DDistanceSq(_vehicle.Pos, TargetPos);
+                float distanceSq = Vector2D.Vec2DDistanceSq(_flyingEntity.Pos, TargetPos);
 
                 if (distanceSq > _panicDistanceSQ) return Vector2D.Zero;
             }
 
-            Vector2D DesiredVelocity = Vector2D.Normalize(_vehicle.Pos - TargetPos)
-                                      * _vehicle.MaxSpeed;
+            Vector2D DesiredVelocity = Vector2D.Normalize(_flyingEntity.Pos - TargetPos)
+                                      * _flyingEntity.MaxSpeed;
 
-            return (DesiredVelocity - _vehicle.Velocity);
+            return (DesiredVelocity - _flyingEntity.Velocity);
         }
 
         /// <summary>
@@ -638,10 +570,10 @@ namespace TowerDefense.Util.Steering
         public Vector2D Arrive(Vector2D TargetPos,
                                           DecelerationRate deceleration)
         {
-            if (_vehicle.Pos.x == TargetPos.x && _vehicle.Pos.y == TargetPos.y) return Vector2D.Zero;
-            ClampPositions(ref _vehicle, TargetPos);
+            if (_flyingEntity.Pos.x == TargetPos.x && _flyingEntity.Pos.y == TargetPos.y) return Vector2D.Zero;
+            ClampPositions(ref _flyingEntity, TargetPos);
 
-            Vector2D ToTarget = TargetPos - _vehicle.Pos;
+            Vector2D ToTarget = TargetPos - _flyingEntity.Pos;
 
             // Calculate the distance to the target.
             double dist = ToTarget.Length();
@@ -656,14 +588,14 @@ namespace TowerDefense.Util.Steering
                 deceleration. */
                 double speed = dist / ((double)deceleration * DecelerationTweaker);
                 // Make sure the velocity does not exceed the max.
-                speed = Math.Min(speed, _vehicle.MaxSpeed);
+                speed = Math.Min(speed, _flyingEntity.MaxSpeed);
 
                 /* From here proceed just like Seek except we don't need to normalize 
                    the ToTarget vector because we have already gone to the trouble
                    of calculating its length: dist. */
                 Vector2D DesiredVelocity = ToTarget * speed / dist;
 
-                return (DesiredVelocity - _vehicle.Velocity);
+                return (DesiredVelocity - _flyingEntity.Velocity);
             }
 
             return new Vector2D(0, 0);
@@ -673,15 +605,15 @@ namespace TowerDefense.Util.Steering
         /// This behaviour returns a force that will steer the agent towards to agent thats trying to evade the pursuing agent.
         /// </summary>
         /// <returns>Steering Force</returns>
-        public Vector2D Pursuit(Vehicle evader)
+        public Vector2D Pursuit(FlyingEntity evader)
         {
             /* If the evader is ahead and facing the agent then we can just seek
                for the evader's current position. */
-            Vector2D ToEvader = evader.Pos - _vehicle.Pos;
+            Vector2D ToEvader = evader.Pos - _flyingEntity.Pos;
 
-            double RelativeHeading = _vehicle.Heading.Dot(evader.Heading);
+            double RelativeHeading = _flyingEntity.Heading.Dot(evader.Heading);
 
-            if ((ToEvader.Dot(_vehicle.Heading) > 0) &&
+            if ((ToEvader.Dot(_flyingEntity.Heading) > 0) &&
                  (RelativeHeading < -0.95))  // Acos(0.95)= 18 degrees
             {
                 return Seek(evader.Pos);
@@ -693,7 +625,7 @@ namespace TowerDefense.Util.Steering
                and the pursuer; and is inversely proportional to the sum of the
                agent's velocities */
             double LookAheadTime = ToEvader.Length() /
-                                  (_vehicle.MaxSpeed + evader.Speed());
+                                  (_flyingEntity.MaxSpeed + evader.Speed());
 
             // Now seek to the predicted future position of the evader.
             return Seek(evader.Pos + evader.Velocity * LookAheadTime);
@@ -704,9 +636,9 @@ namespace TowerDefense.Util.Steering
         /// </summary>
         /// <param name="pursuer"></param>
         /// <returns>Steering Force</returns>
-        public Vector2D Evade(Vehicle pursuer)
+        public Vector2D Evade(FlyingEntity pursuer)
         {
-            Vector2D ToPursuer = pursuer.Pos - _vehicle.Pos;
+            Vector2D ToPursuer = pursuer.Pos - _flyingEntity.Pos;
 
             if (_evadeThreatRangeOn)
             {
@@ -717,178 +649,11 @@ namespace TowerDefense.Util.Steering
              * and the pursuer; and is inversely proportional to the sum of the
              * agents' velocities. */
             double LookAheadTime = ToPursuer.Length() /
-                                   (_vehicle.MaxSpeed + pursuer.Speed());
+                                   (_flyingEntity.MaxSpeed + pursuer.Speed());
 
             // Now flee away from predicted future position of the pursuer.
             return Flee(pursuer.Pos + pursuer.Velocity * LookAheadTime);
         }
-
-        /// <summary>
-        /// This behavior makes the agent wander about randomly.
-        /// </summary>
-        /// <returns>Steering Force</returns>
-        public Vector2D Wander()
-        {
-            Random rand1 = new Random();
-            Random rand2 = new Random(1);
-            /* This behavior is dependent on the update rate, so this line must
-            be included when using time independent framerate. */
-            double JitterThisTimeSlice = _wanderJitter * 0.001;
-            double randomClamped = rand1.NextDouble() - rand2.NextDouble();
-            // First, add a small random vector to the target's position.
-            _wanderTarget += new Vector2D(randomClamped * JitterThisTimeSlice,
-                                        randomClamped * JitterThisTimeSlice);
-
-            // Reproject this new vector back on to a unit circle.
-            _wanderTarget.Normalize();
-
-            //Console.WriteLine(_wanderTarget);
-            // Increase the length of the vector to the same as the radius
-            // of the wander circle.
-            _wanderTarget *= _wanderRadius;
-
-            return _wanderTarget;
-        }
-
-        /// <summary>
-        /// Returns a force that repels the agent from other agents.
-        /// </summary>
-        /// <param name="neighbors"></param>
-        /// <returns>Steering Force</returns>
-        public Vector2D Separation(List<Vehicle> neighbors)
-        {
-            Vector2D SteeringForce = Vector2D.Zero;
-
-            for (int i = 0; i < neighbors.Count; ++i)
-            {
-                /* Make sure this agent isn't included in the calculations and that
-                 * the agent being examined is close enough. 
-                 * Also make sure it doesn't include the evade target */
-                if ((neighbors[i] != _vehicle) && neighbors[i].Tag &&
-                  (neighbors[i] != TargetAgent1))
-                {
-                    Vector2D ToAgent = _vehicle.Pos - neighbors[i].Pos;
-
-                    /* Scale the force inversely proportional to the agents distance  
-                       from its neighbor. */
-                    SteeringForce += Vector2D.Normalize(ToAgent) / ToAgent.Length();
-                }
-            }
-
-            return SteeringForce;
-        }
-
-        /// <summary>
-        /// Returns a force that attempts to align agents heading with the heading of its neighbours.
-        /// </summary>
-        /// <param name="neighbors"></param>
-        /// <returns></returns>
-        Vector2D Alignment(List<Vehicle> neighbors)
-        {
-            // Used to record the average heading of the neighbors.
-            Vector2D AverageHeading = Vector2D.Zero;
-
-            // Used to count the number of vehicles in the neighborhood.
-            int NeighborCount = 0;
-
-            // Iterate through all the tagged vehicles and sum their heading vectors.
-            for (int i = 0; i < neighbors.Count; ++i)
-            {
-                /* Make sure *this* agent isn't included in the calculations and that
-                 * the agent being examined is close enough. 
-                 * Also make sure it doesn't include any evade target */
-                if ((neighbors[i] != _vehicle) && neighbors[i].Tag &&
-                  (neighbors[i] != TargetAgent1))
-                {
-                    AverageHeading += neighbors[i].Heading;
-
-                    ++NeighborCount;
-                }
-            }
-
-            /* If the neighborhood contained one or more vehicles, average their
-             * heading vectors. */
-            if (NeighborCount > 0)
-            {
-                AverageHeading /= (double)NeighborCount;
-
-                AverageHeading -= _vehicle.Heading;
-            }
-
-            return AverageHeading;
-        }
-
-        /// <summary>
-        /// Returns a steering force that attempts to move the agent towards the
-        /// center of mass of the agents in its immediate area.
-        /// </summary>
-        /// <param name="neighbors"></param>
-        /// <returns>Steering Force</returns>
-        Vector2D Cohesion(List<Vehicle> neighbors)
-        {
-            // First find the center of mass of all the agents.
-            Vector2D CenterOfMass = Vector2D.Zero;
-            Vector2D SteeringForce = Vector2D.Zero;
-
-            int NeighborCount = 0;
-
-            // Iterate through the neighbors and sum up all the position vectors.
-            for (int i = 0; i < neighbors.Count; ++i)
-            {
-                /* Make sure this agent isn't included in the calculations and that
-                 * the agent being examined is close enough. 
-                 * Also make sure it doesn't include the evade target, */
-                if ((neighbors[i] != _vehicle) && neighbors[i].Tag &&
-                  (neighbors[i] != TargetAgent1))
-                {
-                    CenterOfMass += neighbors[i].Pos;
-
-                    ++NeighborCount;
-                }
-            }
-
-            if (NeighborCount > 0)
-            {
-                //the center of mass is the average of the sum of positions
-                CenterOfMass /= (double)NeighborCount;
-
-                //now seek towards that position
-                SteeringForce = Seek(CenterOfMass);
-            }
-
-            //the magnitude of cohesion is usually much larger than separation or
-            //allignment so it usually helps to normalize it.
-            SteeringForce.Normalize();
-            return SteeringForce;
-        }
-
-        /// <summary>
-        /// Returns a steering force that makes the agent attempt to position itself between the two specified Vehicles.
-        /// </summary>
-        /// <param name="agentA"></param>
-        /// <param name="agentB"></param>
-        /// <returns>Steering Force</returns>
-        public Vector2D Interpose(Vehicle agentA, Vehicle agentB)
-        {
-            /* First we need to figure out where the two agents are going to be at 
-             * time T in the future. This is approximated by determining the time
-             * taken to reach the mid way point at the current time at at max speed. */
-            Vector2D MidPoint = (agentA.Pos + agentB.Pos) / 2.0;
-            double TimeToReachMidPoint = Vector2D.Vec2DDistance(_vehicle.Pos, MidPoint) /
-                                         _vehicle.MaxSpeed;
-
-            /* Now we have T, we assume that agent A and agent B will continue on a
-             * straight trajectory and extrapolate to get their future positions */
-            Vector2D APos = agentA.Pos + agentA.Velocity * TimeToReachMidPoint;
-            Vector2D BPos = agentB.Pos + agentB.Velocity * TimeToReachMidPoint;
-
-            // Calculate the mid point of these predicted positions.
-            MidPoint = (APos + BPos) / 2.0;
-
-            // Then steer to Arrive at it.
-            return Arrive(MidPoint, DecelerationRate.FAST);
-        }
-
 
 
         /// <summary>
@@ -900,16 +665,9 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D FollowPath()
         {
-            ClampPositions(ref _vehicle, _path.Current);
+            ClampPositions(ref _flyingEntity, _path.Current);
             if (_path.Current == null) return Vector2D.Zero;
-            /* Move to next target if close enough to current target (working in
-             * distance squared space). */
-            if (Vector2D.Vec2DDistanceSq(_path.Current, _vehicle.Pos) <
-               _waypointSeekDistSq)
-            {
-                _path.GoNext();
-            }
-
+            _path.GoNext();
             if (!_path.IsFinished())
             {
                 return Seek(_path.Current);
@@ -921,30 +679,15 @@ namespace TowerDefense.Util.Steering
             }
         }
         /// <summary>
-        /// Produces a steering force that keeps a vehicle at a specified offset
-        /// from a leader vehicle.
+        /// Produces a steering force that keeps a FlyingEntity at a specified offset
+        /// from a leader FlyingEntity.
         /// </summary>
         /// <param name="leader"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public Vector2D OffsetPursuit(Vehicle leader, Vector2D offset)
+        public Vector2D OffsetPursuit(FlyingEntity leader, int offset)
         {
-            // Calculate the offset's position in world space.
-            Vector2D WorldOffsetPos = GameWorld.PointToWorldSpace(offset,
-                                                            leader.Heading,
-                                                            leader.Side,
-                                                            leader.Pos);
-
-            Vector2D ToOffset = WorldOffsetPos - _vehicle.Pos;
-
-            /* The lookahead time is propotional to the distance between the leader
-             * and the pursuer; and is inversely proportional to the sum of both
-             * agent's velocities. */
-            double LookAheadTime = ToOffset.Length() /
-                                  (_vehicle.MaxSpeed + leader.Speed());
-
-            // Now Arrive at the predicted future position of the offset.
-            return Arrive(WorldOffsetPos + leader.Velocity * LookAheadTime, DecelerationRate.FAST);
+            return Arrive(leader.Pos - leader.Heading * offset, DecelerationRate.FAST);
         }
     }
 }

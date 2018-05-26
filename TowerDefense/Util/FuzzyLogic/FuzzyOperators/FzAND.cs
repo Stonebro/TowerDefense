@@ -9,23 +9,23 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
     /// <summary>
     ///  This is a rewrite of the FzAnd class authored by Mat Buckland and all credit goes to him.
     /// </summary>
-    public class FzAND : FuzzyTerm
+    public class FzAND : IFuzzyTerm
     {
 
-        private List<FuzzyTerm> MemberTerms = new List<FuzzyTerm>();
+        private List<IFuzzyTerm> MemberTerms = new List<IFuzzyTerm>();
 
-        public FzAND(FuzzyTerm operator1, FuzzyTerm operator2)
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2)
         {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
 
         }
-        public FzAND(FuzzyTerm operator1, FuzzyTerm operator2, FuzzyTerm operator3) {
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2, IFuzzyTerm operator3) {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
             MemberTerms.Add(operator3.Clone());
         }
-        public FzAND(FuzzyTerm operator1, FuzzyTerm operator2, FuzzyTerm operator3, FuzzyTerm operator4)
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2, IFuzzyTerm operator3, IFuzzyTerm operator4)
         {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
@@ -40,10 +40,10 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
 
         public void ClearDOM()
         {
-            foreach (FuzzyTerm term in MemberTerms) term.ClearDOM();
+            foreach (IFuzzyTerm term in MemberTerms) term.ClearDOM();
         }
 
-        public FuzzyTerm Clone()
+        public IFuzzyTerm Clone()
         {
             return new FzAND(this);
         }
@@ -51,7 +51,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
         public double GetDOM()
         {
             double smallest = Double.MaxValue;
-            foreach(FuzzyTerm term in MemberTerms)
+            foreach(IFuzzyTerm term in MemberTerms)
             {
                 if (term.GetDOM() < smallest) smallest = term.GetDOM();
             }
@@ -60,7 +60,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
 
         public void ORWithDOM(double val)
         {
-            foreach (FuzzyTerm term in MemberTerms) term.ORWithDOM(val);
+            foreach (IFuzzyTerm term in MemberTerms) term.ORWithDOM(val);
         }
     }
 }

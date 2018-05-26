@@ -70,11 +70,11 @@
             this.showVerticesBtn.TabIndex = 3;
             this.showVerticesBtn.Text = "Show Vertices";
             this.showVerticesBtn.UseVisualStyleBackColor = true;
-            this.showVerticesBtn.Click += new System.EventHandler(this.showVerticesBtn_Click);
+            this.showVerticesBtn.Click += new System.EventHandler(this.ShowVerticesBtn_Click);
             // 
             // globalTimer
             // 
-            this.globalTimer.Tick += new System.EventHandler(this.globalTimer_Tick);
+            this.globalTimer.Tick += new System.EventHandler(this.GlobalTimer_Tick);
             // 
             // playerGoldLabel
             // 
@@ -158,7 +158,7 @@
             this.handSelectPB.Size = new System.Drawing.Size(50, 50);
             this.handSelectPB.TabIndex = 8;
             this.handSelectPB.TabStop = false;
-            this.handSelectPB.Click += new System.EventHandler(this.handSelectPB_Click);
+            this.handSelectPB.Click += new System.EventHandler(this.HandSelectPB_Click);
             // 
             // deleteTowerBtn
             // 
@@ -169,7 +169,7 @@
             this.deleteTowerBtn.Text = "Delete";
             this.deleteTowerBtn.UseVisualStyleBackColor = true;
             this.deleteTowerBtn.Visible = false;
-            this.deleteTowerBtn.Click += new System.EventHandler(this.deleteTowerBtn_Click);
+            this.deleteTowerBtn.Click += new System.EventHandler(this.DeleteTowerBtn_Click);
             // 
             // selectedTowerNameLabel
             // 
@@ -319,7 +319,7 @@
             this.nextWaveBtn.TabIndex = 24;
             this.nextWaveBtn.Text = "Next wave!";
             this.nextWaveBtn.UseVisualStyleBackColor = true;
-            this.nextWaveBtn.Click += new System.EventHandler(this.nextWaveBtn_Click);
+            this.nextWaveBtn.Click += new System.EventHandler(this.NextWaveBtn_Click);
             // 
             // FuzzyTowerPB
             // 

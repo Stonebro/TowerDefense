@@ -29,7 +29,7 @@ namespace TowerDefense.Util.FuzzyLogic
             return _memberVarMap[name];
         }
 
-        public void AddRule(FuzzyTerm antecedent, FuzzyTerm consequent)
+        public void AddRule(IFuzzyTerm antecedent, IFuzzyTerm consequent)
         {
             _memberRules.Add(new FuzzyRule(antecedent, consequent));
         }

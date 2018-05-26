@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using TowerDefense.Entities;
 using TowerDefense.Entities.Enemies;
+using TowerDefense.Entities.Powerups;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.Util.Steering;
@@ -42,31 +41,41 @@ namespace TowerDefense.World
         public BaseTile[] tilesList;
         // List of Towers.
         public List<Tower> towers;
-        // List of Enemies
+        // List of Enemies.
         public List<Enemy> enemies;
-        public List<FlyingEntity> FlyingEntities;
-        public List<Vehicle> Vehicles;
-        public Eagle testEagle;
-        public Eagle testEagle2;
+        // List of Coins, used for demonstrating explore.
+        public Queue<Powerup> coins;
+        // List of Flying Entities.
+        public List<FlyingEntity> flyingEntities;
+
+        // Eagles for showing required steering behaviours.
+        public Eagle testEagle; // Shows Seek.
+        public Eagle testEagle2; // Shows Offsetpursuit.
+        public Eagle testEagle3; // Shows Explore (also uses Arrive).
+
         // The target for seek/arrive like behaviors. Can be updated by pressing the middle mouse button on a position on the PictureBox.
         public Vector2D Crosshair = new Vector2D(350, 350);
         public Graph graph;
         // StartTile and EndTile.
         public BaseTile startTile, endTile;
-        // Number of waves, this affects enemy strength
+        // Number of waves, this affects enemy strength.
         public int waveCount;
+
         public bool pathBlocked;
+        public Stopwatch stopwatch;
 
         // UI Elements
-        public int gold { get; private set; }
-        public int lives { get; set; }
-        public Tower tower { get; set; }
+        public int Gold { get; private set; }
+        public int Lives { get; set; }
+        public Tower Tower { get; set; }
 
         /// GameWorld constructor. 
         public GameWorld()
         {
-            gold = 500;
-            lives = 50;
+            stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Gold = 500;
+            Lives = 50;
             // Initializes GameWorld.
             _instance = this;
 
@@ -77,7 +86,8 @@ namespace TowerDefense.World
             // Initializes list of Towers.
             towers = new List<Tower>();
             enemies = new List<Enemy>();
-            FlyingEntities = new List<FlyingEntity>();
+            coins = new Queue<Powerup>();
+            flyingEntities = new List<FlyingEntity>();
             // Creates Graph.
             graph = new Graph();
 
@@ -94,6 +104,14 @@ namespace TowerDefense.World
                 }
                 this.tilesList[i] = tile;
             }
+
+            // Adds coins to queue (to be able to explore them).
+            coins.Enqueue(new Coin(0, 250, 30, 30));
+            coins.Enqueue(new Coin(200, 250, 30, 30));
+            coins.Enqueue(new Coin(0, 500, 30, 30));
+            coins.Enqueue(new Coin(200, 500, 30, 30));
+
+
             // Initializes Graph.
             graph.InitializeGraph();
             // Sets startTile to be upper-left tile.
@@ -105,18 +123,24 @@ namespace TowerDefense.World
             // Sets endTile to not Buildable.
             endTile.buildable = false;
             Bat testEnemy = new Bat(waveCount);
-            testEagle = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 50, 10, 10, BehaviourType.SEEK);
-            //testEagle2 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 1, 50, 10, 10, BehaviourType.OFFSETPURSUIT);
-            //testEagle2.SetTargetAgent1(testEagle.Vehicle);
+            testEagle = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviourType.SEEK);
+            testEagle2 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviourType.OFFSETPURSUIT);
+            testEagle2.SetTargetAgent1(testEagle);
+            testEagle3 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviourType.EXPLORE)
+            {
+                goals = coins,
 
-            //FlyingEntities.Add(testEagle);
-            //FlyingEntities.Add(testEagle2);
+            };
+            // Deep copy of goals to be able keep repeating the original queue of goals.
+            testEagle3.originalGoals = new Queue<Powerup>(coins);
+
+            flyingEntities.Add(testEagle);
+            flyingEntities.Add(testEagle2);
+            flyingEntities.Add(testEagle3);
             testEnemy.pos = tilesList[125].pos;
             testEnemy.path = Path.GetPath(startTile, tilesList[674]);
-            testEnemy.addForce = new Seek();
+            testEnemy.AddForce = new Seek();
             Instance.enemies.Add(testEnemy);
-            //Instance.Vehicles.Add(testEagle.Vehicle);
-            //Instance.Vehicles.Add(testEagle2.Vehicle);
         }
 
         /// Draws each tile
@@ -125,7 +149,7 @@ namespace TowerDefense.World
             // Loops through Tiles.
             for (int i = 0; i < tiles; i++)
             {
-                // Handles draw of not-buildable Tiles (Should be sprites).
+                // Handles draw of not-buildable Tiles.
                 if (tilesList[i].buildable == false)
                 {
                     if (tilesList[i].tower is ArrowTower)
@@ -138,7 +162,6 @@ namespace TowerDefense.World
                         SolidBrush CTBrush = new SolidBrush(Color.FromArgb(128, 25, 25, 25));
                         g.FillRectangle(CTBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                     }
-                    /*else g.FillRectangle(new SolidBrush(Color.FromArgb(128, 0, 200, 0)), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));*/
                 }
                 else
                 { // If Tile is buildable.
@@ -148,6 +171,8 @@ namespace TowerDefense.World
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[0].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(tilesList[tiles - 1].pos, new Vector2D(BaseTile.size, BaseTile.size)));
             }
+
+            // Renders non-dead enemies.
             foreach (Enemy e in enemies)
             {
                 if (!e.dead)
@@ -156,15 +181,22 @@ namespace TowerDefense.World
                     if (e.path != null) e.path.Render(g);
                 }
             }
-            //foreach(FlyingEntity flyingEntity in FlyingEntities)
-            //{
-            //    g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(flyingEntity.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
-            //    flyingEntity.Update();
-            //}
-            //testEagle.Update();
-            //testEagle2.Update();
-            //g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
-            //g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(testEagle2.Vehicle.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
+
+            // Renders Flying Entities and updates them.
+            foreach (FlyingEntity flyingEntity in flyingEntities)
+            {
+                g.FillRectangle(new SolidBrush(Color.DarkTurquoise), new Rectangle(flyingEntity.Pos, new Vector2D(BaseTile.size, BaseTile.size)));
+                flyingEntity.Update(stopwatch.ElapsedMilliseconds);
+                if (flyingEntity.goals != null)
+                {
+                    if (!flyingEntity.goals.Any()) { flyingEntity.goals = flyingEntity.originalGoals; Console.WriteLine(flyingEntity.originalGoals.Count); }
+
+                    flyingEntity.goals.Peek().Draw(g);
+                }
+            }
+
+            // Restarts stopwatch for elapsedseconds.
+            stopwatch.Restart();
         }
 
         public void Update()
@@ -177,9 +209,11 @@ namespace TowerDefense.World
         public void SpawnEnemy()
         {
             ResetAllVertices();
-            Imp imp = new Imp(waveCount);
-            imp.pos = startTile.pos;
-            imp.path = Path.GetPath(startTile, endTile);
+            Imp imp = new Imp(waveCount)
+            {
+                pos = startTile.pos,
+                path = Path.GetPath(startTile, endTile)
+            };
             Instance.enemies.Add(imp);
             foreach (Tower t in towers)
                 t.nearbyEnemies.Add(imp);
@@ -328,11 +362,11 @@ namespace TowerDefense.World
 
         public int AddGold(int amount)
         {
-            return gold += amount;
+            return Gold += amount;
         }
         public int DeductGold(int amount)
         {
-            return gold -= amount;
+            return Gold -= amount;
         }
         /// <summary>
         /// Tags any entities contained in a std container that are within the
@@ -340,25 +374,25 @@ namespace TowerDefense.World
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="radius"></param>
-        public void TagVehiclesWithinViewRange(Vehicle vehicle, double radius)
+        public void TagVehiclesWithinViewRange(FlyingEntity FlyingEntity, double radius)
         {
-            foreach (Vehicle veh in Vehicles)
+            foreach (FlyingEntity flyingEntity in flyingEntities)
             {
 
                 // First clear any current tag.
-                vehicle.Tag = false;
+                FlyingEntity.Tag = false;
 
-                Vector2D to = veh.Pos - vehicle.Pos;
+                Vector2D to = flyingEntity.Pos - FlyingEntity.Pos;
 
                 /* The bounding radius of the other is taken into account by adding it 
                    to the range. */
-                double range = radius + veh.BoundingRadius;
+                double range = radius + flyingEntity.BoundingRadius;
 
                 /* If entity within range, tag for further consideration. (working in
                 distance-squared space to avoid sqrts) */
-                if ((veh != vehicle) && (to.LengthSq() < range * range))
+                if ((flyingEntity != FlyingEntity) && (to.LengthSq() < range * range))
                 {
-                    veh.Tag = true;
+                    flyingEntity.Tag = true;
                 }
 
             }// Next entity.

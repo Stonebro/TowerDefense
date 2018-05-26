@@ -73,7 +73,7 @@ namespace TowerDefense.Util
         /// Checks whether both values are 0
         /// </summary>
         /// <returns>True if both values are 0, false otherwhys</returns>
-        public bool isZero()
+        public bool IsZero()
         {
             return x == 0 && y == 0;
         }
@@ -119,10 +119,9 @@ namespace TowerDefense.Util
         public static Vector2D Normalize(Vector2D v)
         {
             Vector2D vec = v;
-            if (float.IsNaN(vec.Length())) return Vector2D.Zero;
-
             vec.x /= vec.Length();
             vec.y /= vec.Length();
+            if (float.IsNaN(vec.Length()) || float.IsNaN(vec.x) || float.IsNaN(vec.y)) return Vector2D.Zero;
             return vec;
         }
 
@@ -272,7 +271,7 @@ namespace TowerDefense.Util
         /// <param name="posSecond">Position of the second vector</param>
         /// <param name="fov">FOV of the first vector</param>
         /// <returns></returns>
-        public bool isSecondInFOVOfFirst(Vector2D posFirst, Vector2D facingFirst, Vector2D posSecond, float fov)
+        public bool IsSecondInFOVOfFirst(Vector2D posFirst, Vector2D facingFirst, Vector2D posSecond, float fov)
         {
             Vector2D toTarget = Vec2DNormalize(posSecond - posFirst);
 

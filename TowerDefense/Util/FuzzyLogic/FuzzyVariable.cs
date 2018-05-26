@@ -16,11 +16,11 @@ namespace TowerDefense.Util.FuzzyLogic
         private double _memberMinRange;
         private double _memberMaxRange;
 
-        //--------------------------- Fuzzify -----------------------------------------
-        //
-        //  Takes a crisp value and calculates its degree of membership for each set
-        //  in the variable.
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Takes a crisp value and calculates its degree of membership for each set
+        ///  in the variable.
+        /// </summary>
+        /// <param name="val"></param>
         public void Fuzzify(double val)
         {
             // Asserts the value in within bounds of the variable.
@@ -29,12 +29,11 @@ namespace TowerDefense.Util.FuzzyLogic
                 foreach (FuzzySet set in _memberSets.Values) set.MemberDOM = set.CalculateDOM(val);
         }
 
-        //--------------------------- DeFuzzifyMaxAv ----------------------------------
-        //
-        // Defuzzifies the value by averaging the maxima of the sets that have fired.
-        //
-        // OUTPUT = sum (maxima * DOM) / sum (DOMs) 
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Defuzzifies the value by averaging the maxima of the sets that have fired.
+        /// OUTPUT = sum (maxima * DOM) / sum (DOMs) 
+        /// </summary>
+        /// <returns>Value</returns>
         public double DefuzzifyMaxAv()
         {
             double bottom = 0;
@@ -50,10 +49,11 @@ namespace TowerDefense.Util.FuzzyLogic
             return top / bottom;
         }
 
-        //------------------------- DeFuzzifyCentroid ---------------------------------
-        //
-        //  Defuzzify the variable using the centroid method.
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Defuzzify the variable using the centroid method.
+        /// </summary>
+        /// <param name="numSamples"></param>
+        /// <returns>Value</returns>
         public double DefuzzifyCentroid(int numSamples)
         {
             // Calculate the step size.
@@ -89,21 +89,26 @@ namespace TowerDefense.Util.FuzzyLogic
             return (sumOfMoments / totalArea);
         }
 
-        //---------------------------- AdjustRangeToFit -------------------------------
-        //
-        //  This method is called with the upper and lower bound of a set each time a
-        //  new set is added to adjust the upper and lower range values accordingly.
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// This method is called with the upper and lower bound of a set each time a
+        ///  new set is added to adjust the upper and lower range values accordingly.
+        /// </summary>
+        /// <param name="minBound"></param>
+        /// <param name="maxBound"></param>
         public void AdjustRangeToFit(double minBound, double maxBound)
         {
             if (minBound < _memberMinRange) _memberMinRange = minBound;
             if (maxBound > _memberMaxRange) _memberMaxRange = maxBound;
         }
 
-        //--------------------------- AddLeftShoulder ---------------------------------
-        //
-        //  Adds a left shoulder type set.
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Adds a left shoulder type set.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="minBound"></param>
+        /// <param name="peak"></param>
+        /// <param name="maxBound"></param>
+        /// <returns>Fuzzy set</returns>
         public FzSet AddLeftShoulderSet(string name, double minBound, double peak, double maxBound)
         {
             _memberSets[name] = new FuzzySet_LeftShoulder(peak, peak - minBound, maxBound - peak);
@@ -113,10 +118,14 @@ namespace TowerDefense.Util.FuzzyLogic
             return new FzSet(_memberSets[name]);
         }
 
-        //--------------------------- AddRightShoulder ---------------------------------
-        //
-        //  Adds a right shoulder type set.
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Adds a right shoulder type set.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="minBound"></param>
+        /// <param name="peak"></param>
+        /// <param name="maxBound"></param>
+        /// <returns>Fuzzy set</returns>
         public FzSet AddRightShoulderSet(string name, double minBound, double peak, double maxBound)
         {
             _memberSets[name] = new FuzzySet_RightShoulder(peak, peak - minBound, maxBound - peak);
@@ -126,10 +135,14 @@ namespace TowerDefense.Util.FuzzyLogic
             return new FzSet(_memberSets[name]);
         }
 
-        //------------------------- AddTriangularSet ----------------------------------
-        //
-        //  Adds a triangular shaped fuzzy set to the variable.
-        //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Adds a triangular shaped fuzzy set to the variable.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="minBound"></param>
+        /// <param name="peak"></param>
+        /// <param name="maxBound"></param>
+        /// <returns>Fuzzy set</returns>
         public FzSet AddTriangularSet(string name,
                                    double minBound,
                                    double peak,
@@ -145,6 +158,14 @@ namespace TowerDefense.Util.FuzzyLogic
         //
         //  Adds a singleton to the variable.
         //-----------------------------------------------------------------------------
+        /// <summary>
+        /// Adds a singleton to the variable.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="minBound"></param>
+        /// <param name="peak"></param>
+        /// <param name="maxBound"></param>
+        /// <returns>Fuzzy set</returns>
         public FzSet AddSingletonSet(string name,
                                      double minBound,
                                      double peak,

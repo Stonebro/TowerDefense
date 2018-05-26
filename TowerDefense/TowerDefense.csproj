@@ -49,12 +49,14 @@
     <Compile Include="CommandPattern\Command.cs" />
     <Compile Include="CommandPattern\DoNothingCommand.cs" />
     <Compile Include="CommandPattern\IReceiver.cs" />
+    <Compile Include="Entities\Powerups\Coin.cs" />
     <Compile Include="Entities\Enemies\Bat.cs" />
     <Compile Include="Entities\Enemies\Eagle.cs" />
     <Compile Include="Entities\Enemies\Enemy.cs" />
     <Compile Include="Entities\Enemies\Imp.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\FlyingEntity.cs" />
+    <Compile Include="Entities\Powerups\Powerup.cs" />
     <Compile Include="Entities\Weapons\Shotgun.cs" />
     <Compile Include="Entities\Weapons\Sniper.cs" />
     <Compile Include="Entities\Weapons\Weapon.cs" />
@@ -101,7 +103,6 @@
     <Compile Include="Util\Steering\ISteering.cs" />
     <Compile Include="Util\Steering\Seek.cs" />
     <Compile Include="Util\Steering\SteeringBehaviour.cs" />
-    <Compile Include="Util\Steering\Vehicle.cs" />
     <Compile Include="Util\Vector2D.cs" />
     <Compile Include="World\Edge.cs" />
     <Compile Include="World\GameWorld.cs" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\ArrowTower.png" />
+    <Content Include="Resources\Coin.png" />
     <None Include="Resources\ArrowTowerSprite.bmp" />
     <Content Include="Resources\ArrowTowerSprite.png" />
     <EmbeddedResource Include="Resources\basic_ground.bmp" />

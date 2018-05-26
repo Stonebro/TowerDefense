@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TowerDefense.Entities;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
@@ -42,11 +37,10 @@ namespace TowerDefense.Entities {
         public bool drawTowerRange;
         // Amount of kills this Tower made;
         public int kills;
-        //public PriorityQueue<Enemy> nearbyEnemies = new PriorityQueue<Enemy>();
         public List<Enemy> nearbyEnemies = new List<Enemy>();
         public int shotsFired;
 
-        public Graphics b; // TEMPORARY CHEAT
+        public Graphics b; 
 
         /// "Builds" Tower.
         public virtual void BuildTower(List<BaseTile> pos) {
@@ -88,14 +82,14 @@ namespace TowerDefense.Entities {
         }
 
 
-        protected Enemy enemyInRange() {
+        protected Enemy EnemyInRange() {
             for(int i = 0; i < GameWorld.Instance.enemies.Count; i++)
                 if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)
                     return GameWorld.Instance.enemies[i];
             return null;
         }
 
-        protected List<Enemy> enemyInRange(int amountTargets) {
+        protected List<Enemy> EnemyInRange(int amountTargets) {
             List<Enemy> targets = new List<Enemy>();
             for (int i = 0; i < GameWorld.Instance.enemies.Count; i++) { 
                 if (GameWorld.Instance.enemies[i].pos.Distance(position) < (attackRange + 1) * BaseTile.size && !GameWorld.Instance.enemies[i].dead)

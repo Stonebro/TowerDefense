@@ -11,7 +11,7 @@ using TowerDefense.World;
 namespace TowerDefense.FSM {
     class Attack : State<AttackDog> {
         public override void Enter(AttackDog t) {
-            //Console.WriteLine("Attack!");
+           
         }
 
         public override void Execute(AttackDog t) {
@@ -25,10 +25,10 @@ namespace TowerDefense.FSM {
                 t.home.shotsFired++;
                 float range = (t.attackRange * 2 + 1);
                 if (!t.target.dead) {
-                    if (t.home.b != null) // TEMP. CHEAT
+                    if (t.home.b != null) 
                         t.home.b.FillEllipse(new SolidBrush(Color.FromArgb(200, 100, 100, 100)),
                             t.pos.x - t.attackRange * BaseTile.size,
-                            t.pos.y - t.attackRange * BaseTile.size, range * BaseTile.size, range * BaseTile.size); // TEMP. CHEAT
+                            t.pos.y - t.attackRange * BaseTile.size, range * BaseTile.size, range * BaseTile.size);
                 }
             }
         }

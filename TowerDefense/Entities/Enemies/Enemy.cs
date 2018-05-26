@@ -26,7 +26,7 @@ namespace TowerDefense.Entities.Enemies
             BaseTile enemyTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(this.pos)];
             if (enemyTile == GameWorld.Instance.endTile)
             {
-                GameWorld.Instance.lives--;
+                GameWorld.Instance.Lives--;
                 Die();
             }
 
