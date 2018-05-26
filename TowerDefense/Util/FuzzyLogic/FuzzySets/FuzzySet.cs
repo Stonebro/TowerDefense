@@ -13,10 +13,12 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
     {
         protected double _memberDOM;
         protected double _memberRepValue;
-        
-        public double MemberDOM {
+
+        public double MemberDOM
+        {
             get { return _memberDOM; }
-            set {
+            set
+            {
                 if (!(value > 1 || value < 0)) _memberDOM = value;
             }
         }
@@ -32,7 +34,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
 
         public void OrWithDOM(double val)
         {
-           if (val > _memberDOM) _memberDOM = val;
+            if (val > _memberDOM) _memberDOM = val;
         }
 
         public void ClearDOM()

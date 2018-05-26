@@ -23,8 +23,8 @@ namespace TowerDefense.Entities {
         }
 
         public override void Update() {
-            if (nearbyEnemies != null && enemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
-                AttackHighestPriority(enemyInRange(attackTargets));
+            if (nearbyEnemies != null && EnemyInRange() != null && attackIntervalCounter % attackInterval == 0) {
+                AttackHighestPriority(EnemyInRange(attackTargets));
                 attackIntervalCounter++;
             } else DoNothing();
         }
@@ -33,8 +33,8 @@ namespace TowerDefense.Entities {
             base.AttackHighestPriority(enemies);
             foreach(Enemy e in enemies) {
                 shotsFired++;
-                if (!e.dead && b != null) { // TEMP CHEAT
-                    b.DrawLine(new Pen(Color.LightGoldenrodYellow, 2), position, (e.pos + new Vector2D(7, 7))); // TEMP. CHEAT
+                if (!e.dead && b != null) {
+                    b.DrawLine(new Pen(Color.LightGoldenrodYellow, 2), position, (e.pos + new Vector2D(7, 7)));
                     e.health -= attackPower;
                 }
             }

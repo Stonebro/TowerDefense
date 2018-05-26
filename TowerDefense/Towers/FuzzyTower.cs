@@ -76,6 +76,10 @@ namespace TowerDefense.Towers
             g.DrawEllipse(pen, position.x - (shotgunRange / 2) * BaseTile.size, position.y - (shotgunRange / 2) * BaseTile.size, shotgunRange * BaseTile.size, shotgunRange * BaseTile.size);
         }
 
+        /// <summary>
+        ///  Retrieves target with the highest desirability and uses the weapon with the highest desirability to attack the Enemy.
+        /// </summary>
+        /// <returns>Enemy to attack</returns>
         public Enemy GetDesiredTarget() {
             Enemy toReturn = null;
             double highestOverall = -1;

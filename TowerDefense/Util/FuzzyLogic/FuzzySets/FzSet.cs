@@ -9,7 +9,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
     /// <summary>
     ///  This is a rewrite of the FzSet class authored by Mat Buckland and all credit goes to him.
     /// </summary>
-    public class FzSet : FuzzyTerm
+    public class FzSet : IFuzzyTerm
     {
 
         private FuzzySet _memberSet;
@@ -23,7 +23,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzySets
             _memberSet.ClearDOM();
         }
 
-        public FuzzyTerm Clone()
+        public IFuzzyTerm Clone()
         {
             return new FzSet(_memberSet);
         }

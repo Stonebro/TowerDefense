@@ -10,10 +10,10 @@ namespace TowerDefense.Util
     {
         PriorityNode<T>[] heap;
         int size;
-       
+
         /// Default constructor, initializes heap with size 1.
         public PriorityQueue() : this(1) { }
-    
+
         /// Constuctor that initializes heap with specified size.
         public PriorityQueue(int heapSize)
         {
@@ -94,7 +94,7 @@ namespace TowerDefense.Util
             }
             return false;
         }
-     
+
         /// Checks if the heap is empty.
         public bool IsEmpty
         {

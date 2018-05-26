@@ -14,8 +14,6 @@ using TowerDefense.World;
 namespace TowerDefense.Entities.Projectiles {
     class AttackDog : Entity{
         public Tower home;
-        //public float attackPower = 5;
-        //public float attackInterval = 10;
         public float attackIntervalCounter = 0;
         public BaseTile homePos;
         public float attackRange = 1f;

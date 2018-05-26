@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Tiles;
 
-namespace TowerDefense.World {
-    public class Vertex {
+namespace TowerDefense.World
+{
+    public class Vertex
+    {
         // The Tile that corresponds to this Vertex.
         public BaseTile parentTile;
         // Edges that originate from this Vertex.
@@ -21,22 +23,25 @@ namespace TowerDefense.World {
         public bool disabled;
 
         /// Vertex constructor.
-        public Vertex(BaseTile parent) {
+        public Vertex(BaseTile parent)
+        {
             this.parentTile = parent;
             adj = new List<Edge>();
         }
 
         /// Resets Vertex.
-        public void Reset() {
+        public void Reset()
+        {
             distance = Graph.INFINITY;
             previous = null;
-            scratch = false; 
+            scratch = false;
         }
 
         /// Static function for resetting Vertex. 
-        public static void ResetVertex(Vertex vertex) {
-            if(vertex != null)
-            vertex.Reset();
+        public static void ResetVertex(Vertex vertex)
+        {
+            if (vertex != null)
+                vertex.Reset();
         }
     }
 }

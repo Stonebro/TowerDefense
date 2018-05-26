@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TowerDefense.Util;
-using TowerDefense.CommandPattern;
 using TowerDefense.World;
 using TowerDefense.Tiles;
 
@@ -27,7 +26,7 @@ namespace TowerDefense.Entities.Enemies
             BaseTile enemyTile = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(this.pos)];
             if (enemyTile == GameWorld.Instance.endTile)
             {
-                GameWorld.Instance.lives--;
+                GameWorld.Instance.Lives--;
                 Die();
             }
 

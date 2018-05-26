@@ -12,8 +12,10 @@ namespace TowerDefense.Entities
         public Path path;
         public Vector2D pos;
 
-        public void Move(float speed) {
-            if (path.Current != null) {
+        public void Move(float speed)
+        {
+            if (path.Current != null)
+            {
                 // Calculates x difference in next waypoint on Path and the enemy. 
                 float deltaX = path.Current.x - this.pos.x;
                 // Is the difference a positive number or not (so should the enemy move to the left or to the right). 

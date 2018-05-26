@@ -14,7 +14,8 @@ namespace TowerDefense.Util.FuzzyLogic
         private Dictionary<string, FuzzyVariable> _memberVarMap = new Dictionary<string, FuzzyVariable>();
         private List<FuzzyRule> _memberRules = new List<FuzzyRule>();
 
-        public enum DefuzzifyMethod {MAX_AV, CENTROID}
+        public enum DefuzzifyMethod { MAX_AV, CENTROID }
+        // Amount of Samples, for Centroid method.
         public const int NUMSAMPLES = 15;
 
         private void SetConfidencesOfConsequentsToZero()
@@ -28,7 +29,7 @@ namespace TowerDefense.Util.FuzzyLogic
             return _memberVarMap[name];
         }
 
-        public void AddRule(FuzzyTerm antecedent, FuzzyTerm consequent)
+        public void AddRule(IFuzzyTerm antecedent, IFuzzyTerm consequent)
         {
             _memberRules.Add(new FuzzyRule(antecedent, consequent));
         }
@@ -46,23 +47,23 @@ namespace TowerDefense.Util.FuzzyLogic
 
                 foreach (FuzzyRule rule in _memberRules) rule.Calculate();
 
-                switch(method)
+                switch (method)
                 {
                     case DefuzzifyMethod.MAX_AV: return _memberVarMap[FLVName].DefuzzifyMaxAv();
                     case DefuzzifyMethod.CENTROID: return _memberVarMap[FLVName].DefuzzifyCentroid(NUMSAMPLES);
                 }
             }
             return 0;
-        } 
+        }
 
         public FuzzyVariable GetVar(string name)
-        { 
+        {
             return _memberVarMap[name];
         }
 
         public void PrintAllDOMS()
         {
-            foreach (FuzzyVariable var in _memberVarMap.Values) var.PrintDOMs(); 
+            foreach (FuzzyVariable var in _memberVarMap.Values) var.PrintDOMs();
         }
     }
 }

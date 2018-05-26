@@ -7,26 +7,25 @@ using System.Threading.Tasks;
 namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
 {
     /// <summary>
-    ///  This is a rewrite of the FzOR class authored by Mat Buckland and all credit goes to him.
+    ///  This is a rewrite of the FzAnd class authored by Mat Buckland and all credit goes to him.
     /// </summary>
-    public class FzOR : FuzzyTerm
+    public class FzAND : IFuzzyTerm
     {
 
-        private List<FuzzyTerm> MemberTerms = new List<FuzzyTerm>();
+        private List<IFuzzyTerm> MemberTerms = new List<IFuzzyTerm>();
 
-        public FzOR(ref FuzzyTerm operator1, ref FuzzyTerm operator2)
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2)
         {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
 
         }
-        public FzOR(ref FuzzyTerm operator1, ref FuzzyTerm operator2, ref FuzzyTerm operator3)
-        {
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2, IFuzzyTerm operator3) {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
             MemberTerms.Add(operator3.Clone());
         }
-        public FzOR(ref FuzzyTerm operator1, ref FuzzyTerm operator2, ref FuzzyTerm operator3, ref FuzzyTerm operator4)
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2, IFuzzyTerm operator3, IFuzzyTerm operator4)
         {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
@@ -34,34 +33,34 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
             MemberTerms.Add(operator4.Clone());
         }
 
-        public FzOR(FzOR copy)
+        public FzAND(FzAND copy)
         {
             this.MemberTerms = copy.MemberTerms;
         }
 
         public void ClearDOM()
         {
-            foreach (FuzzyTerm term in MemberTerms) term.ClearDOM();
+            foreach (IFuzzyTerm term in MemberTerms) term.ClearDOM();
         }
 
-        public FuzzyTerm Clone()
+        public IFuzzyTerm Clone()
         {
-            return new FzOR(this);
+            return new FzAND(this);
         }
 
         public double GetDOM()
         {
-            double largest = Double.MinValue;
-            foreach (FuzzyTerm term in MemberTerms)
+            double smallest = Double.MaxValue;
+            foreach(IFuzzyTerm term in MemberTerms)
             {
-                if (term.GetDOM() > largest) largest = term.GetDOM();
+                if (term.GetDOM() < smallest) smallest = term.GetDOM();
             }
-            return largest;
+            return smallest;
         }
 
         public void ORWithDOM(double val)
         {
-            foreach (FuzzyTerm term in MemberTerms) term.ORWithDOM(val);
+            foreach (IFuzzyTerm term in MemberTerms) term.ORWithDOM(val);
         }
     }
 }

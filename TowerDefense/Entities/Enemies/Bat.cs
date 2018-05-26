@@ -10,10 +10,13 @@ using TowerDefense.Util.Steering;
 using TowerDefense.World;
 
 namespace TowerDefense.Entities.Enemies {
-    class Bat : Enemy {
+    /// <summary>
+    /// Old implementation of Steering behaviours. For the new implementation see Eagle.
+    /// </summary>
+    public class Bat : Enemy {
 
         private List<ISteering> steeringForces;
-        public ISteering addForce {
+        public ISteering AddForce {
             set {
                 if (!steeringForces.Contains(value))
                     steeringForces.Add(value);
@@ -65,7 +68,7 @@ namespace TowerDefense.Entities.Enemies {
 
 
         public void SetHeading(Vector2D newheading) {
-            if ((newheading.LengthSq() - 1) < 0.00001) ;
+            if ((newheading.LengthSq() - 1) < 0.00001) 
             {
                 heading = newheading;
                 side = heading.Perp();
