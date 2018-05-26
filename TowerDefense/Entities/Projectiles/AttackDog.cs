@@ -11,8 +11,10 @@ using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
 
-namespace TowerDefense.Entities.Projectiles {
-    class AttackDog : Entity{
+namespace TowerDefense.Entities.Projectiles
+{
+    class AttackDog : Entity
+    {
         public Tower home;
         public float attackIntervalCounter = 0;
         public BaseTile homePos;
@@ -20,25 +22,31 @@ namespace TowerDefense.Entities.Projectiles {
         public StateMachine<AttackDog> stateMachine;
         public Enemy target;
 
-        public AttackDog(Tower home) {
+        public AttackDog(Tower home)
+        {
             this.home = home;
             stateMachine = new StateMachine<AttackDog>(this);
-            try {
+            try
+            {
                 homePos = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(home.position + new Vector2D(-BaseTile.size, BaseTile.size))];
-            } catch {
-                homePos = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(home.position - new Vector2D(BaseTile.size*2, BaseTile.size*2))];
+            }
+            catch
+            {
+                homePos = GameWorld.Instance.tilesList[GameWorld.Instance.GetIndexOfTile(home.position - new Vector2D(BaseTile.size * 2, BaseTile.size * 2))];
             }
             this.pos = homePos.pos;
         }
 
-        public void Render(Graphics g) {
+        public void Render(Graphics g)
+        {
             g.FillRectangle(new SolidBrush(Color.Black), new Rectangle(pos, new Vector2D(BaseTile.size, BaseTile.size)));
             float range = (attackRange * 2 + 1);
             g.DrawEllipse(new Pen(Color.FromArgb(128, 255, 0, 0)), pos.x - attackRange * BaseTile.size, pos.y - attackRange * BaseTile.size, range * BaseTile.size, range * BaseTile.size);
             g.DrawLine(new Pen(Color.FromArgb(200, 33, 33, 33), 2), home.position, (pos + new Vector2D(BaseTile.size / 2, BaseTile.size / 2)));
         }
 
-        public void ChaseEnemy(Enemy enemy) {
+        public void ChaseEnemy(Enemy enemy)
+        {
             target = enemy;
             if (enemy.pos.Distance(pos) > attackRange * BaseTile.size && !enemy.dead)
                 stateMachine.ChangeState(new Chase());
@@ -46,17 +54,22 @@ namespace TowerDefense.Entities.Projectiles {
                 AttackEnemy(enemy);
         }
 
-        public void AttackEnemy(Enemy enemy) {
+        public void AttackEnemy(Enemy enemy)
+        {
             stateMachine.ChangeState(new Attack());
         }
 
-        public void Return() {
-            if(this.pos == homePos.pos) {
+        public void Return()
+        {
+            if (this.pos == homePos.pos)
+            {
                 stateMachine.ChangeState(new Idle());
-            } else stateMachine.ChangeState(new Return());
+            }
+            else stateMachine.ChangeState(new Return());
         }
 
-        public void Update() {
+        public void Update()
+        {
             stateMachine.Update();
             if (attackIntervalCounter >= home.attackInterval) attackIntervalCounter = home.attackInterval;
             else attackIntervalCounter++;

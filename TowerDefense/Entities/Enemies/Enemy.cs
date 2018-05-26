@@ -30,15 +30,18 @@ namespace TowerDefense.Entities.Enemies
                 Die();
             }
 
-            if (!dead) {
-                if (path != null) {
+            if (!dead)
+            {
+                if (path != null)
+                {
                     if (health <= 0) Die();
                 }
             }
         }
 
         public virtual void Render(Graphics g) { }
-        public virtual void Die() {
+        public virtual void Die()
+        {
             dead = true;
             path = null;
         }

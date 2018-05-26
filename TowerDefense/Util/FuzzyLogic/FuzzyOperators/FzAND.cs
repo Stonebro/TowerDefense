@@ -20,7 +20,8 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
             MemberTerms.Add(operator2.Clone());
 
         }
-        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2, IFuzzyTerm operator3) {
+        public FzAND(IFuzzyTerm operator1, IFuzzyTerm operator2, IFuzzyTerm operator3)
+        {
             MemberTerms.Add(operator1.Clone());
             MemberTerms.Add(operator2.Clone());
             MemberTerms.Add(operator3.Clone());
@@ -51,7 +52,7 @@ namespace TowerDefense.Util.FuzzyLogic.FuzzyOperators
         public double GetDOM()
         {
             double smallest = Double.MaxValue;
-            foreach(IFuzzyTerm term in MemberTerms)
+            foreach (IFuzzyTerm term in MemberTerms)
             {
                 if (term.GetDOM() < smallest) smallest = term.GetDOM();
             }

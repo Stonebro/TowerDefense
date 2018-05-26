@@ -8,7 +8,8 @@ namespace TowerDefense.Entities.Weapons
 {
     public class Sniper : Weapon
     {
-        public Sniper() {
+        public Sniper()
+        {
             attackRange = 10;
             // Amount of damage in health points.
             attackPower = 5;

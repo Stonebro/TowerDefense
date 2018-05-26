@@ -39,14 +39,16 @@ namespace TowerDefense.Towers
             towerSniperFuzzyModule = InitFuzzyTowerBaseModule();
             weapon = sniper;
             FuzzyTowerCalcShotgun(towerShotgunFuzzyModule);
-            FuzzyTowerCalcSniper(towerSniperFuzzyModule);           
+            FuzzyTowerCalcSniper(towerSniperFuzzyModule);
         }
 
         public override void Update()
         {
-            if (attackIntervalCounter % weapon.attackInterval == 0) {
+            if (attackIntervalCounter % weapon.attackInterval == 0)
+            {
                 Enemy target = GetDesiredTarget();
-                if (target != null) {
+                if (target != null)
+                {
                     AttackHighestPriority(target);
                     attackIntervalCounter++;
                 }
@@ -56,19 +58,23 @@ namespace TowerDefense.Towers
 
         protected override void AttackHighestPriority(Enemy enemy)
         {
-            if (!enemy.dead && b != null) {
-                if (weapon is Sniper) {
+            if (!enemy.dead && b != null)
+            {
+                if (weapon is Sniper)
+                {
                     b.DrawLine(new Pen(Color.Red, 2), position, (enemy.pos + new Vector2D(7, 7)));
                     enemy.health -= weapon.attackPower;
                 }
-                if (weapon is Shotgun) {
+                if (weapon is Shotgun)
+                {
                     b.DrawLine(new Pen(Color.DarkTurquoise, 4), position, (enemy.pos + new Vector2D(7, 7)));
                     enemy.health = (float)Math.Floor(enemy.health * (1 - (weapon.attackPower / 100)));
                 }
             }
         }
 
-        public override void DrawAttackRange(Graphics g) {
+        public override void DrawAttackRange(Graphics g)
+        {
             float sniperRange = (sniper.attackRange * 2 + 2);
             float shotgunRange = (shotgun.attackRange * 2 + 2);
             Pen pen = new Pen(Color.Red);
@@ -80,12 +86,15 @@ namespace TowerDefense.Towers
         ///  Retrieves target with the highest desirability and uses the weapon with the highest desirability to attack the Enemy.
         /// </summary>
         /// <returns>Enemy to attack</returns>
-        public Enemy GetDesiredTarget() {
+        public Enemy GetDesiredTarget()
+        {
             Enemy toReturn = null;
             double highestOverall = -1;
-            foreach(Enemy e in GameWorld.Instance.enemies) {
+            foreach (Enemy e in GameWorld.Instance.enemies)
+            {
                 double highestForThisLoop;
-                if(position.Distance(e.pos) < (sniper.attackRange+1) * BaseTile.size) {
+                if (position.Distance(e.pos) < (sniper.attackRange + 1) * BaseTile.size)
+                {
                     double shotgunDesirability;
                     towerShotgunFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
                     towerShotgunFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
@@ -96,15 +105,18 @@ namespace TowerDefense.Towers
                     towerSniperFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
                     sniperDesirability = towerSniperFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
 
-                    if (shotgunDesirability > sniperDesirability) {                     
+                    if (shotgunDesirability > sniperDesirability)
+                    {
                         highestForThisLoop = shotgunDesirability;
-                        if(highestForThisLoop > highestOverall) weapon = shotgun;
+                        if (highestForThisLoop > highestOverall) weapon = shotgun;
                     }
-                    else {                      
+                    else
+                    {
                         highestForThisLoop = sniperDesirability;
-                        if(highestForThisLoop > highestOverall) weapon = sniper;
+                        if (highestForThisLoop > highestOverall) weapon = sniper;
                     }
-                    if (highestForThisLoop > highestOverall) {
+                    if (highestForThisLoop > highestOverall)
+                    {
                         highestOverall = highestForThisLoop;
                         toReturn = e;
                     }
@@ -138,7 +150,7 @@ namespace TowerDefense.Towers
             FzSet middle = new FzSet(health.GetSet("Middle"));
             FzSet high = new FzSet(health.GetSet("High"));
 
-            FuzzyVariable distanceToEnemy= towerFuzzyModule.GetVar("DistanceToEnemy");
+            FuzzyVariable distanceToEnemy = towerFuzzyModule.GetVar("DistanceToEnemy");
             FzSet close = new FzSet(distanceToEnemy.GetSet("Close"));
             FzSet medium = new FzSet(distanceToEnemy.GetSet("Medium"));
             FzSet far = new FzSet(distanceToEnemy.GetSet("Far"));
@@ -164,7 +176,8 @@ namespace TowerDefense.Towers
             towerFuzzyModule.AddRule(new FzAND(high, far), undesirable);
         }
 
-        public void FuzzyTowerCalcSniper(FuzzyModule towerFuzzyModule) {
+        public void FuzzyTowerCalcSniper(FuzzyModule towerFuzzyModule)
+        {
             // Retrieves the antecedents.
             FuzzyVariable health = towerFuzzyModule.GetVar("Health");
             FzSet low = new FzSet(health.GetSet("Low"));

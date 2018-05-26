@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace TowerDefense.CommandPattern
 {
-    class DoNothingCommand : Command {
+    class DoNothingCommand : Command
+    {
 
-        public DoNothingCommand(IReceiver receiver) : base(receiver) {
+        public DoNothingCommand(IReceiver receiver) : base(receiver)
+        {
             //Console.WriteLine("Not doing anything");
         }
 
-        public override void Execute() {
+        public override void Execute()
+        {
             //Console.WriteLine("Not doing anything");
         }
     }

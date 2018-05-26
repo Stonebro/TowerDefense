@@ -8,13 +8,17 @@ using TowerDefense.Entities.Projectiles;
 using TowerDefense.Util;
 using TowerDefense.World;
 
-namespace TowerDefense.FSM {
-    class Return : State<AttackDog> {
-        public override void Enter(AttackDog t) {
+namespace TowerDefense.FSM
+{
+    class Return : State<AttackDog>
+    {
+        public override void Enter(AttackDog t)
+        {
             Console.WriteLine("Returning");
         }
 
-        public override void Execute(AttackDog t) {
+        public override void Execute(AttackDog t)
+        {
             BaseTile[] tilesList = GameWorld.Instance.tilesList;
             GameWorld instance = GameWorld.Instance;
             if (t.pos != t.homePos.pos)
@@ -28,7 +32,8 @@ namespace TowerDefense.FSM {
             }
         }
 
-        public override void Exit(AttackDog t) {
+        public override void Exit(AttackDog t)
+        {
 
         }
     }

@@ -9,15 +9,19 @@ using TowerDefense.Util;
 using TowerDefense.Util.Steering;
 using TowerDefense.World;
 
-namespace TowerDefense.Entities.Enemies {
+namespace TowerDefense.Entities.Enemies
+{
     /// <summary>
     /// Old implementation of Steering behaviours. For the new implementation see Eagle.
     /// </summary>
-    public class Bat : Enemy {
+    public class Bat : Enemy
+    {
 
         private List<ISteering> steeringForces;
-        public ISteering AddForce {
-            set {
+        public ISteering AddForce
+        {
+            set
+            {
                 if (!steeringForces.Contains(value))
                     steeringForces.Add(value);
             }
@@ -27,7 +31,7 @@ namespace TowerDefense.Entities.Enemies {
         public Vector2D heading;
         //a vector perpendicular to the heading vector
         public Vector2D side;
-        
+
         //the maximum speed this entity may travel at.
         public float maxSpeed;
         //the maximum force this entity can produce to power itself 
@@ -39,11 +43,12 @@ namespace TowerDefense.Entities.Enemies {
 
         Vector2D moveTarget;
 
-        public Bat(int waveBonus) {
+        public Bat(int waveBonus)
+        {
             name = "Bat";
             health = 10 + (waveBonus * 2);
             size = 7;
-            bounty = 2 + waveBonus;     
+            bounty = 2 + waveBonus;
             moveTarget = new Vector2D(100, 200);
             heading = Vector2D.Up;
             maxTurnRate = 0.19f;
@@ -54,28 +59,33 @@ namespace TowerDefense.Entities.Enemies {
             steeringForces = new List<ISteering>();
         }
 
-        public bool IsSpeedMaxedOut() {
+        public bool IsSpeedMaxedOut()
+        {
             return maxSpeed * maxSpeed > velocity.LengthSq();
         }
 
-        public float Speed() {
+        public float Speed()
+        {
             return velocity.Length();
         }
 
-        public float SpeedSq() {
+        public float SpeedSq()
+        {
             return velocity.LengthSq();
         }
 
 
-        public void SetHeading(Vector2D newheading) {
-            if ((newheading.LengthSq() - 1) < 0.00001) 
+        public void SetHeading(Vector2D newheading)
+        {
+            if ((newheading.LengthSq() - 1) < 0.00001)
             {
                 heading = newheading;
                 side = heading.Perp();
             }
         }
 
-        public bool RotateHeadingToFacePosition(Vector2D target) {
+        public bool RotateHeadingToFacePosition(Vector2D target)
+        {
             Vector2D toTarget = Vector2D.Vec2DNormalize(target - pos);
 
             double angle = Math.Acos(heading.Dot(toTarget));
@@ -123,7 +133,8 @@ namespace TowerDefense.Entities.Enemies {
             }
         }
 
-        public override void Render(Graphics g) {
+        public override void Render(Graphics g)
+        {
             g.FillRectangle(new SolidBrush(Color.Black), new RectangleF(pos.x + ((BaseTile.size - size) / 2), pos.y + ((BaseTile.size - size) / 2), size, size));
         }
     }

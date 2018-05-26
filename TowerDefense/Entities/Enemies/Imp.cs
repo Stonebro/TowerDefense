@@ -9,25 +9,30 @@ using TowerDefense.Entities;
 using TowerDefense.Util;
 using TowerDefense.World;
 
-namespace TowerDefense.Entities.Enemies {
-    public class Imp : Enemy {
-        public Imp(int waveBonus) {
+namespace TowerDefense.Entities.Enemies
+{
+    public class Imp : Enemy
+    {
+        public Imp(int waveBonus)
+        {
             name = "Imp";
-            maxHealth = 20 + (waveBonus * 3) ;
+            maxHealth = 20 + (waveBonus * 3);
             health = maxHealth;
             size = 10;
             bounty = 3 + waveBonus;
         }
 
-        public override void Update() {
+        public override void Update()
+        {
             base.Update();
-            if (!dead) 
-                if (path.Current != null) 
+            if (!dead)
+                if (path.Current != null)
                     Move(3.75f);
         }
 
-        public override void Render(Graphics g) {
-            g.FillRectangle(new SolidBrush(Color.Red), new RectangleF(pos.x + ((BaseTile.size-size)/2), pos.y + ((BaseTile.size - size) / 2), size, size));
+        public override void Render(Graphics g)
+        {
+            g.FillRectangle(new SolidBrush(Color.Red), new RectangleF(pos.x + ((BaseTile.size - size) / 2), pos.y + ((BaseTile.size - size) / 2), size, size));
         }
     }
 }

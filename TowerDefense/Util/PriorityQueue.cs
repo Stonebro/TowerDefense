@@ -163,7 +163,7 @@ namespace TowerDefense.Util
 
             for (int j = 0; j < t; j++)
                 Console.Write('\t');
-            Console.WriteLine("P: {1}", heap[i].node, heap[i].priority);
+            Console.WriteLine(heap[i].node + " " + heap[i].priority);
 
             PrintHeap(i * 2, t + 1);
 

@@ -486,7 +486,7 @@ namespace TowerDefense.Util.Steering
         /// <typeparam name="T"></typeparam>
         /// <param name="goals"></param>
         /// <returns>Steering force.</returns>
-        public Vector2D Explore<T>(Queue<T> goals) where T : Powerup
+        public Vector2D Explore(Queue<Powerup> goals)
         {
             Vector2D goalPos;
             Vector2D steeringForce = Vector2D.Zero;
@@ -495,7 +495,7 @@ namespace TowerDefense.Util.Steering
             if (goals.Peek() != null)
             {
                 // Draw the goal
-                T goal = goals.Peek();
+                Powerup goal = goals.Peek();
                 // Convert Rect pos to Vector.
                 goalPos = new Vector2D(goal.Pos.X, goal.Pos.Y);
                 // Calculate steering force to Arrive to goal.
