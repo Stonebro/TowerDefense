@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TowerDefense.Util;
 using TowerDefense.Util.Steering;
 using TowerDefense.World;
-using static TowerDefense.Util.Steering.SteeringBehaviour;
+using static TowerDefense.Util.Steering.SteeringBehavior;
 
 namespace TowerDefense.Entities.Enemies
 {

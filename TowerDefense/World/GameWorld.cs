@@ -9,7 +9,7 @@ using TowerDefense.Entities.Powerups;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.Util.Steering;
-using static TowerDefense.Util.Steering.SteeringBehaviour;
+using static TowerDefense.Util.Steering.SteeringBehavior;
 
 namespace TowerDefense.World
 {

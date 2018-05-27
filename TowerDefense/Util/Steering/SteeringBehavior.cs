@@ -11,10 +11,9 @@ using TowerDefense.World;
 namespace TowerDefense.Util.Steering
 {
     /// <summary>
-    /// This is a (partial) rewrite of the Steeringbehaviours class by Mat Buckland (with a few extra functions added). All credit goes to him.
-    /// The behaviours that we didn't implement are: Wall avoidance, Obstacle avoidance, CohesionPlus, SeparationPlus and AlignmentPlus.
+    /// This is a partial rewrite of the Steeringbehaviours class by Mat Buckland (with a few extra functions added). All credit goes to him.
     /// </summary>
-    public class SteeringBehaviour
+    public class SteeringBehavior
     {
         #region Consts
         // The radius of the constraining circle for the wander behavior.
@@ -95,7 +94,7 @@ namespace TowerDefense.Util.Steering
         private double theta = new Random().NextDouble() * (Math.PI * 2);
         #endregion
 
-        public SteeringBehaviour(FlyingEntity agent)
+        public SteeringBehavior(FlyingEntity agent)
         {
             _flyingEntity = agent;
             TargetAgent1 = null;
@@ -269,9 +268,6 @@ namespace TowerDefense.Util.Steering
                 }
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
-
-
-
             return force;
         }
 

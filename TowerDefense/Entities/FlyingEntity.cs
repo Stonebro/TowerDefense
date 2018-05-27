@@ -7,7 +7,7 @@ using TowerDefense.Entities.Powerups;
 using TowerDefense.Util;
 using TowerDefense.Util.Steering;
 using TowerDefense.World;
-using static TowerDefense.Util.Steering.SteeringBehaviour;
+using static TowerDefense.Util.Steering.SteeringBehavior;
 
 namespace TowerDefense.Entities
 {
@@ -46,7 +46,7 @@ namespace TowerDefense.Entities
         public double BoundingRadius { get; set; }
         public bool Tag;
 
-        private SteeringBehaviour _behaviour;
+        private SteeringBehavior _behaviour;
 
         public FlyingEntity(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate, BehaviourType behaviors)
         {
@@ -59,7 +59,7 @@ namespace TowerDefense.Entities
             MaxSpeed = maxSpeed;
             MaxForce = maxForce;
             MaxTurnRate = maxTurnRate;
-            _behaviour = new SteeringBehaviour(this)
+            _behaviour = new SteeringBehavior(this)
             {
                 behaviours = behaviors
             };
