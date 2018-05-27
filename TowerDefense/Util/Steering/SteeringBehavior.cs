@@ -40,7 +40,7 @@ namespace TowerDefense.Util.Steering
         public enum SumMethod { WEIGHTED_AVG, PRIORITIZED, DITHERED }
         public SumMethod SummingMethod;
         [Flags]
-        public enum BehaviourType
+        public enum BehaviorType
         {
             NONE = 0,
             SEEK = 1,
@@ -53,7 +53,7 @@ namespace TowerDefense.Util.Steering
             EXPLORE = 128
         }
 
-        public BehaviourType behaviours;
+        public BehaviorType behaviours;
 
         /* Arrive makes use of this enum to determine how quickly a FlyingEntity
            should decelerate to its target*/
@@ -202,7 +202,7 @@ namespace TowerDefense.Util.Steering
         {
             Vector2D force = Vector2D.Zero;
 
-            if (On(BehaviourType.EVADE))
+            if (On(BehaviorType.EVADE))
             {
                 if (TargetAgent1 != null)
                 {
@@ -212,7 +212,7 @@ namespace TowerDefense.Util.Steering
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            if (On(BehaviourType.FLEE))
+            if (On(BehaviorType.FLEE))
             {
                 force = Flee(_flyingEntity.World.Crosshair) * _weightFlee;
 
@@ -220,7 +220,7 @@ namespace TowerDefense.Util.Steering
             }
 
 
-            if (On(BehaviourType.SEEK))
+            if (On(BehaviorType.SEEK))
             {
                 force = Seek(_flyingEntity.World.Crosshair) * _weightSeek;
 
@@ -228,14 +228,14 @@ namespace TowerDefense.Util.Steering
             }
 
 
-            if (On(BehaviourType.ARRIVE))
+            if (On(BehaviorType.ARRIVE))
             {
                 force = Arrive(_flyingEntity.World.Crosshair, decelerationRate) * _weightArrive;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            if (On(BehaviourType.PURSUIT))
+            if (On(BehaviorType.PURSUIT))
             {
                 if (TargetAgent1 != null)
                 {
@@ -245,14 +245,14 @@ namespace TowerDefense.Util.Steering
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            if (On(BehaviourType.FOLLOWPATH))
+            if (On(BehaviorType.FOLLOWPATH))
             {
                 force = FollowPath() * _weightFollowPath;
 
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            if (On(BehaviourType.EXPLORE))
+            if (On(BehaviorType.EXPLORE))
             {
                 if (_flyingEntity.goals.Count != 0)
                     force = Explore(_flyingEntity.goals) * _weightExplore;
@@ -260,7 +260,7 @@ namespace TowerDefense.Util.Steering
                 if (!AccumulateForce(_steeringForce, force)) return _steeringForce;
             }
 
-            if (On(BehaviourType.OFFSETPURSUIT))
+            if (On(BehaviorType.OFFSETPURSUIT))
             {
                 if (TargetAgent1 != null)
                 {
@@ -279,7 +279,7 @@ namespace TowerDefense.Util.Steering
         /// <returns>Steering Force</returns>
         public Vector2D CalculateWeightedSum()
         {
-            if (On(BehaviourType.EVADE))
+            if (On(BehaviorType.EVADE))
             {
                 if (TargetAgent1 != null)
                 {
@@ -288,22 +288,22 @@ namespace TowerDefense.Util.Steering
             }
 
 
-            if (On(BehaviourType.SEEK))
+            if (On(BehaviorType.SEEK))
             {
                 _steeringForce += Seek(_flyingEntity.World.Crosshair) * _weightSeek;
             }
 
-            if (On(BehaviourType.FLEE))
+            if (On(BehaviorType.FLEE))
             {
                 _steeringForce += Flee(_flyingEntity.World.Crosshair) * _weightFlee;
             }
 
-            if (On(BehaviourType.ARRIVE))
+            if (On(BehaviorType.ARRIVE))
             {
                 _steeringForce += Arrive(_flyingEntity.World.Crosshair, decelerationRate) * _weightArrive;
             }
 
-            if (On(BehaviourType.PURSUIT))
+            if (On(BehaviorType.PURSUIT))
             {
                 if (TargetAgent1 != null)
                 {
@@ -311,19 +311,19 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.OFFSETPURSUIT))
+            if (On(BehaviorType.OFFSETPURSUIT))
             {
                 if (TargetAgent1 != null)
                 {
                     _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit;
                 }
             }
-            if (On(BehaviourType.FOLLOWPATH))
+            if (On(BehaviorType.FOLLOWPATH))
             {
                 _steeringForce += FollowPath() * _weightFollowPath;
             }
 
-            if (On(BehaviourType.EXPLORE))
+            if (On(BehaviorType.EXPLORE))
             {
                 if (_flyingEntity.goals.Count != 0)
                     _steeringForce += Explore(_flyingEntity.goals) * _weightExplore;
@@ -349,7 +349,7 @@ namespace TowerDefense.Util.Steering
             //reset the steering force
             _steeringForce = Vector2D.Zero;
 
-            if (On(BehaviourType.FLEE) && new Random().NextDouble() < _chanceFlee)
+            if (On(BehaviorType.FLEE) && new Random().NextDouble() < _chanceFlee)
             {
                 _steeringForce += Flee(_flyingEntity.World.Crosshair) * _weightFlee / _chanceFlee;
 
@@ -361,7 +361,7 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.EVADE) && new Random().NextDouble() < _chanceEvade)
+            if (On(BehaviorType.EVADE) && new Random().NextDouble() < _chanceEvade)
             {
                 if (TargetAgent1 != null) _steeringForce += Evade(TargetAgent1) * _weightEvade / _chanceEvade;
 
@@ -374,7 +374,7 @@ namespace TowerDefense.Util.Steering
             }
 
 
-            if (On(BehaviourType.SEEK) && new Random().NextDouble() < _chanceSeek)
+            if (On(BehaviorType.SEEK) && new Random().NextDouble() < _chanceSeek)
             {
                 _steeringForce += Seek(_flyingEntity.World.Crosshair) * _weightSeek / _chanceSeek;
 
@@ -386,7 +386,7 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.ARRIVE) && new Random().NextDouble() < _chanceArrive)
+            if (On(BehaviorType.ARRIVE) && new Random().NextDouble() < _chanceArrive)
             {
                 _steeringForce += Arrive(_flyingEntity.World.Crosshair, decelerationRate) *
                                     _weightArrive / _chanceArrive;
@@ -399,7 +399,7 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.EXPLORE))
+            if (On(BehaviorType.EXPLORE))
             {
                 if (_flyingEntity.goals.Count != 0)
                     _steeringForce += Explore(_flyingEntity.goals) * _weightExplore / _chanceExplore;
@@ -412,7 +412,7 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.OFFSETPURSUIT) && new Random().NextDouble() < _chanceOffsetPursuit)
+            if (On(BehaviorType.OFFSETPURSUIT) && new Random().NextDouble() < _chanceOffsetPursuit)
             {
                 _steeringForce += OffsetPursuit(TargetAgent1, _offset) * _weightOffsetPursuit / _chanceOffsetPursuit;
 
@@ -424,7 +424,7 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.PURSUIT) && new Random().NextDouble() < _chancePursuit)
+            if (On(BehaviorType.PURSUIT) && new Random().NextDouble() < _chancePursuit)
             {
                 if (TargetAgent1 != null)
                 {
@@ -439,7 +439,7 @@ namespace TowerDefense.Util.Steering
                 }
             }
 
-            if (On(BehaviourType.FOLLOWPATH) && new Random().NextDouble() < _chanceFollowPath)
+            if (On(BehaviorType.FOLLOWPATH) && new Random().NextDouble() < _chanceFollowPath)
             {
                 if (TargetAgent1 != null)
                 {
@@ -486,11 +486,11 @@ namespace TowerDefense.Util.Steering
         }
 
         /// <summary>
-        /// Returns if specified BehaviourType is set or not.
+        /// Returns if specified BehaviorType is set or not.
         /// </summary>
         /// <param name="bt"></param>
         /// <returns></returns>
-        public bool On(BehaviourType bt)
+        public bool On(BehaviorType bt)
         {
             return (behaviours & bt) == bt;
         }

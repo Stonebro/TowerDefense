@@ -15,7 +15,7 @@ namespace TowerDefense.Entities.Enemies
     /// </summary>
     public class Eagle : FlyingEntity
     {
-        public Eagle(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate, BehaviourType behaviors)
+        public Eagle(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate, BehaviorType behaviors)
             : base(pos, scale, velocity, heading, radius, mass, maxSpeed, maxForce, maxTurnRate, behaviors)
         {
         }

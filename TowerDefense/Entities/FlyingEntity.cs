@@ -48,7 +48,7 @@ namespace TowerDefense.Entities
 
         private SteeringBehavior _behaviour;
 
-        public FlyingEntity(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate, BehaviourType behaviors)
+        public FlyingEntity(Vector2D pos, Vector2D scale, Vector2D velocity, Vector2D heading, double radius, double mass, double maxSpeed, double maxForce, double maxTurnRate, BehaviorType behaviors)
         {
             Pos = pos;
             Scale = scale;
