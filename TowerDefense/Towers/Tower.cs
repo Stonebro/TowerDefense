@@ -3,11 +3,10 @@ using System.Drawing;
 using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
-using TowerDefense.CommandPattern;
 using TowerDefense.Entities.Enemies;
 
 namespace TowerDefense.Entities {
-    public abstract class Tower : IReceiver {
+    public abstract class Tower {
         // Tower's name
         public string name;
         // Tower's description

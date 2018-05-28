@@ -45,12 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandPattern\AttackCommand.cs" />
-    <Compile Include="CommandPattern\Command.cs" />
-    <Compile Include="CommandPattern\DoNothingCommand.cs" />
-    <Compile Include="..\..\..\backup\IReceiver.cs">
-      <Link>CommandPattern\IReceiver.cs</Link>
-    </Compile>
     <Compile Include="Entities\Powerups\Coin.cs" />
     <Compile Include="Entities\Enemies\Bat.cs" />
     <Compile Include="Entities\Enemies\Eagle.cs" />

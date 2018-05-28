@@ -8,7 +8,6 @@ using TowerDefense.Tiles;
 using TowerDefense.World;
 using TowerDefense.Util;
 using TowerDefense.Entities;
-using TowerDefense.CommandPattern;
 using System.Threading;
 using TowerDefense.Entities.Enemies;
 
