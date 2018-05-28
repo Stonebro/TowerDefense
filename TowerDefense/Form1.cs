@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using TowerDefense.Tiles;
 using TowerDefense.Towers;
 using TowerDefense.Util;
 using TowerDefense.World;
+using WMPLib;
 
 namespace TowerDefense
 {
@@ -28,6 +30,7 @@ namespace TowerDefense
         private bool drawVerts = false;
         // Used for counting elapsed ticks of GlobalTimer.
         public static int TickCounter { get; private set; }
+        WindowsMediaPlayer audioPlayer = new WindowsMediaPlayer();
 
         // Gets Tile that corresponds to the current mouse position.
         private BaseTile GetTileAtMouse
@@ -43,6 +46,7 @@ namespace TowerDefense
             InitializeComponent();
             playerGoldAmount.Text = world.Gold.ToString();
             playerLivesAmount.Text = world.Lives.ToString();
+            audioPlayer.settings.volume = 50;
             DrawBackground();
             globalTimer.Enabled = true;
         }
@@ -142,11 +146,10 @@ namespace TowerDefense
 
                 // Gets 2x2 square of Tiles according to location of mouse.
                 List<BaseTile> selectedTiles = GetSelectedTiles(e.Location);
-                // If the selected tiles are buildable AND you have a tower selected AND you have enough money..
+                // If the selected tiles are buildable AND you have a tower selected AND you have enough money AND the Path won't be blocked..
                 if (world.IsBuildable(selectedTiles) && selectedTower != null && world.Gold + selectedTower.goldCost >= 0)
                 {
-                    if (world.CheckIfPathIsBlocked(selectedTiles) == false)
-                    {
+                    if (!world.CheckIfPathIsBlocked(selectedTiles)) {
                         // ..Check the selected tower's type and create a new object of that type
                         Tower addTower = null;
                         if (selectedTower is ArrowTower) addTower = new ArrowTower();
@@ -157,18 +160,19 @@ namespace TowerDefense
                         // ..Deduct gold
                         world.DeductGold(selectedTower.goldCost);
                         // Disable each selected tile
-                        foreach (BaseTile bt in selectedTiles)
-                        {
+                        foreach (BaseTile bt in selectedTiles) {
                             bt.DisableTile();
                             bt.tower = addTower;
                         }
                         // Build the tower, update the gold and redraw the background
                         addTower.BuildTower(selectedTiles);
+                        audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/TowerPlace.mp3";
                         DeselectTower();
                         world.Tower = addTower;
                         SelectTower();
                         DrawBackground();
                     }
+                    else audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/CannotBuildThere.mp3";
                 }
             }
 
@@ -284,6 +288,7 @@ namespace TowerDefense
         {
             foreach (BaseTile bt in world.Tower.pos)
                 bt.EnableTile();
+            audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/TowerDelete.mp3";
             world.towers.Remove(world.Tower);
             world.RecalculatePaths();
             DeselectTower();

@@ -18,8 +18,11 @@ namespace TowerDefense.Entities {
             attackRange = 3;
             attackInterval = 15;
             attackTargets = 3;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/SplitShotTowerShot.mp3";
+            audioPlayer.settings.volume = 10;
+            audioPlayer.controls.stop();
+            splash = new Bitmap(Properties.Resources.SplitShotTowerSplash);
+            sprite = new Bitmap(Properties.Resources.SplitShotTowerSprite);
         }
 
         public override void Update() {
@@ -31,6 +34,7 @@ namespace TowerDefense.Entities {
 
         protected override void AttackHighestPriority(List<Enemy> enemies) {
             base.AttackHighestPriority(enemies);
+            audioPlayer.controls.play();
             foreach(Enemy e in enemies) {
                 shotsFired++;
                 if (!e.dead && b != null) {

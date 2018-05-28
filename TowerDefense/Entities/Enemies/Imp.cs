@@ -20,6 +20,9 @@ namespace TowerDefense.Entities.Enemies
             health = maxHealth;
             size = 10;
             bounty = 3 + waveBonus;
+            audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/ImpDeath.mp3";
+            audioPlayer.settings.volume = 15;
+            audioPlayer.controls.stop();
         }
 
         public override void Update()

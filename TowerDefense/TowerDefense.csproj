@@ -138,13 +138,46 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Audio\ArrowAttack.mp3" />
+    <None Include="Resources\ArrowAttack1.wav" />
+    <Content Include="Audio\BatDeath.mp3" />
+    <Content Include="Audio\CannonShot.mp3" />
+    <Content Include="Audio\CannotBuildThere.mp3" />
+    <Content Include="Audio\ImpDeath.mp3" />
+    <Content Include="Audio\ShotgunShot.mp3" />
+    <Content Include="Audio\SniperShot.mp3" />
+    <Content Include="Audio\SplitShotTowerShot.mp3" />
+    <Content Include="Audio\TowerDelete.mp3" />
+    <Content Include="Audio\TowerPlace.mp3" />
     <Content Include="Resources\ArrowTower.png" />
+    <EmbeddedResource Include="Resources\ArrowTowerSplash.png" />
+    <EmbeddedResource Include="Resources\AttackDogSprite.png" />
+    <EmbeddedResource Include="Resources\CannonTowerSplash.png" />
+    <EmbeddedResource Include="Resources\DogHouseSplash.png" />
+    <EmbeddedResource Include="Resources\DogHouseSprite.png" />
+    <EmbeddedResource Include="Resources\FuzzyTowerSplash.png" />
+    <EmbeddedResource Include="Resources\FuzzyTowerSprite.png" />
+    <EmbeddedResource Include="Resources\SplitShotTowerSplash.png" />
+    <EmbeddedResource Include="Resources\SplitShotTowerSprite.png" />
+    <None Include="Resources\CannonTower.bmp" />
+    <None Include="Resources\Clear.png" />
     <Content Include="Resources\Coin.png" />
     <None Include="Resources\ArrowTowerSprite.bmp" />
-    <Content Include="Resources\ArrowTowerSprite.png" />
+    <EmbeddedResource Include="Resources\ArrowTowerSprite.png" />
     <EmbeddedResource Include="Resources\basic_ground.bmp" />
-    <Content Include="Resources\CannonTower.png" />
-    <Content Include="Resources\CannonTowerSprite.png" />
+    <EmbeddedResource Include="Resources\CannonTower.png" />
+    <EmbeddedResource Include="Resources\CannonTowerSprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

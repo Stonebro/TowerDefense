@@ -10,6 +10,7 @@ using TowerDefense.Util;
 using TowerDefense.Entities;
 using System.Threading;
 using TowerDefense.Entities.Enemies;
+using WMPLib;
 
 namespace TowerDefense.Entities {
     class ArrowTower : Tower {
@@ -21,8 +22,12 @@ namespace TowerDefense.Entities {
             attackPower = 1;
             attackRange = 4;
             attackInterval = 10;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/ArrowAttack.mp3";
+            audioPlayer.settings.volume = 9;
+            audioPlayer.controls.stop();
+            //audioPlayer.URL = str;
+            splash = new Bitmap(Properties.Resources.ArrowTowerSplash);
+            sprite = new Bitmap(Properties.Resources.ArrowTowerSprite);
         }
 
         public override void Update() {
@@ -36,7 +41,8 @@ namespace TowerDefense.Entities {
         protected override void AttackHighestPriority(Enemy enemy) {
             base.AttackHighestPriority(enemy);
             shotsFired++;
-            if(!enemy.dead && b != null) {
+            audioPlayer.controls.play();
+            if (!enemy.dead && b != null) {
                 b.DrawLine(new Pen(Color.Teal, 2), position, (enemy.pos + new Vector2D(7, 7)));
                 enemy.health -= attackPower;
             }

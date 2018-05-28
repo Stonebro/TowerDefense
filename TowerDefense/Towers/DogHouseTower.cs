@@ -21,8 +21,8 @@ namespace TowerDefense.Entities {
             attackPower = 5;
             attackRange = 8;
             attackInterval = 7;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            splash = new Bitmap(Resources.Resources.DogHouseSplash);
+            sprite = new Bitmap(Resources.Resources.DogHouseSprite);
         }
 
         public override void BuildTower(List<BaseTile> pos) {

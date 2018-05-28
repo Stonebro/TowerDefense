@@ -4,6 +4,8 @@ using TowerDefense.Tiles;
 using TowerDefense.Util;
 using TowerDefense.World;
 using TowerDefense.Entities.Enemies;
+using WMPLib;
+using System.Media;
 
 namespace TowerDefense.Entities {
     public abstract class Tower {
@@ -38,6 +40,7 @@ namespace TowerDefense.Entities {
         public int kills;
         public List<Enemy> nearbyEnemies = new List<Enemy>();
         public int shotsFired;
+        public WindowsMediaPlayer audioPlayer = new WindowsMediaPlayer();
 
         public Graphics b; 
 

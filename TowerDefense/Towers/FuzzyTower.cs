@@ -33,8 +33,10 @@ namespace TowerDefense.Towers
             name = "Fuzzy Tower";
             description = "The Fuzzy Tower carries 2 weapons: A long ranged sniper and a short ranged shotgun. It uses Fuzzy Logic to decide which weapon to use.";
             goldCost = 35;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            audioPlayer.settings.volume = 15;
+            audioPlayer.controls.stop();
+            splash = new Bitmap(Properties.Resources.FuzzyTowerSplash);
+            sprite = new Bitmap(Properties.Resources.FuzzyTowerSprite);
             towerShotgunFuzzyModule = InitFuzzyTowerBaseModule();
             towerSniperFuzzyModule = InitFuzzyTowerBaseModule();
             weapon = sniper;
@@ -60,13 +62,16 @@ namespace TowerDefense.Towers
         {
             if (!enemy.dead && b != null)
             {
+                
                 if (weapon is Sniper)
                 {
+                    audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/SniperShot.mp3";
                     b.DrawLine(new Pen(Color.Red, 2), position, (enemy.pos + new Vector2D(7, 7)));
                     enemy.health -= weapon.attackPower;
                 }
                 if (weapon is Shotgun)
                 {
+                    audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/ShotgunShot.mp3";
                     b.DrawLine(new Pen(Color.DarkTurquoise, 4), position, (enemy.pos + new Vector2D(7, 7)));
                     enemy.health = (float)Math.Floor(enemy.health * (1 - (weapon.attackPower / 100)));
                 }
@@ -99,6 +104,8 @@ namespace TowerDefense.Towers
                     towerShotgunFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
                     towerShotgunFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
                     shotgunDesirability = towerShotgunFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
+                    towerShotgunFuzzyModule.PrintAllDOMS();
+
 
                     double sniperDesirability;
                     towerSniperFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
@@ -109,11 +116,13 @@ namespace TowerDefense.Towers
                     {
                         highestForThisLoop = shotgunDesirability;
                         if (highestForThisLoop > highestOverall) weapon = shotgun;
+                        Console.WriteLine("Shotgun over Sniper");
                     }
                     else
                     {
                         highestForThisLoop = sniperDesirability;
                         if (highestForThisLoop > highestOverall) weapon = sniper;
+                        Console.WriteLine("Sniper over Shotgun");
                     }
                     if (highestForThisLoop > highestOverall)
                     {
@@ -130,14 +139,14 @@ namespace TowerDefense.Towers
             FuzzyModule towerFuzzyModule = new FuzzyModule();
 
             FuzzyVariable health = towerFuzzyModule.CreateFLV("Health");
-            health.AddLeftShoulderSet("Low", 0, 12.5, 25);
-            health.AddTriangularSet("Middle", 20, 40, 65);
-            health.AddRightShoulderSet("High", 60, 100, 100);
+            health.AddLeftShoulderSet("Low", 0, 20, 33);
+            health.AddTriangularSet("Middle", 20, 33, 60);
+            health.AddRightShoulderSet("High", 33, 60, 100);
 
             FuzzyVariable distanceToEnemy = towerFuzzyModule.CreateFLV("DistanceToEnemy");
-            distanceToEnemy.AddLeftShoulderSet("Close", 0, 33, 33);
-            distanceToEnemy.AddTriangularSet("Medium", 33, 50, 66);
-            distanceToEnemy.AddRightShoulderSet("Far", 66, 70, 100);
+            distanceToEnemy.AddLeftShoulderSet("Close", 0, 29, 30);
+            distanceToEnemy.AddTriangularSet("Medium", 29, 30, 66);
+            distanceToEnemy.AddRightShoulderSet("Far", 30, 66, 100);
 
             return towerFuzzyModule;
         }
@@ -158,9 +167,9 @@ namespace TowerDefense.Towers
             // Creates the consequent.
             FuzzyVariable shootDesirability = towerFuzzyModule.CreateFLV("ShootDesirability");
 
-            FzSet undesirable = shootDesirability.AddLeftShoulderSet("Undesirable", 0, 20, 40);
-            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 30, 40, 60);
-            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 60, 90, 100);
+            FzSet undesirable = shootDesirability.AddLeftShoulderSet("Undesirable", 0, 20, 30);
+            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 20, 30, 60);
+            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 30, 60, 100);
 
             // Add rules to complete the FAM.
             towerFuzzyModule.AddRule(new FzAND(low, close), undesirable);
@@ -194,8 +203,8 @@ namespace TowerDefense.Towers
             FuzzyVariable shootDesirability = towerFuzzyModule.CreateFLV("ShootDesirability");
 
             FzSet undesirable = shootDesirability.AddLeftShoulderSet("Undesirable", 0, 15, 30);
-            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 15, 50, 75);
-            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 70, 85, 100);
+            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 15, 30, 75);
+            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 30, 75, 100);
 
             // Add rules to complete the FAM.
             towerFuzzyModule.AddRule(new FzAND(low, close), desirable);
@@ -207,7 +216,7 @@ namespace TowerDefense.Towers
             towerFuzzyModule.AddRule(new FzAND(middle, far), desirable);
 
             towerFuzzyModule.AddRule(new FzAND(high, close), undesirable);
-            towerFuzzyModule.AddRule(new FzAND(high, medium), desirable);
+            towerFuzzyModule.AddRule(new FzAND(high, medium), undesirable);
             towerFuzzyModule.AddRule(new FzAND(high, far), desirable);
         }
 

@@ -19,8 +19,11 @@ namespace TowerDefense.Entities {
             attackPower = 10;
             attackRange = 8;
             attackInterval = 30f;
-            splash = new Bitmap(Resources.Resources.CannonTower);
-            sprite = new Bitmap(Resources.Resources.CannonTowerSprite);
+            audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/CannonShot.mp3";
+            audioPlayer.settings.volume = 10;
+            audioPlayer.controls.stop();
+            splash = new Bitmap(Properties.Resources.CannonTowerSplash);
+            sprite = new Bitmap(Properties.Resources.CannonTowerSprite);
         }
 
         public override void Update() {
@@ -33,6 +36,7 @@ namespace TowerDefense.Entities {
         protected override void AttackHighestPriority(Enemy enemy) {
             base.AttackHighestPriority(enemy);
             shotsFired++;
+            audioPlayer.controls.play();
             if (!enemy.dead & b != null) { 
                 b.DrawLine(new Pen(Color.Purple, 4), position, (enemy.pos + new Vector2D(7, 7))); 
                 enemy.health -= attackPower;

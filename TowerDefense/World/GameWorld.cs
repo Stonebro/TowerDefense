@@ -149,22 +149,9 @@ namespace TowerDefense.World
             // Loops through Tiles.
             for (int i = 0; i < tiles; i++)
             {
-                // Handles draw of not-buildable Tiles.
-                if (tilesList[i].buildable == false)
+                // Handles draw of buildable Tiles.
+                if (tilesList[i].buildable)
                 {
-                    if (tilesList[i].tower is ArrowTower)
-                    {
-                        SolidBrush ATBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 200));
-                        g.FillRectangle(ATBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
-                    }
-                    else if (tilesList[i].tower is CannonTower)
-                    {
-                        SolidBrush CTBrush = new SolidBrush(Color.FromArgb(128, 25, 25, 25));
-                        g.FillRectangle(CTBrush, new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
-                    }
-                }
-                else
-                { // If Tile is buildable.
                     g.DrawRectangle(new Pen(Color.LightGray), new Rectangle(tilesList[i].pos, new Vector2D(BaseTile.size, BaseTile.size)));
                 }
                 // Draws startTile and endTile.

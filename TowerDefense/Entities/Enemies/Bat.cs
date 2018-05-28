@@ -57,6 +57,9 @@ namespace TowerDefense.Entities.Enemies
             velocity = new Vector2D(0, 0);
             pos = GameWorld.Instance.startTile.pos;
             steeringForces = new List<ISteering>();
+            audioPlayer.URL = "C:/Dev/TowerDefense/TowerDefense/Audio/BatDeath.mp3";
+            audioPlayer.settings.volume = 15;
+            audioPlayer.controls.stop();
         }
 
         public bool IsSpeedMaxedOut()

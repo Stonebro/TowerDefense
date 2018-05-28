@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TowerDefense.Util;
 using TowerDefense.World;
 using TowerDefense.Tiles;
+using WMPLib;
 
 namespace TowerDefense.Entities.Enemies
 {
@@ -19,6 +20,7 @@ namespace TowerDefense.Entities.Enemies
         public Vector2D velocity;
         public bool dead;
         public int bounty;
+        public WindowsMediaPlayer audioPlayer = new WindowsMediaPlayer();
 
         /// Handles moving the enemy.
         public virtual void Update()
@@ -42,6 +44,7 @@ namespace TowerDefense.Entities.Enemies
         public virtual void Render(Graphics g) { }
         public virtual void Die()
         {
+            audioPlayer.controls.play();
             dead = true;
             path = null;
         }

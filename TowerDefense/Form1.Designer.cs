@@ -31,10 +31,6 @@
             this.playerGoldAmount = new System.Windows.Forms.Label();
             this.playerLivesLabel = new System.Windows.Forms.Label();
             this.playerLivesAmount = new System.Windows.Forms.Label();
-            this.Tower2PB = new System.Windows.Forms.PictureBox();
-            this.Tower1PB = new System.Windows.Forms.PictureBox();
-            this.GameWorldPB = new System.Windows.Forms.PictureBox();
-            this.handSelectPB = new System.Windows.Forms.PictureBox();
             this.deleteTowerBtn = new System.Windows.Forms.Button();
             this.selectedTowerNameLabel = new System.Windows.Forms.Label();
             this.selectedTowerAtkDmgLabel = new System.Windows.Forms.Label();
@@ -44,22 +40,26 @@
             this.selectedTowerDamage = new System.Windows.Forms.Label();
             this.selectedTowerAS = new System.Windows.Forms.Label();
             this.selectedTowerKills = new System.Windows.Forms.Label();
-            this.Tower3PB = new System.Windows.Forms.PictureBox();
             this.selectedTowerShotsFiredLabel = new System.Windows.Forms.Label();
             this.selectedTowerShotsFired = new System.Windows.Forms.Label();
             this.selectedTowerTotalDamageLabel = new System.Windows.Forms.Label();
             this.selectedTowerTotalDamage = new System.Windows.Forms.Label();
-            this.DogHouseTowerPB = new System.Windows.Forms.PictureBox();
             this.nextWaveBtn = new System.Windows.Forms.Button();
-            this.FuzzyTowerPB = new System.Windows.Forms.PictureBox();
             this.towerDescription = new System.Windows.Forms.RichTextBox();
+            this.FuzzyTowerPB = new System.Windows.Forms.PictureBox();
+            this.DogHouseTowerPB = new System.Windows.Forms.PictureBox();
+            this.Tower3PB = new System.Windows.Forms.PictureBox();
+            this.handSelectPB = new System.Windows.Forms.PictureBox();
+            this.Tower2PB = new System.Windows.Forms.PictureBox();
+            this.Tower1PB = new System.Windows.Forms.PictureBox();
+            this.GameWorldPB = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.FuzzyTowerPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DogHouseTowerPB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tower3PB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.handSelectPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower2PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower1PB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GameWorldPB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.handSelectPB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Tower3PB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DogHouseTowerPB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FuzzyTowerPB)).BeginInit();
             this.SuspendLayout();
             // 
             // showVerticesBtn
@@ -111,54 +111,6 @@
             this.playerLivesAmount.Size = new System.Drawing.Size(13, 13);
             this.playerLivesAmount.TabIndex = 7;
             this.playerLivesAmount.Text = "0";
-            // 
-            // Tower2PB
-            // 
-            this.Tower2PB.BackColor = System.Drawing.SystemColors.InfoText;
-            this.Tower2PB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Tower2PB.Location = new System.Drawing.Point(618, 68);
-            this.Tower2PB.Name = "Tower2PB";
-            this.Tower2PB.Size = new System.Drawing.Size(50, 50);
-            this.Tower2PB.TabIndex = 2;
-            this.Tower2PB.TabStop = false;
-            this.Tower2PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower2PB_MouseDown);
-            // 
-            // Tower1PB
-            // 
-            this.Tower1PB.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Tower1PB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTower;
-            this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
-            this.Tower1PB.Location = new System.Drawing.Point(618, 12);
-            this.Tower1PB.Name = "Tower1PB";
-            this.Tower1PB.Size = new System.Drawing.Size(50, 50);
-            this.Tower1PB.TabIndex = 1;
-            this.Tower1PB.TabStop = false;
-            this.Tower1PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower1PB_MouseDown);
-            // 
-            // GameWorldPB
-            // 
-            this.GameWorldPB.InitialImage = ((System.Drawing.Image)(resources.GetObject("GameWorldPB.InitialImage")));
-            this.GameWorldPB.Location = new System.Drawing.Point(0, 0);
-            this.GameWorldPB.Name = "GameWorldPB";
-            this.GameWorldPB.Size = new System.Drawing.Size(600, 600);
-            this.GameWorldPB.TabIndex = 0;
-            this.GameWorldPB.TabStop = false;
-            this.GameWorldPB.Paint += new System.Windows.Forms.PaintEventHandler(this.GameWorldPB_Paint);
-            this.GameWorldPB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameWorldPB_MouseDown);
-            this.GameWorldPB.MouseLeave += new System.EventHandler(this.GameWorldPB_MouseLeave);
-            this.GameWorldPB.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GameWorldPB_MouseMove);
-            // 
-            // handSelectPB
-            // 
-            this.handSelectPB.BackColor = System.Drawing.SystemColors.Highlight;
-            this.handSelectPB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.handSelectPB.Location = new System.Drawing.Point(674, 12);
-            this.handSelectPB.Name = "handSelectPB";
-            this.handSelectPB.Size = new System.Drawing.Size(50, 50);
-            this.handSelectPB.TabIndex = 8;
-            this.handSelectPB.TabStop = false;
-            this.handSelectPB.Click += new System.EventHandler(this.HandSelectPB_Click);
             // 
             // deleteTowerBtn
             // 
@@ -251,16 +203,6 @@
             this.selectedTowerKills.Text = "0";
             this.selectedTowerKills.Visible = false;
             // 
-            // Tower3PB
-            // 
-            this.Tower3PB.BackColor = System.Drawing.Color.DarkRed;
-            this.Tower3PB.Location = new System.Drawing.Point(675, 69);
-            this.Tower3PB.Name = "Tower3PB";
-            this.Tower3PB.Size = new System.Drawing.Size(49, 49);
-            this.Tower3PB.TabIndex = 18;
-            this.Tower3PB.TabStop = false;
-            this.Tower3PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower3PB_MouseDown);
-            // 
             // selectedTowerShotsFiredLabel
             // 
             this.selectedTowerShotsFiredLabel.AutoSize = true;
@@ -301,16 +243,6 @@
             this.selectedTowerTotalDamage.Text = "0";
             this.selectedTowerTotalDamage.Visible = false;
             // 
-            // DogHouseTowerPB
-            // 
-            this.DogHouseTowerPB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.DogHouseTowerPB.Location = new System.Drawing.Point(699, 125);
-            this.DogHouseTowerPB.Name = "DogHouseTowerPB";
-            this.DogHouseTowerPB.Size = new System.Drawing.Size(25, 25);
-            this.DogHouseTowerPB.TabIndex = 23;
-            this.DogHouseTowerPB.TabStop = false;
-            this.DogHouseTowerPB.Click += new System.EventHandler(this.DogHouseTowerPB_Click);
-            // 
             // nextWaveBtn
             // 
             this.nextWaveBtn.Location = new System.Drawing.Point(663, 527);
@@ -321,17 +253,6 @@
             this.nextWaveBtn.UseVisualStyleBackColor = true;
             this.nextWaveBtn.Click += new System.EventHandler(this.NextWaveBtn_Click);
             // 
-            // FuzzyTowerPB
-            // 
-            this.FuzzyTowerPB.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.FuzzyTowerPB.Location = new System.Drawing.Point(730, 12);
-            this.FuzzyTowerPB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.FuzzyTowerPB.Name = "FuzzyTowerPB";
-            this.FuzzyTowerPB.Size = new System.Drawing.Size(41, 50);
-            this.FuzzyTowerPB.TabIndex = 25;
-            this.FuzzyTowerPB.TabStop = false;
-            this.FuzzyTowerPB.Click += new System.EventHandler(this.FuzzyTowerPB_Click);
-            // 
             // towerDescription
             // 
             this.towerDescription.Location = new System.Drawing.Point(620, 374);
@@ -340,6 +261,93 @@
             this.towerDescription.Size = new System.Drawing.Size(151, 138);
             this.towerDescription.TabIndex = 26;
             this.towerDescription.Text = "";
+            // 
+            // FuzzyTowerPB
+            // 
+            this.FuzzyTowerPB.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.FuzzyTowerPB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.FuzzyTowerPB.Image = ((System.Drawing.Image)(resources.GetObject("FuzzyTowerPB.Image")));
+            this.FuzzyTowerPB.Location = new System.Drawing.Point(675, 12);
+            this.FuzzyTowerPB.Margin = new System.Windows.Forms.Padding(2);
+            this.FuzzyTowerPB.Name = "FuzzyTowerPB";
+            this.FuzzyTowerPB.Size = new System.Drawing.Size(50, 50);
+            this.FuzzyTowerPB.TabIndex = 25;
+            this.FuzzyTowerPB.TabStop = false;
+            this.FuzzyTowerPB.Click += new System.EventHandler(this.FuzzyTowerPB_Click);
+            // 
+            // DogHouseTowerPB
+            // 
+            this.DogHouseTowerPB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.DogHouseTowerPB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DogHouseTowerPB.Image = ((System.Drawing.Image)(resources.GetObject("DogHouseTowerPB.Image")));
+            this.DogHouseTowerPB.Location = new System.Drawing.Point(730, 12);
+            this.DogHouseTowerPB.Name = "DogHouseTowerPB";
+            this.DogHouseTowerPB.Size = new System.Drawing.Size(50, 50);
+            this.DogHouseTowerPB.TabIndex = 23;
+            this.DogHouseTowerPB.TabStop = false;
+            this.DogHouseTowerPB.Click += new System.EventHandler(this.DogHouseTowerPB_Click);
+            // 
+            // Tower3PB
+            // 
+            this.Tower3PB.BackColor = System.Drawing.Color.Black;
+            this.Tower3PB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Tower3PB.Image = ((System.Drawing.Image)(resources.GetObject("Tower3PB.Image")));
+            this.Tower3PB.Location = new System.Drawing.Point(675, 69);
+            this.Tower3PB.Name = "Tower3PB";
+            this.Tower3PB.Size = new System.Drawing.Size(49, 49);
+            this.Tower3PB.TabIndex = 18;
+            this.Tower3PB.TabStop = false;
+            this.Tower3PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower3PB_MouseDown);
+            // 
+            // handSelectPB
+            // 
+            this.handSelectPB.BackColor = System.Drawing.SystemColors.Highlight;
+            this.handSelectPB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.handSelectPB.Image = global::TowerDefense.Properties.Resources.Clear;
+            this.handSelectPB.Location = new System.Drawing.Point(730, 69);
+            this.handSelectPB.Name = "handSelectPB";
+            this.handSelectPB.Size = new System.Drawing.Size(50, 50);
+            this.handSelectPB.TabIndex = 8;
+            this.handSelectPB.TabStop = false;
+            this.handSelectPB.Click += new System.EventHandler(this.HandSelectPB_Click);
+            // 
+            // Tower2PB
+            // 
+            this.Tower2PB.BackColor = System.Drawing.SystemColors.InfoText;
+            this.Tower2PB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Tower2PB.Image = ((System.Drawing.Image)(resources.GetObject("Tower2PB.Image")));
+            this.Tower2PB.Location = new System.Drawing.Point(618, 68);
+            this.Tower2PB.Name = "Tower2PB";
+            this.Tower2PB.Size = new System.Drawing.Size(50, 50);
+            this.Tower2PB.TabIndex = 2;
+            this.Tower2PB.TabStop = false;
+            this.Tower2PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower2PB_MouseDown);
+            // 
+            // Tower1PB
+            // 
+            this.Tower1PB.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Tower1PB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Tower1PB.Image = ((System.Drawing.Image)(resources.GetObject("Tower1PB.Image")));
+            this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
+            this.Tower1PB.Location = new System.Drawing.Point(618, 12);
+            this.Tower1PB.Name = "Tower1PB";
+            this.Tower1PB.Size = new System.Drawing.Size(50, 50);
+            this.Tower1PB.TabIndex = 1;
+            this.Tower1PB.TabStop = false;
+            this.Tower1PB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Tower1PB_MouseDown);
+            // 
+            // GameWorldPB
+            // 
+            this.GameWorldPB.InitialImage = ((System.Drawing.Image)(resources.GetObject("GameWorldPB.InitialImage")));
+            this.GameWorldPB.Location = new System.Drawing.Point(0, 0);
+            this.GameWorldPB.Name = "GameWorldPB";
+            this.GameWorldPB.Size = new System.Drawing.Size(600, 600);
+            this.GameWorldPB.TabIndex = 0;
+            this.GameWorldPB.TabStop = false;
+            this.GameWorldPB.Paint += new System.Windows.Forms.PaintEventHandler(this.GameWorldPB_Paint);
+            this.GameWorldPB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.GameWorldPB_MouseDown);
+            this.GameWorldPB.MouseLeave += new System.EventHandler(this.GameWorldPB_MouseLeave);
+            this.GameWorldPB.MouseMove += new System.Windows.Forms.MouseEventHandler(this.GameWorldPB_MouseMove);
             // 
             // Form1
             // 
@@ -376,13 +384,13 @@
             this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.FuzzyTowerPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DogHouseTowerPB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tower3PB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.handSelectPB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower2PB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tower1PB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GameWorldPB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.handSelectPB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Tower3PB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DogHouseTowerPB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FuzzyTowerPB)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
