@@ -34,8 +34,7 @@ namespace TowerDefense.Towers
             name = "Fuzzy Tower";
             description = "The Fuzzy Tower carries 2 weapons: A long ranged sniper and a short ranged shotgun. It uses Fuzzy Logic to decide which weapon to use.";
             goldCost = 35;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            //sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
             towerShotgunFuzzyModule = InitFuzzyTowerBaseModule();
             towerSniperFuzzyModule = InitFuzzyTowerBaseModule();
             weapon = sniper;
@@ -52,7 +51,7 @@ namespace TowerDefense.Towers
                 {
                     AttackHighestPriority(target);
                     attackIntervalCounter++;
-                }
+                } 
             }
             else DoNothing();
         }
@@ -71,6 +70,9 @@ namespace TowerDefense.Towers
                     b.DrawLine(new Pen(Color.DarkTurquoise, 4), position, (enemy.pos + new Vector2D(7, 7)));
                     enemy.health = (float)Math.Floor(enemy.health * (1 - (weapon.attackPower / 100)));
                 }
+            } else
+            {
+                Console.WriteLine("err");
             }
         }
 
@@ -94,13 +96,16 @@ namespace TowerDefense.Towers
             foreach (Enemy e in GameWorld.Instance.enemies)
             {
                 double highestForThisLoop;
-                if (position.Distance(e.pos) < (sniper.attackRange + 1) * BaseTile.size)
+                if (position.Distance(e.pos) < (sniper.attackRange + 1) * BaseTile.size && !e.dead)
                 {
-                    double shotgunDesirability;
-                    towerShotgunFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
-                    towerShotgunFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
-                    shotgunDesirability = towerShotgunFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
+                    double shotgunDesirability = 0;
 
+                    if (position.Distance(e.pos) < (shotgun.attackRange + 1) * BaseTile.size)
+                    {
+                        towerShotgunFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
+                        towerShotgunFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
+                        shotgunDesirability = towerShotgunFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
+                    }
                     double sniperDesirability;
                     towerSniperFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
                     towerSniperFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
@@ -120,7 +125,14 @@ namespace TowerDefense.Towers
                     {
                         highestOverall = highestForThisLoop;
                         toReturn = e;
+                        Console.WriteLine(sniperDesirability + " " + shotgunDesirability );
+                               if (!enemiesInRange.Contains(e))
+                        {
+                            Console.WriteLine(weapon);
+
+                        }
                     }
+                 
                 }
             }
             return toReturn;
@@ -131,14 +143,14 @@ namespace TowerDefense.Towers
             FuzzyModule towerFuzzyModule = new FuzzyModule();
 
             FuzzyVariable health = towerFuzzyModule.CreateFLV("Health");
-            health.AddLeftShoulderSet("Low", 0, 12.5, 25);
-            health.AddTriangularSet("Middle", 20, 40, 65);
-            health.AddRightShoulderSet("High", 60, 100, 100);
+            health.AddLeftShoulderSet("Low", 0, 20, 33);
+            health.AddTriangularSet("Middle", 20, 33, 60);
+            health.AddRightShoulderSet("High", 33, 60, 100);
 
             FuzzyVariable distanceToEnemy = towerFuzzyModule.CreateFLV("DistanceToEnemy");
-            distanceToEnemy.AddLeftShoulderSet("Close", 0, 33, 33);
-            distanceToEnemy.AddTriangularSet("Medium", 33, 50, 66);
-            distanceToEnemy.AddRightShoulderSet("Far", 66, 70, 100);
+            distanceToEnemy.AddLeftShoulderSet("Close", 0, 29, 30);
+            distanceToEnemy.AddTriangularSet("Medium", 29, 30, 66);
+            distanceToEnemy.AddRightShoulderSet("Far", 30, 66, 100);
 
             return towerFuzzyModule;
         }
@@ -159,9 +171,9 @@ namespace TowerDefense.Towers
             // Creates the consequent.
             FuzzyVariable shootDesirability = towerFuzzyModule.CreateFLV("ShootDesirability");
 
-            FzSet undesirable = shootDesirability.AddLeftShoulderSet("Undesirable", 0, 20, 40);
-            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 30, 40, 60);
-            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 60, 90, 100);
+            FzSet undesirable = shootDesirability.AddLeftShoulderSet("Undesirable", 0, 20, 30);
+            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 20, 30, 60);
+            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 30, 60, 100);
 
             // Add rules to complete the FAM.
             towerFuzzyModule.AddRule(new FzAND(low, close), undesirable);
@@ -195,9 +207,9 @@ namespace TowerDefense.Towers
             FuzzyVariable shootDesirability = towerFuzzyModule.CreateFLV("ShootDesirability");
 
             FzSet undesirable = shootDesirability.AddLeftShoulderSet("Undesirable", 0, 15, 30);
-            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 15, 50, 75);
-            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 70, 85, 100);
-
+            FzSet desirable = shootDesirability.AddTriangularSet("Desirable", 15, 30, 75);
+            FzSet veryDesirable = shootDesirability.AddRightShoulderSet("VeryDesirable", 30, 75, 100);
+            
             // Add rules to complete the FAM.
             towerFuzzyModule.AddRule(new FzAND(low, close), desirable);
             towerFuzzyModule.AddRule(new FzAND(low, medium), desirable);
@@ -208,7 +220,7 @@ namespace TowerDefense.Towers
             towerFuzzyModule.AddRule(new FzAND(middle, far), desirable);
 
             towerFuzzyModule.AddRule(new FzAND(high, close), undesirable);
-            towerFuzzyModule.AddRule(new FzAND(high, medium), desirable);
+            towerFuzzyModule.AddRule(new FzAND(high, medium), undesirable);
             towerFuzzyModule.AddRule(new FzAND(high, far), desirable);
         }
 

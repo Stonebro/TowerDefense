@@ -19,8 +19,7 @@ namespace TowerDefense.Entities {
             attackPower = 10;
             attackRange = 8;
             attackInterval = 30f;
-            splash = new Bitmap(Resources.Resources.CannonTower);
-            sprite = new Bitmap(Resources.Resources.CannonTowerSprite);
+            //sprite = new Bitmap(Resources.Resources.CannonTowerSprite);
         }
 
         public override void Update() {
