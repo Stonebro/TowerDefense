@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using TowerDefense.Util.FuzzyLogic.FuzzySets;
 
@@ -189,10 +190,10 @@ namespace TowerDefense.Util.FuzzyLogic
         {
             foreach (KeyValuePair<string, FuzzySet> set in _memberSets)
             {
-                Console.WriteLine("key = " + set.Key + " value is " + set.Value.MemberDOM);
+                Debug.WriteLine("key = " + set.Key + " value is " + set.Value.MemberDOM);
             }
 
-            Console.WriteLine("minbound = " + _memberMinRange + " maxbound = " + _memberMaxRange);
+            Debug.WriteLine("minbound = " + _memberMinRange + " maxbound = " + _memberMaxRange);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -104,7 +105,7 @@ namespace TowerDefense.Towers
                     towerSniperFuzzyModule.Fuzzify("Health", e.health / e.maxHealth * 100);
                     towerSniperFuzzyModule.Fuzzify("DistanceToEnemy", position.Distance(e.pos) / ((sniper.attackRange + 1) * BaseTile.size) * 100);
                     sniperDesirability = towerSniperFuzzyModule.DeFuzzify("ShootDesirability", DefuzzifyMethod.MAX_AV);
-
+            
                     if (shotgunDesirability > sniperDesirability)
                     {
                         highestForThisLoop = shotgunDesirability;

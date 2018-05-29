@@ -127,7 +127,7 @@
             // 
             this.Tower1PB.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.Tower1PB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTower;
+            this.Tower1PB.Image = global::TowerDefense.Resources.Resources.ArrowTower;
             this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
             this.Tower1PB.Location = new System.Drawing.Point(618, 12);
             this.Tower1PB.Name = "Tower1PB";

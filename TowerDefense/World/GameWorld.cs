@@ -124,7 +124,7 @@ namespace TowerDefense.World
             endTile.buildable = false;
             Bat testEnemy = new Bat(waveCount);
             testEagle = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviorType.SEEK);
-            testEagle2 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviorType.OFFSETPURSUIT | BehaviorType.FOLLOWPATH);
+            testEagle2 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviorType.OFFSETPURSUIT);
             testEagle2.SetTargetAgent1(testEagle);
             testEagle3 = new Eagle(new Vector2D(100, 100), Vector2D.Zero, Vector2D.Zero, Vector2D.Zero, 20, 5, 5, 10, 10, BehaviorType.EXPLORE)
             {
@@ -189,9 +189,10 @@ namespace TowerDefense.World
                 flyingEntity.Update(stopwatch.ElapsedMilliseconds);
                 if (flyingEntity.goals != null)
                 {
-                    if (!flyingEntity.goals.Any()) { flyingEntity.goals = flyingEntity.originalGoals; Console.WriteLine(flyingEntity.originalGoals.Count); }
-
-                    flyingEntity.goals.Peek().Draw(g);
+                    if (flyingEntity.goals.Count == 0) { flyingEntity.goals = flyingEntity.originalGoals; Console.WriteLine(flyingEntity.originalGoals.Count); }
+                    else {
+                        flyingEntity.goals.Peek().Draw(g);
+                    }
                 }
             }
 
