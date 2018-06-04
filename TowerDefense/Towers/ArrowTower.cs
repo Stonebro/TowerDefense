@@ -21,7 +21,7 @@ namespace TowerDefense.Entities {
             attackPower = 1;
             attackRange = 4;
             attackInterval = 10;
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            sprite = new Bitmap(Properties.Resources.ArrowTowerSprite);
         }
 
         public override void Update() {

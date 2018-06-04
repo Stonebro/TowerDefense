@@ -49,7 +49,7 @@ namespace TowerDefense.World
 
         /// Creates vertex that corresponds to Tile if Tile is not null.
         /// Gets all availabile neighbouring tiles of this Tile.
-        /// Connects the Vertex of the current Tile with the vertex of each available (for building,moving) neighbouring Tile
+        /// Connects the Vertex of the current Tile with the vertex of each available (for building) neighbouring Tile
         /// if they aren't already connected. This is done by adding an Edge between them.
         public void CreateGraph(BaseTile tile)
         {

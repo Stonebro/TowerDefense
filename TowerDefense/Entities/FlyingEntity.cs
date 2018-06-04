@@ -44,7 +44,7 @@ namespace TowerDefense.Entities
         // The maximum rate (in radians per second) at which this Entity can rotate.
         public double MaxTurnRate { get; set; }
         public double BoundingRadius { get; set; }
-        public bool Tag;
+        public bool Tag { get; set; }
 
         private SteeringBehavior _behaviour;
 

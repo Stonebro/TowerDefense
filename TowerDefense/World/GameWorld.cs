@@ -174,9 +174,10 @@ namespace TowerDefense.World
                 flyingEntity.Update(stopwatch.ElapsedMilliseconds);
                 if (flyingEntity.goals != null)
                 {
-                    if (!flyingEntity.goals.Any()) { flyingEntity.goals = flyingEntity.originalGoals; Console.WriteLine(flyingEntity.originalGoals.Count); }
-
-                    flyingEntity.goals.Peek().Draw(g);
+                    if (flyingEntity.goals.Count == 0) { flyingEntity.goals = flyingEntity.originalGoals; Console.WriteLine(flyingEntity.originalGoals.Count); }
+                    else {
+                        flyingEntity.goals.Peek().Draw(g);
+                    }
                 }
             }
 
