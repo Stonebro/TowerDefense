@@ -139,12 +139,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\ArrowTower.png" />
+    <None Include="Resources\SplitShotTowerSprite.png" />
+    <None Include="Resources\SplitShotTowerSplash.png" />
+    <None Include="Resources\FuzzyTowerSprite.png" />
+    <None Include="Resources\FuzzyTowerSplash.png" />
+    <None Include="Resources\DogHouseSprite.png" />
+    <None Include="Resources\DogHouseSplash.png" />
+    <None Include="Resources\ArrowTowerSplash.png" />
+    <None Include="Resources\ArrowTowerSprite.png" />
+    <None Include="Resources\AttackDogSprite.png" />
+    <None Include="Resources\CannonTowerSplash.png" />
+    <None Include="Resources\CannonTowerSprite.png" />
+    <None Include="Resources\Clear.png" />
     <Content Include="Resources\Coin.png" />
     <None Include="Resources\ArrowTowerSprite.bmp" />
-    <Content Include="Resources\ArrowTowerSprite.png" />
     <EmbeddedResource Include="Resources\basic_ground.bmp" />
     <Content Include="Resources\CannonTower.png" />
-    <Content Include="Resources\CannonTowerSprite.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -116,6 +116,7 @@
             // 
             this.Tower2PB.BackColor = System.Drawing.SystemColors.InfoText;
             this.Tower2PB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Tower2PB.Image = global::TowerDefense.Properties.Resources.CannonTowerSplash;
             this.Tower2PB.Location = new System.Drawing.Point(618, 68);
             this.Tower2PB.Name = "Tower2PB";
             this.Tower2PB.Size = new System.Drawing.Size(50, 50);
@@ -127,7 +128,7 @@
             // 
             this.Tower1PB.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.Tower1PB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTower;
+            this.Tower1PB.Image = global::TowerDefense.Properties.Resources.ArrowTowerSplash;
             this.Tower1PB.InitialImage = ((System.Drawing.Image)(resources.GetObject("Tower1PB.InitialImage")));
             this.Tower1PB.Location = new System.Drawing.Point(618, 12);
             this.Tower1PB.Name = "Tower1PB";
@@ -153,6 +154,7 @@
             // 
             this.handSelectPB.BackColor = System.Drawing.SystemColors.Highlight;
             this.handSelectPB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.handSelectPB.Image = global::TowerDefense.Properties.Resources.Clear;
             this.handSelectPB.Location = new System.Drawing.Point(674, 12);
             this.handSelectPB.Name = "handSelectPB";
             this.handSelectPB.Size = new System.Drawing.Size(50, 50);
@@ -254,6 +256,7 @@
             // Tower3PB
             // 
             this.Tower3PB.BackColor = System.Drawing.Color.DarkRed;
+            this.Tower3PB.Image = global::TowerDefense.Properties.Resources.SplitShotTowerSplash;
             this.Tower3PB.Location = new System.Drawing.Point(675, 69);
             this.Tower3PB.Name = "Tower3PB";
             this.Tower3PB.Size = new System.Drawing.Size(49, 49);
@@ -304,9 +307,10 @@
             // DogHouseTowerPB
             // 
             this.DogHouseTowerPB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.DogHouseTowerPB.Location = new System.Drawing.Point(699, 125);
+            this.DogHouseTowerPB.Image = global::TowerDefense.Properties.Resources.DogHouseSplash;
+            this.DogHouseTowerPB.Location = new System.Drawing.Point(730, 69);
             this.DogHouseTowerPB.Name = "DogHouseTowerPB";
-            this.DogHouseTowerPB.Size = new System.Drawing.Size(25, 25);
+            this.DogHouseTowerPB.Size = new System.Drawing.Size(50, 50);
             this.DogHouseTowerPB.TabIndex = 23;
             this.DogHouseTowerPB.TabStop = false;
             this.DogHouseTowerPB.Click += new System.EventHandler(this.DogHouseTowerPB_Click);
@@ -324,10 +328,11 @@
             // FuzzyTowerPB
             // 
             this.FuzzyTowerPB.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.FuzzyTowerPB.Image = global::TowerDefense.Properties.Resources.FuzzyTowerSplash;
             this.FuzzyTowerPB.Location = new System.Drawing.Point(730, 12);
-            this.FuzzyTowerPB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FuzzyTowerPB.Margin = new System.Windows.Forms.Padding(2);
             this.FuzzyTowerPB.Name = "FuzzyTowerPB";
-            this.FuzzyTowerPB.Size = new System.Drawing.Size(41, 50);
+            this.FuzzyTowerPB.Size = new System.Drawing.Size(50, 50);
             this.FuzzyTowerPB.TabIndex = 25;
             this.FuzzyTowerPB.TabStop = false;
             this.FuzzyTowerPB.Click += new System.EventHandler(this.FuzzyTowerPB_Click);

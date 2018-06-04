@@ -21,7 +21,6 @@ namespace TowerDefense.Entities {
             attackPower = 1;
             attackRange = 4;
             attackInterval = 10;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
             sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
         }
 

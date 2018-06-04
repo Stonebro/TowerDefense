@@ -33,8 +33,7 @@ namespace TowerDefense.Towers
             name = "Fuzzy Tower";
             description = "The Fuzzy Tower carries 2 weapons: A long ranged sniper and a short ranged shotgun. It uses Fuzzy Logic to decide which weapon to use.";
             goldCost = 35;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            sprite = new Bitmap(Properties.Resources.FuzzyTowerSprite);
             towerShotgunFuzzyModule = InitFuzzyTowerBaseModule();
             towerSniperFuzzyModule = InitFuzzyTowerBaseModule();
             weapon = sniper;

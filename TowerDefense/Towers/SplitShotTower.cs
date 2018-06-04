@@ -18,8 +18,7 @@ namespace TowerDefense.Entities {
             attackRange = 3;
             attackInterval = 15;
             attackTargets = 3;
-            splash = new Bitmap(Resources.Resources.ArrowTower);
-            sprite = new Bitmap(Resources.Resources.ArrowTowerSprite);
+            sprite = new Bitmap(Properties.Resources.SplitShotTowerSprite);
         }
 
         public override void Update() {

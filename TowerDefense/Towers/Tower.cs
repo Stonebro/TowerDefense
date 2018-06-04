@@ -26,8 +26,6 @@ namespace TowerDefense.Entities {
         // Position of the Tower.
         public List<BaseTile> pos;
         public Vector2D position;
-        // Splash Bitmap of the Tower.
-        public Bitmap splash;
         // Sprite Bitmap of the Tower.
         public Bitmap sprite;
         // Enemies in range
